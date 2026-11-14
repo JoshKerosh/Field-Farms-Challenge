@@ -18,3 +18,18 @@ build/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Verificación y herramientas locales
+test-results/
+playwright-report/
+.playwright-cli/
+output/
+coverage/
+*.tsbuildinfo
+.env.*
+!.env.example
+
+# Datos descargados y artefactos del proceso Python
+jobs/data-pipeline/data/
+.pytest_cache/
+.ruff_cache/
