@@ -43,6 +43,10 @@ export function AppLayout() {
   const navigationState = useNavigation();
   const { ctx, demo, setDemo, loading, error, myFarm, farmSite } = useField();
   const flow = useFarmFlowCopy();
+  const shortNavigation: Record<string, string> = {
+    '/care': flow.plan,
+    '/watershed': flow.watershedTab,
+  };
   useEffect(() => {
     if (loading) return;
     const title = document.getElementById('page-title');
@@ -96,8 +100,8 @@ export function AppLayout() {
               className={({ isActive }) => `nav-link${isActive ? ' is-active' : ''}`}
             >
               <Icon size={22} aria-hidden="true" />
-              <span className={to === '/care' ? 'nav-long' : undefined}>{label}</span>
-              {to === '/care' && <span className="nav-short">{flow.plan}</span>}
+              <span className={shortNavigation[to] ? 'nav-long' : undefined}>{label}</span>
+              {shortNavigation[to] && <span className="nav-short">{shortNavigation[to]}</span>}
             </NavLink>
           ))}
         </nav>
