@@ -23,6 +23,14 @@ describe('Motor espacial y de cálculo con datos reales v10', () => {
     expect(ctx?.sub.n.length).toBeGreaterThan(2);
   });
 
+  it('convierte coordenadas locales de vuelta a lat/lon para el mapa satelital', async () => {
+    const ds = await loadDataset();
+    const geo = getGeo(ds);
+    const [lon, lat] = geo.localToLngLat(geo.llToLocal(9.8556, -83.9126));
+    expect(lon).toBeCloseTo(-83.9126, 5);
+    expect(lat).toBeCloseTo(9.8556, 5);
+  });
+
   it('decodifica orillas IGN 1:5 000 + MODIS y arma el plan de subcuenca', async () => {
     const ds = await loadDataset();
     const ctx = placeAt(ds, getGeo(ds).llToLocal(10.8, -85.08), null)!;

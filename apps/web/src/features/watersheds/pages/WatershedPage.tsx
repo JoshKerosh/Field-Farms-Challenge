@@ -1,14 +1,19 @@
-import { Droplet, Layers, MapPin, RotateCcw, Trees, Waves, ZoomIn, ZoomOut } from 'lucide-react';
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { Droplet, Layers, MapPin, Waves } from 'lucide-react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { distText, fmtInt } from '../../../data/engine/format';
+import { getGeo } from '../../../data/engine/geo';
 import { RISK_LABEL, RISK_STYLE, terrainCards, type MapLayer, type SourceInfo } from '../../../data/engine/watershed';
-import { copy } from '../../../i18n';
-import { PageHeader, PageLink } from '../../../shared/ui';
+import { copy, number } from '../../../i18n';
+import { PageHeader } from '../../../shared/ui';
 import { useField } from '../../../app/context/FieldContext';
 import type { BasinExplorerRepository } from '../data/basin-explorer.repository';
+import { farmSubbasins, subbasinLayers } from '../components/subbasin-layers';
+import { RainOutlook } from '../components/RainOutlook';
+import { WaterJourney } from '../components/WaterJourney';
 
 // MapLibre and Turf load only when this page opens.
 const BasinExplorer = lazy(() => import('../components/BasinExplorer'));
+const SubbasinMap = lazy(() => import('../components/SubbasinMap'));
 
 const LAYERS: { id: MapLayer; label: string; desc: string }[] = [
   { id: 'agua', label: 'Fuentes de agua', desc: 'Nacientes, pozos y halos de recarga de 1 km (SAGA).' },
@@ -17,27 +22,31 @@ const LAYERS: { id: MapLayer; label: string; desc: string }[] = [
 ];
 
 export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository }) {
-  const { ds, ctx, plan, basin, alerts, journey, farmSite } = useField();
+  const { ds, ctx, plan, basin, alerts, journey, farmSite, setSubbasin, demo } = useField();
   const [layer, setLayer] = useState<MapLayer>('agua');
-  const [zoom, setZoom] = useState(1);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
   const terrain = useMemo(() => (ds && ctx ? terrainCards(ds, ctx) : []), [ds, ctx]);
+  const farmSubs = useMemo(
+    () => (ds && farmSite ? farmSubbasins(ds, farmSite) : []),
+    [ds, farmSite],
+  );
+  // The app's 3 km grid can place the farm in a neighboring sub-basin: show one it is really in.
+  const subId = ctx?.subId;
+  useEffect(() => {
+    if (subId !== undefined && farmSubs.length && !farmSubs.some((s) => s.id === subId)) {
+      setSubbasin(farmSubs[0].id);
+    }
+  }, [farmSubs, subId, setSubbasin]);
+  const mapLayers = useMemo(
+    () => (ds && ctx && plan ? subbasinLayers(getGeo(ds), ctx, plan, farmSite) : null),
+    [ds, ctx, plan, farmSite],
+  );
 
-  if (!ds || !ctx || !plan || !basin || !alerts || !journey) return null;
+  if (!ds || !ctx || !plan || !basin || !alerts || !journey || !mapLayers) return null;
 
-  const pin = ctx.geo.toPx(ctx.loc.x, ctx.loc.y);
-  const BW = ctx.geo.box.BW;
-  const BH = ctx.geo.box.BH;
-  const zw = BW / zoom;
-  const zh = BH / zoom;
   const activeSource: SourceInfo | null =
     plan.sources.find((s) => s.i === selectedIdx) ?? plan.sources[0] ?? null;
-  const activePx = activeSource ? ctx.geo.toPx(activeSource.q[0], activeSource.q[1]) : null;
-  const focus = activePx ?? pin;
-  const zvx = zoom <= 1 ? 0 : Math.max(0, Math.min(BW - zw, focus.x - zw / 2));
-  const zvy = zoom <= 1 ? 0 : Math.max(0, Math.min(BH - zh, focus.y - zh / 2));
-  const maxRain = Math.max(40, ...plan.forecast.flatMap((m) => [m.n, m.e]));
 
   return (
     <div className="v10-stack">
@@ -95,49 +104,7 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
         </article>
       </section>
 
-      <section className="v10-card" aria-labelledby="hydro-title">
-        <h2 id="hydro-title">Cómo viaja el agua desde tu potrero hasta la ASADA</h2>
-        <svg
-          viewBox="0 0 640 150"
-          className="v10-svg-canvas"
-          style={{ background: '#EFF6F2' }}
-          role="img"
-          aria-label={`Diagrama del viaje del agua: la lluvia se infiltra en tu finca, recarga el acuífero y alimenta la fuente ${journey.src} a ${journey.dist}, administrada por ${journey.op}.`}
-        >
-          <path d="M0,78 Q160,55 320,88 T640,104 L640,150 L0,150 Z" fill="#C7DFCE" />
-          <path d="M0,108 Q180,98 340,114 T640,124 L640,150 L0,150 Z" fill="#9BC9DC" opacity="0.7" />
-          <path
-            d="M110,68 C170,115 280,118 390,106 C450,100 500,98 555,102"
-            fill="none"
-            stroke="#17617C"
-            strokeWidth="4"
-            className="v10-flow-anim"
-          />
-          <circle cx="110" cy="64" r="10" fill="#2E7A43" />
-          <text x="110" y="34" textAnchor="middle" fontSize="13" fontWeight="700" fill="#16231C">
-            Tu finca
-          </text>
-          <text x="110" y="48" textAnchor="middle" fontSize="11" fill="#46574C">
-            Infiltración en suelo
-          </text>
-
-          <circle cx="345" cy="108" r="11" fill="#17617C" />
-          <text x="345" y="76" textAnchor="middle" fontSize="13" fontWeight="700" fill="#0D3A4B">
-            {journey.src.slice(0, 26)}
-          </text>
-          <text x="345" y="90" textAnchor="middle" fontSize="11" fill="#46574C">
-            A {journey.dist}
-          </text>
-
-          <rect x="505" y="78" width="110" height="44" rx="10" fill="#FFFFFF" stroke="#17617C" strokeWidth="2" />
-          <text x="560" y="98" textAnchor="middle" fontSize="12" fontWeight="800" fill="#0D3A4B">
-            {journey.op.slice(0, 18)}
-          </text>
-          <text x="560" y="113" textAnchor="middle" fontSize="11" fill="#46574C">
-            {journey.conn} conexiones
-          </text>
-        </svg>
-      </section>
+      <WaterJourney repository={explorer} site={farmSite} approx={journey} />
 
       <section className="v10-svg-box" aria-labelledby="map-layers-title">
         <div className="v10-map-toolbar">
@@ -162,10 +129,32 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
           </div>
         </div>
 
+        {farmSubs.length > 1 && (
+          <div className="v10-pill-row" role="group" aria-label={copy.subbasinChoice.label(farmSubs.length)}>
+            <span className="v10-small" style={{ alignSelf: 'center' }}>
+              {copy.subbasinChoice.label(farmSubs.length)}
+            </span>
+            {farmSubs.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className="v10-pill-btn"
+                aria-pressed={ctx.subId === s.id}
+                onClick={() => {
+                  setSelectedIdx(null);
+                  setSubbasin(s.id);
+                }}
+              >
+                {copy.subbasinChoice.option(s.name, number(s.share * 100, 0))}
+              </button>
+            ))}
+          </div>
+        )}
+
         <div className="v10-map-toolbar">
           <div className="v10-legend-row">
             <span className="v10-legend-dot">
-              <i style={{ background: '#17617C' }} /> Tu finca
+              <i style={{ background: farmSite?.parcel ? '#C2185B' : '#17617C' }} /> Tu finca
             </span>
             {layer === 'agua' && (
               <>
@@ -208,114 +197,23 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
             )}
           </div>
 
-          <div className="v10-pill-row">
-            <button
-              type="button"
-              className="v10-pill-btn"
-              aria-label="Acercar subcuenca"
-              onClick={() => setZoom((z) => Math.min(4, z * 2))}
-            >
-              <ZoomIn size={16} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="v10-pill-btn"
-              aria-label="Alejar subcuenca"
-              onClick={() => setZoom((z) => Math.max(1, z / 2))}
-            >
-              <ZoomOut size={16} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="v10-pill-btn"
-              aria-label="Restablecer vista de subcuenca"
-              onClick={() => setZoom(1)}
-            >
-              <RotateCcw size={16} aria-hidden="true" />
-            </button>
-          </div>
         </div>
 
-        <svg
-          viewBox={`${zvx.toFixed(1)} ${zvy.toFixed(1)} ${zw.toFixed(1)} ${zh.toFixed(1)}`}
-          className="v10-svg-canvas"
-          style={{ maxHeight: 360 }}
-          role="img"
-          aria-label={`Mapa de la subcuenca ${ctx.sub.n} en capa ${LAYERS.find((l) => l.id === layer)?.label}.`}
+        <Suspense
+          fallback={
+            <p className="map-loading" role="status">
+              {copy.watershed.mapLoading}
+            </p>
+          }
         >
-          <g>
-            <svg viewBox={ctx.geo.vb} width={BW} height={BH} preserveAspectRatio="none">
-              <path d={ctx.geo.d} fill="#F4F8F5" stroke="#5A7566" strokeWidth="1.5" />
-            </svg>
-          </g>
-
-          {layer === 'restaurar' &&
-            plan.tilesRestaurar.map((t, i) => (
-              <rect
-                key={`rest-${i}`}
-                x={t.x}
-                y={t.y}
-                width={9}
-                height={9}
-                fill={t.col}
-                fillOpacity={0.72}
-                rx={1.5}
-              />
-            ))}
-
-          {layer === 'orillas' &&
-            plan.tilesOrillas.map((t, i) => (
-              <rect
-                key={`ori-${i}`}
-                x={t.x}
-                y={t.y}
-                width={9}
-                height={9}
-                fill={t.col}
-                fillOpacity={0.76}
-                rx={1.5}
-              />
-            ))}
-
-          {layer === 'agua' &&
-            plan.halos.map((h, i) => (
-              <circle
-                key={`halo-${i}`}
-                cx={h.x}
-                cy={h.y}
-                r={12}
-                fill={h.col}
-                fillOpacity={0.14}
-                stroke={h.col}
-                strokeOpacity={0.45}
-                strokeDasharray="3 3"
-              />
-            ))}
-
-          {plan.sources.map((s) => {
-            const pt = ctx.geo.toPx(s.q[0], s.q[1]);
-            const style = RISK_STYLE[s.risk];
-            return (
-              <g
-                key={s.i}
-                style={{ cursor: 'pointer' }}
-                onClick={() => setSelectedIdx(s.i)}
-              >
-                <circle
-                  cx={pt.x}
-                  cy={pt.y}
-                  r={activeSource?.i === s.i ? 7.5 : 5}
-                  fill={style[1]}
-                  stroke="#FFFFFF"
-                  strokeWidth="1.5"
-                />
-              </g>
-            );
-          })}
-
-          <circle cx={pin.x} cy={pin.y} r={9} fill="#17617C" fillOpacity={0.22} />
-          <circle cx={pin.x} cy={pin.y} r={5} fill="#17617C" stroke="#FFFFFF" strokeWidth="2" />
-        </svg>
+          <SubbasinMap
+            layers={mapLayers}
+            layer={layer}
+            selected={activeSource?.i ?? null}
+            onSelect={setSelectedIdx}
+            label={`Mapa de la subcuenca ${ctx.sub.n} en capa ${LAYERS.find((l) => l.id === layer)?.label}.`}
+          />
+        </Suspense>
 
         {activeSource ? (
           <div
@@ -355,65 +253,7 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
         )}
       </section>
 
-      <section className="v10-grid-2">
-        <article className="v10-card">
-          <h2>Lluvia esperada en tu zona (El Niño vs normal)</h2>
-          <p className="v10-muted">{plan.forecastTxt}</p>
-          <div className="v10-bar-chart" role="img" aria-label={`Comparación de lluvia de 6 meses: ${plan.forecastTxt}`}>
-            {plan.forecast.map((m) => (
-              <div key={m.m} className="v10-bar-col">
-                <div className="v10-bar-stack">
-                  <div
-                    className="v10-bar"
-                    style={{ height: Math.max(8, Math.round((m.n / maxRain) * 76)), background: '#9AB8C7' }}
-                    title={`Normal ${m.m}: ${m.n} mm`}
-                  />
-                  <div
-                    className="v10-bar"
-                    style={{ height: Math.max(8, Math.round((m.e / maxRain) * 76)), background: '#17617C' }}
-                    title={`Con El Niño ${m.m}: ${m.e} mm`}
-                  />
-                </div>
-                <strong style={{ fontSize: '0.8125rem' }}>{m.m}</strong>
-                <span className="v10-small">{m.e} mm</span>
-              </div>
-            ))}
-          </div>
-          <div className="v10-legend-row">
-            <span className="v10-legend-dot">
-              <i style={{ background: '#9AB8C7' }} /> Promedio 1991–2025
-            </span>
-            <span className="v10-legend-dot">
-              <i style={{ background: '#17617C' }} /> Año El Niño (NASA POWER)
-            </span>
-          </div>
-        </article>
-
-        <article className="v10-card">
-          <h2>
-            <Trees size={18} aria-hidden="true" /> Plan de regeneración para esta subcuenca
-          </h2>
-          <ul className="v10-list">
-            {plan.actions.map((act) => (
-              <li key={act.num} className="v10-list-item">
-                <div className="v10-map-toolbar">
-                  <strong>{act.t}</strong>
-                  <span className="v10-tag" style={{ background: '#E2F1E5', color: '#1F5A32' }}>
-                    {act.when}
-                  </span>
-                </div>
-                <span className="v10-muted">{act.d}</span>
-                <span className="v10-small">
-                  Impacto: {act.imp} · Responsable: {act.who}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <PageLink to="/care" primary>
-            Ir a acciones en mi finca
-          </PageLink>
-        </article>
-      </section>
+      <RainOutlook ds={ds} reg={ctx.reg} demo={demo} />
 
       <section aria-labelledby="terrain-title">
         <h2 id="terrain-title" style={{ marginBottom: 12 }}>

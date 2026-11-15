@@ -1,4 +1,4 @@
-import { Check, Droplet, ShieldAlert, Sprout } from 'lucide-react';
+import { Check, Droplet, ShieldAlert, Sprout, Trees } from 'lucide-react';
 import { CONSERVATION_ACTIONS } from '../../../data/engine/farm';
 import { PageHeader, PageLink } from '../../../shared/ui';
 import { useField } from '../../../app/context/FieldContext';
@@ -15,9 +15,10 @@ export function RestorationPage() {
     setApartos,
     rotation,
     farm,
+    plan,
   } = useField();
 
-  if (!ctx || !legal || !journey || !zoneAbove || !rotation || !farm) return null;
+  if (!ctx || !legal || !journey || !zoneAbove || !rotation || !farm || !plan) return null;
 
   const doneCount = CONSERVATION_ACTIONS.filter((a) => acts[a.id] === 'hecho').length;
   const planCount = CONSERVATION_ACTIONS.filter((a) => acts[a.id] === 'plan').length;
@@ -138,6 +139,31 @@ export function RestorationPage() {
       </section>
 
       {/* Calculadora de rotación de potreros */}
+      {/* Plan de la subcuenca (antes en Mi cuenca) */}
+      <section>
+        <article className="v10-card">
+          <h2>
+            <Trees size={18} aria-hidden="true" /> Plan de regeneración para esta subcuenca
+          </h2>
+          <ul className="v10-list">
+            {plan.actions.map((act) => (
+              <li key={act.num} className="v10-list-item">
+                <div className="v10-map-toolbar">
+                  <strong>{act.t}</strong>
+                  <span className="v10-tag" style={{ background: '#E2F1E5', color: '#1F5A32' }}>
+                    {act.when}
+                  </span>
+                </div>
+                <span className="v10-muted">{act.d}</span>
+                <span className="v10-small">
+                  Impacto: {act.imp} · Responsable: {act.who}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      </section>
+
       <section className="v10-card" aria-labelledby="rotation-title">
         <div className="v10-map-toolbar">
           <div>

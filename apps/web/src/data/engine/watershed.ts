@@ -210,6 +210,9 @@ export interface SourceInfo {
 export interface MapTile {
   x: number;
   y: number;
+  /** Centro de la celda en coordenadas locales. */
+  lx: number;
+  ly: number;
   col: string;
 }
 
@@ -299,11 +302,15 @@ export function watershedPlan(
   const tilesRestaurar: MapTile[] = tileP.map((o) => ({
     x: o.t.x,
     y: o.t.y,
+    lx: o.t.lx,
+    ly: o.t.ly,
     col: o.water ? '#CFE3EC' : o.pr < 0 ? '#1F6B3A' : PCOL[o.pr],
   }));
   const tilesOrillas: MapTile[] = tileP.map((o) => ({
     x: o.t.x,
     y: o.t.y,
+    lx: o.t.lx,
+    ly: o.t.ly,
     col: o.water || !o.r ? '#CFE3EC' : BCOL[o.r.bank],
   }));
 
