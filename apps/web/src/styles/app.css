@@ -1389,6 +1389,17 @@ summary {
   .secondary-nav {
     display: none;
   }
+  .sidebar .secondary-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  .sidebar .secondary-link {
+    min-height: 44px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8125rem;
+  }
   .primary-nav {
     position: fixed;
     bottom: 0;

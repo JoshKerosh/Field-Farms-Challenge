@@ -197,7 +197,7 @@ export interface ConservationAction {
 export const CONSERVATION_ACTIONS: ConservationAction[] = localizedResource(() => [
   {
     id: 'naciente',
-    ic: '💧',
+    ic: '',
     t: message('m60414a7c0d35'),
     d: message('m10b9d0db8d4d'),
     ley: message('ma799cc98b16f'),
@@ -205,7 +205,7 @@ export const CONSERVATION_ACTIONS: ConservationAction[] = localizedResource(() =
   },
   {
     id: 'ribera',
-    ic: '🌳',
+    ic: '',
     t: message('m4ec28cf8bf1e'),
     d: message('madeb542e4791'),
     ley: message('ma799cc98b16f'),
@@ -213,7 +213,7 @@ export const CONSERVATION_ACTIONS: ConservationAction[] = localizedResource(() =
   },
   {
     id: 'potreros',
-    ic: '🔄',
+    ic: '',
     t: message('mf84fdd3b79a3'),
     d: message('m915eb959e3b0'),
     ley: '',
@@ -221,7 +221,7 @@ export const CONSERVATION_ACTIONS: ConservationAction[] = localizedResource(() =
   },
   {
     id: 'bebederos',
-    ic: '🚰',
+    ic: '',
     t: message('m4a575ff7a0b4'),
     d: message('md4de59a92411'),
     ley: '',
@@ -229,7 +229,7 @@ export const CONSERVATION_ACTIONS: ConservationAction[] = localizedResource(() =
   },
   {
     id: 'arboles',
-    ic: '🌱',
+    ic: '',
     t: message('mc29de0c02f68'),
     d: message('m77b39eb67bba'),
     ley: '',
@@ -237,7 +237,7 @@ export const CONSERVATION_ACTIONS: ConservationAction[] = localizedResource(() =
   },
   {
     id: 'lluvia',
-    ic: '🌧',
+    ic: '',
     t: message('m3948892529c4'),
     d: message('m25a5604890b3'),
     ley: '',
@@ -245,7 +245,7 @@ export const CONSERVATION_ACTIONS: ConservationAction[] = localizedResource(() =
   },
   {
     id: 'quemas',
-    ic: '🔥',
+    ic: '',
     t: message('m5978b178d0cf'),
     d: message('mae0ef6633d61'),
     ley: '',
@@ -253,7 +253,7 @@ export const CONSERVATION_ACTIONS: ConservationAction[] = localizedResource(() =
   },
   {
     id: 'turismo',
-    ic: '🦜',
+    ic: '',
     t: message('md81399711b16'),
     d: message('m3a520eb2876b'),
     ley: '',

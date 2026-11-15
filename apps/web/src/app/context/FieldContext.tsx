@@ -14,7 +14,6 @@ import {
   type AlertSources,
 } from '../../features/alerts/data/alert-sources';
 import { imergEvidenceForPoint } from '../../features/alerts/data/imerg-source';
-import { answerQuestion, type QuestionId } from '../../data/engine/assistant';
 import {
   climateSignals,
   prepare,
@@ -61,11 +60,6 @@ const LS_KEYS = {
   flucShare: 'ffc.v10.flucShare',
   farmSite: 'ffc.v10.farmSite',
 } as const;
-export interface ChatTurn {
-  id: QuestionId;
-  question: string;
-  answer: string;
-}
 /** Point chosen on the real map in "Mi finca" and the SIRI parcel under it, if any. */
 export interface FarmSite {
   provisionalId?: string;
@@ -103,7 +97,6 @@ export interface FieldContextValue {
   ctx: PlaceContext | null;
   approx: boolean;
   demo: DemoScenario | null;
-  setDemo: (d: DemoScenario | null) => void;
   pickLocation: (
     loc: Loc,
     opts?: {
@@ -136,7 +129,7 @@ export interface FieldContextValue {
   apartos: number;
   setApartos: (n: number) => void;
   recs: FieldRecord[];
-  addRecord: (rec: Omit<FieldRecord, 'id'>) => void;
+  addRecord: (rec: Omit<FieldRecord, 'id'>) => boolean;
   loadDemoRecords: (srcIndex: number) => void;
   clearDemoRecords: () => void;
   role: ViewRole;
@@ -157,9 +150,6 @@ export interface FieldContextValue {
   alerts: AlertsSummary | null;
   alertSources: AlertSources;
   fluc: FlucSummary | null;
-  chatTurns: ChatTurn[];
-  askAssistant: (id: QuestionId, questionText: string) => string;
-  clearAssistant: () => void;
 }
 const FieldContext = createContext<FieldContextValue | null>(null);
 export function FieldContextProvider({ children }: { children: ReactNode }) {
@@ -200,7 +190,7 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
       ? null
       : readJson<FarmSite | null>(LS_KEYS.farmSite, null),
   );
-  const [demo, setDemo] = useState<DemoScenario | null>(null);
+  const demo: DemoScenario | null = null;
   const [alertSources, setAlertSources] = useState<AlertSources>(emptyAlertSources);
   const [spatialAlertEvidence, setSpatialAlertEvidence] = useState<AlertSources['spatial']>(null);
   useEffect(() => {
@@ -219,7 +209,6 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     };
   }, []);
   const [satFrame, setSatFrame] = useState<number | null>(null);
-  const [chatTurns, setChatTurns] = useState<ChatTurn[]>([]);
   useEffect(() => {
     let alive = true;
     loadDataset()
@@ -239,6 +228,14 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
   }, []);
   const ctx = useMemo<PlaceContext | null>(() => {
     if (!ds) return null;
+    // The active farm is authoritative, including when an older contextual location was saved.
+    if (farmSite) {
+      const loc = getGeo(ds).llToLocal(farmSite.lat, farmSite.lng);
+      const samePoint =
+        storedLoc && Math.abs(storedLoc.x - loc.x) < 1e-6 && Math.abs(storedLoc.y - loc.y) < 1e-6;
+      const resolved = placeAt(ds, loc, samePoint ? storedLoc.subId : null);
+      if (resolved) return resolved;
+    }
     if (storedLoc) {
       const resolved = placeAt(ds, { x: storedLoc.x, y: storedLoc.y }, storedLoc.subId);
       if (resolved) return resolved;
@@ -246,7 +243,7 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     const geo = getGeo(ds);
     const upalaLoc = geo.llToLocal(10.8, -85.08);
     return placeAt(ds, upalaLoc, null);
-  }, [ds, storedLoc, messageLanguage()]);
+  }, [ds, storedLoc, farmSite, messageLanguage()]);
   useEffect(() => {
     if (!ds || !ctx) return;
     let alive = true;
@@ -366,17 +363,16 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
   );
   const addRecord = useCallback(
     (rec: Omit<FieldRecord, 'id'>) => {
-      setRecs((prev) => {
-        const created: FieldRecord = {
-          ...rec,
-          id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-        };
-        const next = [created, ...prev];
-        writeJson(LS_KEYS.recs, next);
-        return next;
-      });
+      const next = [{ ...rec, id: crypto.randomUUID() }, ...recs];
+      try {
+        window.localStorage.setItem(LS_KEYS.recs, JSON.stringify(next));
+      } catch {
+        return false;
+      }
+      setRecs(next);
+      return true;
     },
-    [messageLanguage()],
+    [recs],
   );
   const loadDemoRecords = useCallback(
     (srcIndex: number) => {
@@ -472,27 +468,6 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     () => (ds && ctx ? flucForCanton(ds, ctx.canton.n) : null),
     [ds, ctx, messageLanguage()],
   );
-  const askAssistant = useCallback(
-    (id: QuestionId, questionText: string) => {
-      if (!ds || !ctx || !journey || !alerts || !fluc || !plan || !zoneAbove) {
-        return message('m71c152386fd2');
-      }
-      const answer = answerQuestion(id, {
-        ds,
-        ctx,
-        siteFloodsFlag,
-        journey,
-        alerts,
-        fluc,
-        plan,
-        zoneAbove,
-      });
-      setChatTurns((prev) => [...prev, { id, question: questionText, answer }]);
-      return answer;
-    },
-    [ds, ctx, siteFloodsFlag, journey, alerts, fluc, plan, zoneAbove, messageLanguage()],
-  );
-  const clearAssistant = useCallback(() => setChatTurns([]), [messageLanguage()]);
   const value: FieldContextValue = {
     ds,
     loading,
@@ -500,7 +475,6 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     ctx,
     approx: Boolean(storedLoc?.approx),
     demo,
-    setDemo,
     pickLocation,
     pickLatLon,
     farmSite,
@@ -529,7 +503,6 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
       setFarmState({ key: 'mia', my: null });
       setFarmSiteState(null);
       setStoredLoc(null);
-      setDemo(null);
     },
     farm,
     saveMyFarm,
@@ -560,9 +533,6 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     alerts,
     alertSources,
     fluc,
-    chatTurns,
-    askAssistant,
-    clearAssistant,
   };
   return <FieldContext.Provider value={value}>{children}</FieldContext.Provider>;
 }

@@ -1,0 +1,45 @@
+.benefits-summary {
+  grid-template-columns: minmax(0, 1fr);
+}
+.benefit-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+.benefit-summary dd {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.opportunity-details {
+  margin-top: 1rem;
+  max-width: 70ch;
+}
+.opportunity-details h4 {
+  margin: 1.25rem 0 0.5rem;
+}
+.opportunity-details ul {
+  list-style: disc;
+  padding-left: 1.4rem;
+}
+.opportunity-details ol {
+  list-style: decimal;
+  padding-left: 1.4rem;
+}
+.opportunity-details li {
+  margin-bottom: 0.6rem;
+}
+.opportunity-details a {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 480px) {
+  .benefit-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .benefit-summary > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+}

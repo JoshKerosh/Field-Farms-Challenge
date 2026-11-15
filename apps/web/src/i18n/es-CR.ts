@@ -9,7 +9,7 @@ const signed = (value: number) =>
 export const esCR = localizedResource(
   () =>
     ({
-      brand: { name: 'Field Farms Challenge', promise: message('me1099d6eb3d7') },
+      brand: { name: 'Sow Water', promise: message('me1099d6eb3d7') },
       nav: {
         farm: message('mba8875d8f580'),
         watershed: message('m5d9996a3835e'),

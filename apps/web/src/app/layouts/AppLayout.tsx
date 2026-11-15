@@ -14,7 +14,6 @@ import {
   HandCoins,
   Map,
   MapPin,
-  MessageCircle,
   Sprout,
   TriangleAlert,
 } from 'lucide-react';
@@ -41,7 +40,7 @@ export function AppLayout() {
   ];
   const { pathname } = useLocation();
   const navigationState = useNavigation();
-  const { ctx, demo, setDemo, loading, error, myFarm, farmSite } = useField();
+  const { ctx, loading, error, myFarm, farmSite } = useField();
   const flow = useFarmFlowCopy();
   const shortNavigation: Record<string, string> = {
     '/care': flow.plan,
@@ -85,10 +84,7 @@ export function AppLayout() {
           <span className="brand-mark">
             <Droplet size={25} aria-hidden="true" />
           </span>
-          <span>
-            {message('m29e912511fcd')}
-            <span className="brand-subtitle">{message('m27cf1792f7bb')}</span>
-          </span>
+          <span>{message('m29e912511fcd')}</span>
         </Link>
 
         <nav className="primary-nav" aria-label={c.mainNav}>
@@ -113,10 +109,6 @@ export function AppLayout() {
           <NavLink to="/benefits" className="secondary-link">
             <HandCoins size={20} aria-hidden="true" />
             {c.benefits}
-          </NavLink>
-          <NavLink to="/assistant" className="secondary-link">
-            <MessageCircle size={20} aria-hidden="true" />
-            {c.assistant}
           </NavLink>
         </nav>
         <div className="sidebar-foot">
@@ -143,17 +135,6 @@ export function AppLayout() {
           </Link>
           <Preferences />
         </header>
-        {demo ? (
-          <div className="demo-banner demo-banner--active" role="status">
-            <span className="demo-label">
-              {c.simulation}: {{ seco: c.drought, inund: c.flood, calor: c.heat }[demo]}
-            </span>
-            <p>{c.simulationHint}</p>
-            <button type="button" className="v10-pill-btn" onClick={() => setDemo(null)}>
-              {c.exit}
-            </button>
-          </div>
-        ) : null}
         <main
           id="main"
           className="main-content"
@@ -170,7 +151,7 @@ export function AppLayout() {
               {c.loading}
             </p>
           ) : (!myFarm || !farmSite) &&
-            ['/watershed', '/alerts', '/benefits', '/assistant'].includes(pathname) ? (
+            ['/watershed', '/alerts', '/benefits'].includes(pathname) ? (
             <div className="v10-stack">
               <PageHeader
                 title={
@@ -178,7 +159,6 @@ export function AppLayout() {
                   {
                     '/environment': c.environment,
                     '/benefits': c.benefits,
-                    '/assistant': c.assistant,
                   }[pathname] ??
                   c.farm
                 }
@@ -198,10 +178,6 @@ export function AppLayout() {
           <ConnectionStatus />
           <PwaStatus />
         </footer>
-        <Link className="mobile-assistant" to="/assistant" aria-label={c.assistant}>
-          <MessageCircle size={20} aria-hidden="true" />
-          <span>{c.assistant}</span>
-        </Link>
       </div>
     </div>
   );

@@ -8,10 +8,10 @@ test.beforeEach(async ({ page }) => registerTestFarm(page));
 test('keeps missing spatial evidence gray and exposes both project rules', async ({ page }) => {
   await page.goto('/alerts');
   const map = page.getByRole('region', { name: 'Mapa de condiciones de riesgo', exact: true });
-  await expect(map.getByRole('img')).toBeVisible();
+  await expect(map.getByRole('img')).toHaveCount(0);
+  await map.locator('summary').click();
   await expect(map).toContainText('Faltan capas verificadas');
   await expect(map).toContainText('pendiente ≥20°');
-  await map.getByRole('button', { name: 'Inundaciones', exact: true }).click();
   await expect(map).toContainText('≤5m (HAND)');
   await expect(map.locator('svg path[fill="#25804A"]')).toHaveCount(0);
   expect(

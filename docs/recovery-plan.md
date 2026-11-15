@@ -19,7 +19,13 @@ editing and deletion. "Delete record" asks for confirmation and removes the prof
 associated plan (including its known provisional copy), with its photos and expenses. Other plans
 are kept. If clearing the profile fails, it tries to restore the deleted plans.
 
-The plan lets users edit the goal, deadline, place and budget. The unit is locked once
+The plan lets users edit the goal, deadline, place and budget. Each goal links to
+`/records?section=plan&goal=<id>`. Records is the only place to capture and correct progress,
+photos and expenses. Plan, Records and Benefits read the same IndexedDB plan through
+`useRecoveryPlan`; existing identities and backups remain compatible. History, backup,
+restore and printing are in Records, while institutional programmes appear only in Benefits.
+
+The unit is locked once
 measurements exist, so earlier records are not reinterpreted. Progress entries let users correct the date,
 amount, note and expense without losing the photos. The JSON backup includes encoded photos and can
 be restored after confirmation: it replaces the current plan and does not add duplicate expenses. Invalid
@@ -29,6 +35,9 @@ be explicitly linked to the current farm. Imports accept files up to 50 MB.
 Amounts are cumulative up to the given date: progress uses the latest measurement and does not add up
 repeated measurements. If two records have the same date, the one added last wins.
 Expenses are added up. Completing a task does not prove environmental recovery.
+Water measurements are separate from goal entries. Legacy samples and unlinked actions remain
+in a separate archive and do not feed real trends. ASADA and institution summaries are local,
+with no automatic sharing or remote sync.
 Three photos are accepted per record, JPG/PNG/WebP up to 20 MB each. They are resized to
 1600 pixels and stored as JPEG, along with notes and expenses. Save failures don't show
 success or clear the form. Printing lets users share a summary, with no automatic sending.

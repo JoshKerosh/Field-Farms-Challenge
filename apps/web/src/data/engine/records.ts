@@ -8,6 +8,7 @@ export type RecordType = 'caudal' | 'accion' | 'evento' | 'lluvia';
 /** Field record stored on the user's device. */
 export interface FieldRecord {
   id: string;
+  location?: { lat: number; lng: number };
   t: RecordType;
   /** L/s (flow), mm (rainfall) or text (action/event). */
   v: number | string;
@@ -38,10 +39,10 @@ export const RECORD_TYPES: {
   n: string;
   d: string;
 }[] = localizedResource(() => [
-  { id: 'caudal', ic: '💧', n: message('m1f4dc3b3db5e'), d: message('ma4c7ed873722') },
-  { id: 'accion', ic: '🌳', n: message('m212e06c386ff'), d: message('m4f3feefeda40') },
-  { id: 'evento', ic: '⚠️', n: message('m43f6698cdd81'), d: message('m3479bd1a00ba') },
-  { id: 'lluvia', ic: '🌧', n: message('m24af7c4cec82'), d: message('m40897cf0d637') },
+  { id: 'caudal', ic: '', n: message('m1f4dc3b3db5e'), d: message('ma4c7ed873722') },
+  { id: 'accion', ic: '', n: message('m212e06c386ff'), d: message('m4f3feefeda40') },
+  { id: 'evento', ic: '', n: message('m43f6698cdd81'), d: message('m3479bd1a00ba') },
+  { id: 'lluvia', ic: '', n: message('m24af7c4cec82'), d: message('m40897cf0d637') },
 ]);
 export type ViewRole = 'finquero' | 'asada' | 'inst';
 export const VIEW_ROLES: {
