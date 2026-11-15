@@ -14,7 +14,6 @@ import {
   type AlertSources,
 } from '../../features/alerts/data/alert-sources';
 import { imergEvidenceForPoint } from '../../features/alerts/data/imerg-source';
-import { answerQuestion, type QuestionId } from '../../data/engine/assistant';
 import {
   climateSignals,
   prepare,
@@ -61,11 +60,6 @@ const LS_KEYS = {
   flucShare: 'ffc.v10.flucShare',
   farmSite: 'ffc.v10.farmSite',
 } as const;
-export interface ChatTurn {
-  id: QuestionId;
-  question: string;
-  answer: string;
-}
 /** Point chosen on the real map in "Mi finca" and the SIRI parcel under it, if any. */
 export interface FarmSite {
   provisionalId?: string;
@@ -157,9 +151,6 @@ export interface FieldContextValue {
   alerts: AlertsSummary | null;
   alertSources: AlertSources;
   fluc: FlucSummary | null;
-  chatTurns: ChatTurn[];
-  askAssistant: (id: QuestionId, questionText: string) => string;
-  clearAssistant: () => void;
 }
 const FieldContext = createContext<FieldContextValue | null>(null);
 export function FieldContextProvider({ children }: { children: ReactNode }) {
@@ -219,7 +210,6 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     };
   }, []);
   const [satFrame, setSatFrame] = useState<number | null>(null);
-  const [chatTurns, setChatTurns] = useState<ChatTurn[]>([]);
   useEffect(() => {
     let alive = true;
     loadDataset()
@@ -472,27 +462,6 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     () => (ds && ctx ? flucForCanton(ds, ctx.canton.n) : null),
     [ds, ctx, messageLanguage()],
   );
-  const askAssistant = useCallback(
-    (id: QuestionId, questionText: string) => {
-      if (!ds || !ctx || !journey || !alerts || !fluc || !plan || !zoneAbove) {
-        return message('m71c152386fd2');
-      }
-      const answer = answerQuestion(id, {
-        ds,
-        ctx,
-        siteFloodsFlag,
-        journey,
-        alerts,
-        fluc,
-        plan,
-        zoneAbove,
-      });
-      setChatTurns((prev) => [...prev, { id, question: questionText, answer }]);
-      return answer;
-    },
-    [ds, ctx, siteFloodsFlag, journey, alerts, fluc, plan, zoneAbove, messageLanguage()],
-  );
-  const clearAssistant = useCallback(() => setChatTurns([]), [messageLanguage()]);
   const value: FieldContextValue = {
     ds,
     loading,
@@ -560,9 +529,6 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     alerts,
     alertSources,
     fluc,
-    chatTurns,
-    askAssistant,
-    clearAssistant,
   };
   return <FieldContext.Provider value={value}>{children}</FieldContext.Provider>;
 }

@@ -14,7 +14,6 @@ import {
   HandCoins,
   Map,
   MapPin,
-  MessageCircle,
   Sprout,
   TriangleAlert,
 } from 'lucide-react';
@@ -87,7 +86,6 @@ export function AppLayout() {
           </span>
           <span>
             {message('m29e912511fcd')}
-            <span className="brand-subtitle">{message('m27cf1792f7bb')}</span>
           </span>
         </Link>
 
@@ -113,10 +111,6 @@ export function AppLayout() {
           <NavLink to="/benefits" className="secondary-link">
             <HandCoins size={20} aria-hidden="true" />
             {c.benefits}
-          </NavLink>
-          <NavLink to="/assistant" className="secondary-link">
-            <MessageCircle size={20} aria-hidden="true" />
-            {c.assistant}
           </NavLink>
         </nav>
         <div className="sidebar-foot">
@@ -170,7 +164,7 @@ export function AppLayout() {
               {c.loading}
             </p>
           ) : (!myFarm || !farmSite) &&
-            ['/watershed', '/alerts', '/benefits', '/assistant'].includes(pathname) ? (
+            ['/watershed', '/alerts', '/benefits'].includes(pathname) ? (
             <div className="v10-stack">
               <PageHeader
                 title={
@@ -178,7 +172,6 @@ export function AppLayout() {
                   {
                     '/environment': c.environment,
                     '/benefits': c.benefits,
-                    '/assistant': c.assistant,
                   }[pathname] ??
                   c.farm
                 }
@@ -198,10 +191,6 @@ export function AppLayout() {
           <ConnectionStatus />
           <PwaStatus />
         </footer>
-        <Link className="mobile-assistant" to="/assistant" aria-label={c.assistant}>
-          <MessageCircle size={20} aria-hidden="true" />
-          <span>{c.assistant}</span>
-        </Link>
       </div>
     </div>
   );

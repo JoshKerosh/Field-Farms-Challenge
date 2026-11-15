@@ -81,14 +81,10 @@ test('muestra avance en finca y catálogo de beneficios con vigencia y fuente', 
   await expect(ganbos).toHaveCount(0);
 });
 
-test('el asistente responde preguntas rápidas usando el contexto real de la finca', async ({
-  page,
-}) => {
-  await registerTestFarm(page);
-  await page.goto('/assistant', { waitUntil: 'domcontentloaded' });
-  await expect(page.getByRole('heading', { name: 'Asistente del agua' })).toBeVisible();
-  await page.getByRole('button', { name: '¿De dónde viene mi agua?' }).click();
-  await expect(page.getByText(/El agua de tu zona sale de la fuente/)).toBeVisible();
+test('redirects the retired assistant and removes its navigation', async ({ page }) => {
+  await page.goto('/assistant');
+  await expect(page).toHaveURL(/\/guide$/);
+  await expect(page.getByRole('link', { name: /Asistente/ })).toHaveCount(0);
 });
 
 test('no recorta controles a 320 px ni al aumentar el texto al 200 %', async ({ page }) => {

@@ -42,7 +42,7 @@ test('shows pending real assessments, switches demo scenarios, and returns witho
     .click();
   await expect(cards.filter({ hasText: 'Indeterminada' })).toHaveCount(4);
   await expect(page.locator('#alert-mode-title')).toContainText('no significa ausencia');
-  await expect(cards.first()).not.toContainText('Field Farms Challenge · demo');
+  await expect(cards.first()).not.toContainText('Sow Water · demo');
   expect(protectedRequests).toEqual([]);
 });
 
@@ -81,7 +81,7 @@ test.describe('real published sources', () => {
       page.locator('[data-alert-type]').filter({ hasText: 'Indeterminada' }),
     ).toHaveCount(4);
     await page.getByRole('button', { name: 'Simular sequía', exact: true }).click();
-    await expect(drought).toContainText('Field Farms Challenge · demo');
+    await expect(drought).toContainText('Sow Water · demo');
     await expect(drought).not.toContainText('NASA POWER (10.8');
   });
 

@@ -3,7 +3,7 @@ import type { AlertEvidence, EnvironmentalRisk, RiskSeverity } from '@field-farm
 /** All numbers and levels are fictional examples, not scientific risk rules. */
 export type AlertDemoScenario = 'seco' | 'inund' | 'calor';
 export const DEMO_OBSERVED_END = '2026-01-07';
-export const DEMO_SOURCE = 'Field Farms Challenge · demo';
+export const DEMO_SOURCE = 'Sow Water · demo';
 
 export function demoAlertEvidence(scenario: AlertDemoScenario): Record<string, AlertEvidence> {
   const wet = scenario === 'inund';

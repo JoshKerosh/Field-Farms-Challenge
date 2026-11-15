@@ -489,7 +489,7 @@ export function RecordsPage() {
           </h2>
           {recs.length > 0 && (
             <div className="v10-pill-row">
-              <a className="v10-pill-btn" href={csvHref} download="registros-field-farms.csv">
+              <a className="v10-pill-btn" href={csvHref} download="registros-sow-water.csv">
                 <Download size={16} aria-hidden="true" />
                 {message('m2f7cd80aedf2')}
               </a>

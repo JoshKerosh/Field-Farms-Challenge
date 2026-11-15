@@ -204,22 +204,22 @@ export function environmentalAlerts(
       };
   const demoLevels = demo ? demoAlertSeverities(demo) : null;
   const definitions = [
-    { id: 'sequia', icon: '☀️', title: message('mca9d461485f3'), recs: [message('m5182d0419fdf')] },
+    { id: 'sequia', icon: '', title: message('mca9d461485f3'), recs: [message('m5182d0419fdf')] },
     {
       id: 'inundacion',
-      icon: '🌊',
+      icon: '',
       title: message('m3b4b1f8fff8a'),
       recs: [message('m806cc8fcda2b')],
     },
     {
       id: 'saturacion',
-      icon: '💧',
+      icon: '',
       title: message('alerts.saturation'),
       recs: [message('alerts.saturationRecommendation')],
     },
     {
       id: 'deslizamiento',
-      icon: '⛰️',
+      icon: '',
       title: message('m6e6f4d6c09bb'),
       recs: [message('m783a67deff19')],
     },
