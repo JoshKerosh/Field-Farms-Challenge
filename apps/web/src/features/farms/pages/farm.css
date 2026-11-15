@@ -1,0 +1,109 @@
+.farm-record-header,
+.farm-record-actions,
+.farm-next-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.farm-record-header h2 {
+  margin-top: 0.25rem;
+}
+.farm-record-kicker {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+.farm-record-actions {
+  justify-content: flex-start;
+  border-top: 1px solid var(--color-line);
+  padding-top: 1rem;
+  margin-top: 1.25rem;
+}
+.farm-next-actions {
+  justify-content: flex-start;
+  margin-top: 1.25rem;
+}
+.farm-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+.farm-facts > div {
+  min-width: 0;
+}
+.farm-facts dt {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+.farm-facts dd {
+  margin: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.farm-record-location {
+  padding: 1rem;
+  background: var(--color-water-tint);
+  border-radius: var(--radius-sm);
+}
+.farm-record-location p {
+  margin: 0.25rem 0;
+}
+.farm-delete {
+  color: var(--color-danger) !important;
+  border-color: currentColor !important;
+  background: transparent;
+}
+.farm-delete-dialog {
+  width: min(520px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+.farm-delete-dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
+}
+.farm-delete-dialog h2 {
+  margin-bottom: 1rem;
+}
+.farm-delete-dialog .farm-record-actions {
+  justify-content: flex-end;
+}
+.farm-delete-dialog strong {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+.farm-page .v10-form-grid {
+  align-items: start;
+}
+.farm-page .v10-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.farm-page .v10-field label {
+  min-height: 3rem;
+}
+@media (max-width: 640px) {
+  .farm-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .farm-next-actions > a {
+    flex: 1;
+    text-align: center;
+  }
+  .farm-record-actions > button {
+    flex: 1;
+  }
+  .farm-delete-dialog .farm-record-actions {
+    flex-direction: column-reverse;
+  }
+  .farm-delete-dialog button {
+    width: 100%;
+  }
+}

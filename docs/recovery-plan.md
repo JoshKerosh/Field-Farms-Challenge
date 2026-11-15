@@ -6,10 +6,25 @@ prioridades numéricas del prototipo. Los mapas y los estados anteriores de acci
 ## Seguimiento local
 
 IndexedDB `ffc-recovery`, almacén `plans`, separa planes por identificador SIRI. Sin parcela,
-la clave es el punto redondeado a cinco decimales. Si aparece una parcela para ese mismo punto,
+la ubicación activa conserva un identificador provisional estable aunque cambie el GPS.
+Las ubicaciones antiguas conservan su clave de punto como identificador provisional para
+seguir encontrando los planes existentes. «Registrar otra finca» inicia una identidad nueva.
+Si aparece una parcela para ese mismo punto,
 la vista ofrece copiar el plan provisional mediante confirmación; conserva el original.
 El perfil se confirma al crear el plan. Los cambios posteriores del perfil global no reescriben
 el perfil confirmado de otro plan.
+
+Mi finca presenta primero un resumen del registro, con accesos al plan y a la cuenca, edición
+de datos y borrado. «Borrar registro» pide confirmación y elimina la ficha, la ubicación y el
+plan asociado (incluida su copia provisional conocida), con sus fotos y gastos. Mantiene otros
+planes. Ante un fallo al limpiar la ficha intenta restaurar los planes eliminados.
+
+El plan permite editar meta, plazo, lugar y presupuesto. La unidad queda fija cuando existen
+mediciones para no reinterpretar los registros anteriores. Los avances permiten corregir fecha,
+cantidad, nota y gasto sin perder las fotos. El respaldo JSON incluye fotos codificadas y puede
+restaurarse con confirmación: reemplaza el plan actual, no suma gastos duplicados. Se rechazan
+archivos inválidos y respaldos de una parcela catastral diferente. Un respaldo provisional puede
+vincularse explícitamente a la finca actual. La importación admite archivos de hasta 50 MB.
 
 Las cantidades son acumuladas a la fecha indicada: el avance usa la última medición, no suma
 mediciones repetidas. Si dos registros tienen la misma fecha, prevalece el agregado después.

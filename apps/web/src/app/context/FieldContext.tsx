@@ -62,6 +62,7 @@ export interface ChatTurn {
 }
 /** Point chosen on the real map in "Mi finca" and the SIRI parcel under it, if any. */
 export interface FarmSite {
+  provisionalId?: string;
   lng: number;
   lat: number;
   accuracyM: number | null;
@@ -275,8 +276,15 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
   const setFarmSite = useCallback(
     (site: FarmSite) => {
       if (ds) applyLocation(getGeo(ds).llToLocal(site.lat, site.lng));
-      setFarmSiteState(site);
-      writeJson(LS_KEYS.farmSite, site);
+      const draftId = `draft:${crypto.randomUUID()}`;
+      setFarmSiteState((previous) => {
+        const provisionalId =
+          previous?.provisionalId ??
+          (previous ? `point:${previous.lat.toFixed(5)},${previous.lng.toFixed(5)}` : draftId);
+        const next = { ...site, provisionalId };
+        writeJson(LS_KEYS.farmSite, next);
+        return next;
+      });
     },
     [ds, applyLocation, messageLanguage()],
   );
@@ -464,12 +472,25 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     setFarmKey,
     myFarm: farmState.my,
     resetMyFarm: () => {
+      // Removal must succeed before the UI reports that the farm was cleared.
+      const previous = [LS_KEYS.farm, LS_KEYS.farmSite, LS_KEYS.loc].map(
+        (key) => [key, window.localStorage.getItem(key)] as const,
+      );
+      try {
+        for (const [key] of previous) window.localStorage.removeItem(key);
+      } catch (error) {
+        for (const [key, value] of previous) {
+          try {
+            if (value !== null) window.localStorage.setItem(key, value);
+          } catch {
+            /* Preserve the original storage error. */
+          }
+        }
+        throw error;
+      }
       setFarmState({ key: 'mia', my: null });
       setFarmSiteState(null);
       setStoredLoc(null);
-      writeJson(LS_KEYS.farm, { key: 'mia', my: null });
-      writeJson(LS_KEYS.farmSite, null);
-      writeJson(LS_KEYS.loc, null);
       setDemo(null);
     },
     farm,

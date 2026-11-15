@@ -1,6 +1,6 @@
 import 'fake-indexeddb/auto';
 import { describe, it, expect, vi } from 'vitest';
-import { loadRecoveryPlan, saveRecoveryPlan } from './recovery-store';
+import { loadRecoveryPlan, saveRecoveryPlan, deleteRecoveryPlans } from './recovery-store';
 import type { RecoveryPlan } from '@field-farms/domain';
 const plan = (farmId: string): RecoveryPlan => ({
   version: 1,
@@ -19,6 +19,31 @@ const plan = (farmId: string): RecoveryPlan => ({
   goals: [],
 });
 describe('private local recovery plans', () => {
+  it('deletes only the selected farm and its provisional copy, preserving another farm', async () => {
+    const a = plan('delete-siri'),
+      point = plan('delete-point'),
+      b = plan('delete-other');
+    await saveRecoveryPlan(a);
+    await saveRecoveryPlan(point);
+    await saveRecoveryPlan(b);
+    const restore = await deleteRecoveryPlans([a.farmId, point.farmId, a.farmId]);
+    expect(await loadRecoveryPlan(a.farmId)).toBe(null);
+    expect(await loadRecoveryPlan(point.farmId)).toBe(null);
+    expect(await loadRecoveryPlan(b.farmId)).toEqual(b);
+    await restore();
+    expect(await loadRecoveryPlan(a.farmId)).toEqual(a);
+    expect(await loadRecoveryPlan(point.farmId)).toEqual(point);
+  });
+  it('retains the plan when deletion fails', async () => {
+    const a = plan('delete-failure');
+    await saveRecoveryPlan(a);
+    const remove = vi.spyOn(IDBObjectStore.prototype, 'delete').mockImplementationOnce(() => {
+      throw new DOMException('Unavailable', 'InvalidStateError');
+    });
+    await expect(deleteRecoveryPlans([a.farmId])).rejects.toThrow();
+    remove.mockRestore();
+    expect(await loadRecoveryPlan(a.farmId)).toEqual(a);
+  });
   it('hides the old generic record but preserves a new manually confirmed farm with that name', async () => {
     const example = { ...plan('legacy-example'), farmName: 'Finja Ejemplo' };
     await saveRecoveryPlan(example);

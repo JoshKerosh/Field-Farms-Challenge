@@ -40,13 +40,14 @@ export const RECOVERY_NEEDS: RecoveryNeed[] = [
 ];
 export const RECOVERY_UNITS = ['points', 'm', 'ha', 'trees', 'visits'] as const;
 export function recoveryFarmId(site: {
+  provisionalId?: string;
   lat: number;
   lng: number;
   parcel: { properties: { identifica: string } } | null;
 }): string {
   return site.parcel
     ? `siri-${site.parcel.properties.identifica}`
-    : `point:${site.lat.toFixed(5)},${site.lng.toFixed(5)}`;
+    : (site.provisionalId ?? `point:${site.lat.toFixed(5)},${site.lng.toFixed(5)}`);
 }
 export function suggestedRecoveryNeeds(needs: RecoveryPlan['needs']): RecoveryNeed[] {
   const yes = RECOVERY_NEEDS.filter((n) => needs[n] === 'yes');
