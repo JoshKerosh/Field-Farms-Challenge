@@ -79,6 +79,10 @@
   color: var(--color-muted);
   font-size: 0.875rem;
 }
+.farm-page .content-card .v10-pill-btn--primary {
+  color: var(--color-surface);
+  background: var(--color-primary);
+}
 .guide-page > .v10-grid-3 {
   gap: var(--space-lg);
 }
