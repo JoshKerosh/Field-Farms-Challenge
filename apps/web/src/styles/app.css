@@ -703,7 +703,8 @@ p + p {
 .rain-stats > div {
   padding: 10px 12px;
   border-radius: var(--radius-md);
-  background: #eff6f2;
+  background: var(--color-forest-tint);
+  color: var(--color-ink);
 }
 .rain-stats dt {
   font-size: 0.8125rem;
@@ -771,7 +772,7 @@ p + p {
   border-radius: 6px;
 }
 .rain-month.is-active {
-  background: #eef3ef;
+  background: var(--color-forest-tint);
 }
 .rain-bar {
   position: relative;
@@ -842,7 +843,8 @@ p + p {
   min-width: 0;
   padding: 14px;
   border-radius: var(--radius-lg);
-  background: #eff6f2;
+  background: var(--color-forest-tint);
+  color: var(--color-ink);
   overflow-wrap: anywhere;
 }
 .water-journey-steps .legend-parcel {
@@ -853,11 +855,11 @@ p + p {
 .water-journey-arrow {
   display: flex;
   align-items: center;
-  color: #17617c;
+  color: var(--color-primary);
 }
 .water-journey-badge {
-  background: #e2f1e5;
-  color: #1f5a32;
+  background: var(--color-forest-tint);
+  color: var(--color-forest);
 }
 @media (max-width: 640px) {
   .water-journey-steps {
