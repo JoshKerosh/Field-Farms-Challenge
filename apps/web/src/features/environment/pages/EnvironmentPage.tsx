@@ -79,7 +79,10 @@ export function EnvironmentPage() {
               <strong>{satelliteText.observations}</strong>
               <span>{satelliteText.observationsHelp}</span>
             </summary>
-            <section className="v10-card environment-coverage" aria-label={text.regional}>
+            <section
+              className="v10-card content-card environment-coverage"
+              aria-label={text.regional}
+            >
               <h2>{myFarm?.name || text.farm}</h2>
               <p>
                 {number(farmSite.lat, 5)}, {number(farmSite.lng, 5)} · {text.zones[region]}
@@ -290,7 +293,10 @@ function SourcePanel({
   const file = result.status === 'ready' ? result.file : null;
   const item = file ? referenceUnit(file, region) : undefined;
   return (
-    <section className="v10-card environment-source" aria-labelledby={`environment-${source}`}>
+    <section
+      className="v10-card content-card environment-source"
+      aria-labelledby={`environment-${source}`}
+    >
       <h2 id={`environment-${source}`}>{title}</h2>
       {result.status === 'loading' ? (
         <p role="status">{text.loading}</p>

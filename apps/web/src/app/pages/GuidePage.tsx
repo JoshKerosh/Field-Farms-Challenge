@@ -10,18 +10,18 @@ export function GuidePage() {
     { title: c.care, text: c.careHelp, to: '/care', action: c.care },
   ];
   return (
-    <div className="v10-stack">
+    <div className="v10-stack guide-page">
       <PageHeader title={c.guideTitle} intro={c.guideIntro} />
       <div className="v10-grid-3">
         {steps.map((step) => (
-          <section className="v10-card" key={step.to}>
+          <section className="v10-card content-card" key={step.to}>
             <h2>{step.title}</h2>
             <p>{step.text}</p>
             <PageLink to={step.to}>{step.action}</PageLink>
           </section>
         ))}
       </div>
-      <section className="v10-card">
+      <section className="v10-card content-card">
         <h2>{c.records}</h2>
         <p>{c.recordsHelp}</p>
         <p>{c.localHelp}</p>

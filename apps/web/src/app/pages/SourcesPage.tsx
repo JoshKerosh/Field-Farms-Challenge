@@ -46,21 +46,29 @@ export function SourcesPage() {
     };
   }, []);
   return (
-    <div className="v10-stack">
+    <div className="v10-stack sources-page">
       <PageHeader title={message('m0a9459cdcb4a')} intro={message('introSourcesPage')} />
       {(filter === 'all' || filter === 'nasa') && (
         <section className="v10-stack" aria-label={c.sources}>
           <h2>{c.sources}</h2>
           {datasets.map((d) => (
-            <article className="v10-card" key={d.kind}>
+            <article className="v10-card content-card" key={d.kind}>
               <h3>{c[d.kind]}</h3>
               <p>{d.kind === 'vegetation' ? c.vegetationDetail : c.rainfallDetail}</p>
-              <p>
-                {c.period}: {d.months[0]} – {d.months.at(-1)}
-              </p>
-              <p>
-                {c.date}: {d.meta.fecha_dato}
-              </p>
+              <dl className="source-metadata">
+                <div>
+                  <dt>{c.period}</dt>
+                  <dd>
+                    {d.months[0]} – {d.months.at(-1)}
+                  </dd>
+                </div>
+                <div>
+                  <dt>{c.date}</dt>
+                  <dd>
+                    <time dateTime={d.meta.fecha_dato}>{d.meta.fecha_dato}</time>
+                  </dd>
+                </div>
+              </dl>
               <ExternalSource
                 href={
                   d.kind === 'rainfall'
@@ -113,7 +121,7 @@ export function SourcesPage() {
 
       <section className="v10-stack" aria-label={message('m375e7fbf5b1f')}>
         {visible.map((ref) => (
-          <article key={ref.n} className="v10-card">
+          <article key={ref.n} className="v10-card content-card">
             <div className="v10-map-toolbar">
               <h2
                 style={{
@@ -158,7 +166,7 @@ export function SourcesPage() {
       <section className="v10-stack" aria-labelledby="connected-layers-title">
         <h2 id="connected-layers-title">{copy.sources.connectedTitle}</h2>
         {copy.sources.connectedRows.map((row) => (
-          <article key={row.title} className="v10-card">
+          <article key={row.title} className="v10-card content-card">
             <div className="v10-map-toolbar">
               <h3 style={{ fontSize: '1.05rem' }}>{row.title}</h3>
               <Badge tone="green">{copy.common.connected}</Badge>
@@ -171,7 +179,7 @@ export function SourcesPage() {
 
       <section className="v10-stack" aria-labelledby="ai-use-title">
         <h2 id="ai-use-title">{message('aiUseTitle')}</h2>
-        <article className="v10-card">
+        <article className="v10-card content-card">
           <p className="v10-muted">{message('aiUseIntro')}</p>
           <ul>
             <li>{message('aiUseIcons')}</li>

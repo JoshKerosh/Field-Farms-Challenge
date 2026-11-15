@@ -62,7 +62,7 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
   const activeSource: SourceInfo | null =
     plan.sources.find((s) => s.i === selectedIdx) ?? plan.sources[0] ?? null;
   return (
-    <div className="v10-stack">
+    <div className="v10-stack watershed-page">
       <PageHeader
         title={message('m4cbfd1e09d31', ctx.sub.n)}
         intro={message(

@@ -36,7 +36,7 @@ export function BenefitsPage() {
   const planCount = (plan?.goals.length ?? 0) - doneCount;
   const entryCount = plan?.goals.reduce((n, g) => n + g.entries.length, 0) ?? 0;
   return (
-    <div className="v10-stack">
+    <div className="v10-stack benefits-page">
       <PageHeader title={c.title} intro={c.intro} />
       <section className="savings-panel benefits-summary">
         <div>

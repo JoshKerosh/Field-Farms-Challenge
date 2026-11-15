@@ -15,7 +15,7 @@ export function WaterRecords() {
   const [error, setError] = useState(false);
   if (!farmSite || !ds || !ctx)
     return (
-      <section className="v10-card">
+      <section className="v10-card content-card">
         <p>{c.location}</p>
         <PageLink to="/farm">{c.source}</PageLink>
       </section>
@@ -77,7 +77,7 @@ export function WaterRecords() {
   }
   return (
     <div className="v10-stack">
-      <section className="v10-card">
+      <section className="v10-card content-card">
         <h2>{c.water}</h2>
         <p>{c.local}</p>
         <label>
@@ -126,7 +126,7 @@ export function WaterRecords() {
           </>
         )}
       </section>
-      <section className="v10-card">
+      <section className="v10-card content-card">
         <h2>{c.save}</h2>
         <label>
           {c.type}
@@ -199,7 +199,7 @@ export function WaterRecords() {
         </form>
         {feedback && <p role={error ? 'alert' : 'status'}>{feedback}</p>}
       </section>
-      <section className="v10-card">
+      <section className="v10-card content-card">
         <h2>{c.history}</h2>
         {!visible.length ? (
           <p>{c.empty}</p>
@@ -244,7 +244,7 @@ export function WaterRecords() {
         )}
       </section>
       {!!archive.length && (
-        <details className="v10-card">
+        <details className="v10-card content-card">
           <summary>{c.archive}</summary>
           <p>{c.archiveHelp}</p>
           <ul>

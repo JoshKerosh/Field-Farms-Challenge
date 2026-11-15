@@ -5,6 +5,7 @@ import { FieldContextProvider } from './app/context/FieldContext';
 import { router } from './app/routes';
 import './styles/tokens.css';
 import './styles/app.css';
+import './styles/presentation.css';
 import { PreferencesProvider } from './i18n/preferences';
 
 createRoot(document.getElementById('root')!).render(

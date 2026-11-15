@@ -12,7 +12,7 @@ export function AlertsPage() {
   const { ctx, alerts } = useField();
   if (!ctx || !alerts) return null;
   return (
-    <div className="v10-stack">
+    <div className="v10-stack alerts-page">
       <PageHeader
         title={message('alerts.title')}
         intro={message('alerts.intro', ctx.canton.n, ctx.sub.n)}
@@ -29,14 +29,14 @@ export function AlertsPage() {
       </section>
 
       {alerts.sourceWarnings.length > 0 && (
-        <section className="v10-card" aria-label={message('alerts.sourceUpdates')}>
+        <section className="v10-card content-card" aria-label={message('alerts.sourceUpdates')}>
           {alerts.sourceWarnings.map((warning) => (
             <p key={warning}>{warning}</p>
           ))}
         </section>
       )}
 
-      <section className="v10-card" aria-label={message('alerts.futureTitle')}>
+      <section className="v10-card content-card" aria-label={message('alerts.futureTitle')}>
         <h2>{message('alerts.futureTitle')}</h2>
         <p>{message('alerts.futureNotice')}</p>
         <PageLink to="/environment">{message('ma2c2049557a1')}</PageLink>
@@ -48,7 +48,7 @@ export function AlertsPage() {
         {alerts.list.map((a) => (
           <details
             key={a.id}
-            className="v10-card"
+            className="v10-card content-card"
             open={a.severity !== 'indeterminate' && a.defaultOpen}
             data-alert-type={a.id}
           >
@@ -72,7 +72,7 @@ export function AlertsPage() {
 
             <div
               className="v10-stack"
-              style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid #DCE3DE' }}
+              style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid var(--color-line)' }}
             >
               {a.blockers.length > 0 && (
                 <ul className="v10-list">
@@ -172,7 +172,7 @@ export function AlertsPage() {
         ))}
       </section>
 
-      <section className="v10-card" aria-labelledby="hist-title">
+      <section className="v10-card content-card" aria-labelledby="hist-title">
         <h2 id="hist-title">
           <History size={18} aria-hidden="true" />
           {message('m0cac613ec945')}

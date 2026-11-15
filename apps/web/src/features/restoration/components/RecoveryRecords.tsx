@@ -18,7 +18,7 @@ export function RecoveryRecords() {
   const selected = plan?.goals.find((g) => g.id === params.get('goal'));
   if (!id)
     return (
-      <section className="v10-card">
+      <section className="v10-card content-card">
         <p>{c.locate}</p>
         <PageLink to="/farm">{c.farm}</PageLink>
       </section>
@@ -29,7 +29,7 @@ export function RecoveryRecords() {
     <div className="recovery v10-stack">
       <div role="status">{busy ? c.saving : saved ? c.saved : ''}</div>
       {error && <p role="alert">{error}</p>}
-      <section className="v10-card">
+      <section className="v10-card content-card">
         <h2>{myFarm?.name || c.farm}</h2>
         <p>{c.recordsHelp}</p>
         <p>{c.local}</p>
@@ -70,7 +70,7 @@ export function RecoveryRecords() {
           />
         ))}
       {plan && (
-        <section className="v10-card">
+        <section className="v10-card content-card">
           <h2>{c.costs}</h2>
           <dl>
             <dt>{c.spent}</dt>
