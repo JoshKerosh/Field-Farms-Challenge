@@ -1,128 +1,128 @@
-# Comprobación de fuentes para alertas
+# Source check for alerts
 
-Este comprobador prepara evidencia local antes de conectar las alertas. Usa solo
-la biblioteca estándar de Python 3.12 o posterior. No instala paquetes, no lee ni
-envía credenciales, no descarga rásteres y no publica datos en la aplicación.
-Los JSON de salida son muestras de viabilidad, **no el contrato compartido SPA-7**.
+This checker prepares local evidence before the alerts are connected. It uses only
+the Python 3.12+ standard library. It doesn't install packages, read or
+send credentials, download rasters or publish data to the app.
+The output JSON files are feasibility samples, **not the shared SPA-7 contract**.
 
-## Repetir la comprobación
+## Repeating the check
 
-Desde la raíz del repositorio, tanto en PowerShell como en Git Bash:
+From the repository root, in PowerShell or Git Bash:
 
 ```sh
 python jobs/data-pipeline/src/field_farms_data/source_probe.py --as-of 2026-11-15
 ```
 
-Para consultar datos recientes, omitir `--as-of`: el valor por defecto es la fecha
-de Costa Rica (UTC−6). La fecha de referencia no cambia la fecha de descarga; las
-fuentes pueden revisar observaciones anteriores. No se promete reproducibilidad
-bit a bit de una futura descarga.
+To query recent data, omit `--as-of`: the default is the
+Costa Rica date (UTC−6). The reference date doesn't change the download date; the
+sources may revise earlier observations. Bit-for-bit reproducibility of a future
+download is not promised.
 
-Para probar solo POWER y NOAA:
+To test only POWER and NOAA:
 
 ```sh
 python jobs/data-pipeline/src/field_farms_data/source_probe.py --sources power roni
 ```
 
-Para otro punto, usar `--lat`, `--lon` y una carpeta de salida diferente mediante
-`--out jobs/data-pipeline/data/otro-punto`. El punto debe estar dentro de exactamente
-una subcuenca de las capas versionadas. No se sustituye por una ubicación cercana.
-No se sobrescribe una muestra existente de otra ubicación o versión de fuente.
+For another point, use `--lat`, `--lon` and a different output folder with
+`--out jobs/data-pipeline/data/otro-punto`. The point must be inside exactly
+one subwatershed of the versioned layers. It is not replaced by a nearby location.
+An existing sample from another location or source version is not overwritten.
 
-Las salidas predeterminadas quedan en la carpeta local ignorada por Git:
+The default outputs go to the local folder ignored by Git:
 
 ```text
 jobs/data-pipeline/data/source-check/
-  report.json           # Resultado independiente por fuente y pendientes
-  power/latest.json     # Ventana válida de 30 días, unidades y ubicación
-  roni/latest.json      # Última temporada completa, versión y fecha
-  raw/<sha256>.raw      # Respuestas originales pequeñas y metadatos
+  report.json           # Independent result per source and pending items
+  power/latest.json     # Valid 30-day window, units and location
+  roni/latest.json      # Last complete season, version and date
+  raw/<sha256>.raw      # Small original responses and metadata
 ```
 
-El reporte distingue `validated-sample`, `metadata-only`, `sample-checks` y
-`failed`. Que el proceso termine con código 0 significa que las comprobaciones
-solicitadas respondieron y pasaron sus validaciones limitadas; **no significa que
-todos los conectores o indicadores estén disponibles**. Sale con código 1 si
-alguna consulta o muestra falla. Un fallo no sobrescribe el último JSON válido;
-una observación más antigua tampoco reemplaza una más reciente. La fecha del dato
-siempre se conserva; no se actualiza para aparentar una observación nueva.
+The report distinguishes `validated-sample`, `metadata-only`, `sample-checks` and
+`failed`. Exiting with code 0 means the requested checks
+responded and passed their limited validations; **it does not mean that
+every connector or indicator is available**. It exits with code 1 if
+any query or sample fails. A failure doesn't overwrite the last valid JSON;
+an older observation doesn't replace a more recent one either. The data date
+is always kept; it is not updated to look like a new observation.
 
-El timeout por petición es de 25 segundos y cada respuesta se limita a 4 MiB.
-No hay reintentos automáticos ni automatización programada en esta prueba.
+The per-request timeout is 25 seconds and each response is limited to 4 MiB.
+There are no automatic retries or scheduled automation in this check.
 
-## Resultado observado el 15 de noviembre de 2026
+## Result observed on November 15, 2026
 
-Punto: **10,8° N, −85,08°**, dentro de **Río Zapote**, según
-`apps/web/public/data/geo/subcuencas/17.geojson`, elemento 21 (índice desde cero).
-La capa indica gran cuenca «Cuencas Lago De Nicaragua» y vertiente «Atlantica».
-Estos nombres no se reinterpretan automáticamente como una región climática.
-El identificador de archivo/elemento es una referencia local, no un ID estable.
+Point: **10.8° N, −85.08°**, inside **Río Zapote**, according to
+`apps/web/public/data/geo/subcuencas/17.geojson`, feature 21 (zero-based index).
+The layer states the major watershed "Cuencas Lago De Nicaragua" and slope side "Atlantica".
+These names are not automatically reinterpreted as a climate region.
+The file/feature identifier is a local reference, not a stable ID.
 
-| Fuente | Resultado real de la prueba | Limitación |
-| --- | --- | --- |
-| NASA POWER | Ventana UTC completa del 15 oct al 13 nov de 2026: precipitación acumulada **404,38 mm** y media GWETROOT **0,848**, adimensional. | Es una consulta puntual dentro de una subcuenca, no un promedio por área. La última fecha disponible común tiene dos días de retraso respecto a la referencia. |
-| NOAA CPC RONI | **+2,0 °C**, temporada **ASO 2026**, intervalo 1 ago–31 oct; tabla identificada como **ERSSTv6**. | Índice global estacional, no observación diaria de sequía local. NOAA advierte que los valores recientes pueden revisarse. |
-| IMERG | Catálogo accesible: `GPM_3IMERGDL`, versión `07`, colección `C2723754859-GES_DISC`. | Solo metadatos de colección. No se ha probado la descarga autenticada ni obtenido lluvia IMERG. |
-| SMAP | Catálogo accesible: `SPL4SMGP`, versión `008`, colección `C3480440870-NSIDC_CPRD`. | Solo metadatos. Falta descargar y validar variable, unidades, calidad y cobertura. |
-| NASADEM | Catálogo accesible: `NASADEM_HGT`, versión `001`, colección `C2763264762-LPCLOUD`. | No hay elevación descargada ni pendiente calculada. |
-| CNE | WFS respondió y anunció `cne:inundaciones`, `cne:deslizamientos`, `cne:coronas_de_deslizamientos` y `cne:Inundaciones_lidar`. Las tres primeras devolvieron GeoJSON vacío en el área consultada. | Área aproximada de lon −85,10 a −85,06 y lat 10,78 a 10,82; máximo de tres elementos por capa. No demuestra ausencia de riesgo, cobertura completa, validez de geometrías ni intersección con una finca. El servicio utiliza HTTP. |
+| Source        | Actual test result                                                                                                                                                                                  | Limitation                                                                                                                                                                                                                         |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NASA POWER    | Full UTC window from Oct 15 to Nov 13, 2026: accumulated precipitation **404.38 mm** and mean GWETROOT **0.848**, dimensionless.                                                                    | It is a point query inside a subwatershed, not an area average. The latest shared available date is two days behind the reference.                                                                                                 |
+| NOAA CPC RONI | **+2.0 °C**, season **ASO 2026**, interval Aug 1–Oct 31; table identified as **ERSSTv6**.                                                                                                           | Global seasonal index, not a daily local drought observation. NOAA warns that recent values may be revised.                                                                                                                        |
+| IMERG         | Catalog reachable: `GPM_3IMERGDL`, version `07`, collection `C2723754859-GES_DISC`.                                                                                                                 | Collection metadata only. The authenticated download has not been tested and no IMERG rainfall was obtained.                                                                                                                       |
+| SMAP          | Catalog reachable: `SPL4SMGP`, version `008`, collection `C3480440870-NSIDC_CPRD`.                                                                                                                  | Metadata only. The variable, units, quality and coverage still need to be downloaded and validated.                                                                                                                                |
+| NASADEM       | Catalog reachable: `NASADEM_HGT`, version `001`, collection `C2763264762-LPCLOUD`.                                                                                                                  | No elevation downloaded and no slope computed.                                                                                                                                                                                     |
+| CNE           | The WFS responded and announced `cne:inundaciones`, `cne:deslizamientos`, `cne:coronas_de_deslizamientos` and `cne:Inundaciones_lidar`. The first three returned empty GeoJSON in the queried area. | Approximate area from lon −85.10 to −85.06 and lat 10.78 to 10.82; at most three features per layer. It doesn't prove the absence of risk, complete coverage, valid geometries or intersection with a farm. The service uses HTTP. |
 
-Los valores anteriores proceden de descargas realizadas por el comprobador, no
-del JSON del prototipo. No se encontraron archivos originales CNE/RIESGOS,
-rásteres IMERG/SMAP ni shapefiles en el repositorio inspeccionado. Esto no
-descarta que el equipo tenga los originales en otra ubicación.
+The values above come from downloads made by the checker, not
+from the prototype's JSON. No original CNE/RIESGOS files,
+IMERG/SMAP rasters or shapefiles were found in the inspected repository. This doesn't
+rule out that the team has the originals somewhere else.
 
-## Validación que sí se realiza
+## Validation that is performed
 
-- POWER: `PRECTOTCORR` en `mm/day`, GWETROOT adimensional y días UTC; se exige una
-  ventana común completa de 30 días. Se rechazan rellenos negativos, nulos, valores
-  no finitos y humedad fuera de 0–1. Cero de precipitación sí es válido.
-- Se usa el último día común válido anterior a la fecha de referencia. Si hay un
-  hueco en su ventana de 30 días, se rechaza la muestra, sin rellenar con ceros ni
-  buscar silenciosamente una ventana antigua que oculte el hueco.
-- RONI: se extrae únicamente la fila `latest-data` de la página identificada como
-  RONI/ERSSTv6. Se excluyen temporadas aún no finalizadas, se manejan períodos que
-  cruzan el año y no se usa `oni.ascii.txt` como sustituto. Un cambio de estructura
-  provoca un fallo explícito para revisión.
-- Se conserva URL, fecha de descarga, período observado y SHA-256 de cada respuesta.
-- CNE: se comprueba respuesta WFS y la estructura básica de las colecciones GeoJSON;
-  no se validan topología, proyección efectiva ni completitud del servicio.
+- POWER: `PRECTOTCORR` in `mm/day`, dimensionless GWETROOT and UTC days; a
+  complete shared 30-day window is required. Negative fill values, nulls, non-finite
+  values and wetness outside 0–1 are rejected. Zero precipitation is valid.
+- The last valid shared day before the reference date is used. If there is a
+  gap in its 30-day window, the sample is rejected, without filling with zeros or
+  silently looking for an older window that hides the gap.
+- RONI: only the `latest-data` row of the page identified as
+  RONI/ERSSTv6 is extracted. Seasons not yet finished are excluded, periods that
+  cross the year are handled and `oni.ascii.txt` is not used as a substitute. A structure change
+  causes an explicit failure for review.
+- URL, download date, observed period and SHA-256 of each response are kept.
+- CNE: the WFS response and the basic structure of the GeoJSON collections are checked;
+  topology, effective projection and service completeness are not validated.
 
-## Pendientes antes de activar alertas reales
+## Pending before enabling real alerts
 
-1. Comprobar autorización de la cuenta del proyecto para Earthdata/GES DISC/NSIDC
-   y las rutas de descarga. No compartir contraseñas ni tokens en el chat o en Git.
-2. Descargar y procesar IMERG/SMAP y DEM en almacenamiento temporal, con control de
-   cobertura y unidades. No asumir que consultar CMR verifica acceso a los datos.
-3. Elegir y validar la fuente de suelos. SoilGrids de ISRIC es un candidato,
-   todavía no consultado por este script ni acordado como fuente del proyecto.
-4. Acordar la referencia comparable para anomalía de precipitación. La muestra
-   devuelve `null` para esa anomalía; no compara con una constante inventada.
-5. Acordar fuente científica, ámbito y versión de cada umbral, además de reglas de
-   vigencia por producto. Se informa `lagDays`, sin clasificar arbitrariamente la
-   frescura ni convertir humedad POWER a humedad volumétrica SMAP.
-6. Definir IDs estables y el contrato SPA-7 con los responsables de Base compartida;
-   después calcular resúmenes por subcuenca y verificar capas CNE completas.
+1. Check the project account's authorization for Earthdata/GES DISC/NSIDC
+   and the download paths. Don't share passwords or tokens in chat or in Git.
+2. Download and process IMERG/SMAP and DEM in temporary storage, with
+   coverage and unit checks. Don't assume that querying CMR verifies access to the data.
+3. Choose and validate the soil source. ISRIC SoilGrids is a candidate,
+   not yet queried by this script nor agreed as the project's source.
+4. Agree on the comparable baseline for the precipitation anomaly. The sample
+   returns `null` for that anomaly; it doesn't compare against an invented constant.
+5. Agree on the scientific source, scope and version of each threshold, plus validity
+   rules per product. `lagDays` is reported, without arbitrarily classifying
+   freshness or converting POWER wetness into SMAP volumetric moisture.
+6. Define stable IDs and the SPA-7 contract with the shared Base owners;
+   then compute per-subwatershed summaries and verify complete CNE layers.
 
-No se evalúa riesgo, no se confirma ningún evento ambiental y no se modificó el
-motor ni la pantalla de alertas en esta entrega.
+No risk is assessed, no environmental event is confirmed, and neither the
+alerts engine nor the screen were changed in this delivery.
 
-## Pruebas sin red ni instalaciones
+## Tests without network or installs
 
 ```sh
 python -m unittest discover -s jobs/data-pipeline/tests -p test_source_probe.py -v
 ```
 
-Los datos de prueba son sintéticos y permanecen separados de las descargas reales.
-Cubren unidades y fechas, ventanas incompletas, ceros, rellenos, períodos RONI,
-conservación del último válido, protección de ubicación y fallos de red/CNE.
+The test data is synthetic and kept separate from the real downloads.
+It covers units and dates, incomplete windows, zeros, fill values, RONI periods,
+keeping the last valid result, location protection and network/CNE failures.
 
-## Documentación oficial
+## Official documentation
 
-- [NASA POWER, API diaria y estándares temporales](https://power.larc.nasa.gov/docs/services/api/temporal/daily/)
+- [NASA POWER, daily API and time standards](https://power.larc.nasa.gov/docs/services/api/temporal/daily/)
 - [NOAA CPC, RONI](https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso/roni/)
-- [NASA CMR, API de búsqueda](https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html)
-- [NASA, IMERG Late diario](https://gpm.nasa.gov/node/3322)
+- [NASA CMR, search API](https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html)
+- [NASA, daily IMERG Late](https://gpm.nasa.gov/node/3322)
 - [NSIDC, SMAP L4 SPL4SMGP v8](https://nsidc.org/data/spl4smgp/versions/8)
 - [CNE, WFS GetCapabilities](http://mapas.cne.go.cr/servicios/cne/wfs?service=WFS&request=GetCapabilities)
 - [ISRIC, SoilGrids](https://isric.org/explore/soilgrids)

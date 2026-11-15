@@ -1,125 +1,125 @@
-# Alertas ambientales sin Earthdata
+# Environmental alerts without Earthdata
 
-La pantalla `/alerts` permite probar cuatro categorías: sequía, inundación,
-exceso de agua en el suelo y deslizamiento. No necesita cuentas, tokens ni
-servicios externos para abrir o usar los escenarios de demostración.
+The `/alerts` screen lets users try four categories: drought, flooding,
+excess water in the soil and landslide. It needs no accounts, tokens or
+external services to open or use the demo scenarios.
 
-## Probar
+## Try it
 
-Desde la raíz, ejecutar `npm run dev` y abrir `/alerts` en la dirección que
-indique Vite. Usar **Simular sequía**, **Simular lluvias intensas** o **Simular
-calor**. Al salir de la simulación vuelven las evaluaciones pendientes y no se
-conservan valores ficticios como si fueran datos reales.
+From the root, run `npm run dev` and open `/alerts` at the address
+Vite prints. Use **Simulate drought**, **Simulate heavy rain** or **Simulate
+heat**. When leaving the simulation, the pending assessments come back and no
+fictional values are kept as if they were real data.
 
-El modo de simulación es el mismo estado compartido que utiliza Ambiente. No
-se persiste al recargar la página. Los controles global y local permiten salir.
+The simulation mode is the same shared state used by Environment. It is
+not persisted on reload. The global and local controls let users exit.
 
-## Historial, comparación y cartografía
+## History, comparison and mapping
 
-Debajo de los escenarios aparecen tres vistas de datos reales que no cambian al
-activar una simulación y no asignan severidad:
+Below the scenarios there are three real-data views that don't change when
+a simulation is enabled and don't assign severity:
 
-- **Historial:** serie de hasta 90 días de precipitación y humedad relativa de
-  raíces POWER. Permite elegir indicador y mostrar 7, 30 o 90 días, con tabla
-  accesible equivalente. Los huecos no se unen ni se rellenan con ceros.
-- **Comparación temporal:** dos ventanas consecutivas de 1, 7 o 30 días, siempre
-  de igual longitud y sin solapamiento. Se suma lluvia y se promedia humedad.
-  Muestra diferencia absoluta y porcentual; con días faltantes no calcula la
-  comparación y con referencia cero no divide por cero.
-- **Mapa CNE:** geometrías reales del área de la subcuenca, capas de susceptibilidad
-  a inundación y registros de deslizamiento, selección de elementos, leyenda y
-  ampliación. Descarga las geometrías solo al abrir Alertas. Usa SVG ligero,
-  siguiendo el minimapa existente, sin mosaicos externos ni credenciales.
+- **History:** a series of up to 90 days of POWER precipitation and relative root-zone
+  wetness. Users can choose the indicator and show 7, 30 or 90 days, with an
+  equivalent accessible table. Gaps are not joined or filled with zeros.
+- **Temporal comparison:** two consecutive windows of 1, 7 or 30 days, always
+  of equal length and without overlap. Rainfall is summed and wetness is averaged.
+  It shows the absolute and percentage difference; with missing days it doesn't compute the
+  comparison, and with a zero reference it doesn't divide by zero.
+- **CNE map:** real geometries of the subwatershed area, flood susceptibility
+  layers and landslide records, feature selection, legend and
+  zoom. It downloads the geometries only when Alerts is opened. It uses lightweight SVG,
+  following the existing minimap, with no external tiles or credentials.
 
-El punto publicado es Upala (10,8; −85,08). Fuera de ese punto no se aplica su
-serie o mapa a otra ubicación. El botón **Ver punto con datos** permite consultar
-la referencia por separado, sin cambiar la finca ni sus evaluaciones; el aviso
-indica cuándo se está viendo esa referencia. La cartografía descargada para Río Zapote contiene
-25 elementos de inundación y cero de deslizamiento en el área consultada. Esto
-no prueba cobertura histórica completa ni ausencia de amenaza. Se conserva la
-fecha de descarga y se indica que no hay fecha de observación del mapa verificada.
-La geometría se recorta al encuadre y se simplifica a 10 m solo para dibujarla;
-no reemplaza el cruce exacto de puntos del pipeline ni una delimitación catastral.
+The published point is Upala (10.8; −85.08). Away from that point, its
+series or map is not applied to another location. The **View point with data** button lets users browse
+the reference separately, without changing the farm or its assessments; the notice
+says when that reference is being viewed. The mapping downloaded for Río Zapote contains
+25 flood features and zero landslide features in the area queried. This
+does not prove complete historical coverage or the absence of a hazard. The
+download date is kept and the interface says there is no verified observation date for the map.
+The geometry is clipped to the frame and simplified to 10 m only for drawing;
+it does not replace the pipeline's exact point overlay or a cadastral delineation.
 
-Las fuentes se actualizan con los comandos documentados en
-`jobs/data-pipeline/CLIMATE.md`. El historial usa datos estáticos publicados y el
-último día disponible; no es una consulta meteorológica en vivo al navegador.
+The sources are updated with the commands documented in
+`jobs/data-pipeline/CLIMATE.md`. The history uses published static data and the
+last available day; it is not a live weather query from the browser.
 
-## Dos modos separados
+## Two separate modes
 
-- **Datos disponibles:** las cuatro evaluaciones reales son indeterminadas hasta
-  contar con indicadores verificables y reglas científicas aprobadas. El motor
-  nunca transforma ausencia de datos en riesgo bajo.
-- **Simulación:** todos los indicadores proceden del ejemplo aislado de
-  `apps/web/src/demo/fixtures/environmental-alerts.ts`, incluidos sus períodos.
-  Los niveles son un guion visual predefinido, **no comparaciones con umbrales
-  científicos**. Ni la finca, ni su capacidad de uso, ni la rotación ganadera
-  convierten estos ejemplos en evaluaciones reales de la ubicación seleccionada.
+- **Available data:** the four real assessments are indeterminate until
+  there are verifiable indicators and approved scientific rules. The engine
+  never turns missing data into low risk.
+- **Simulation:** every indicator comes from the isolated example in
+  `apps/web/src/demo/fixtures/environmental-alerts.ts`, including its periods.
+  The levels are a predefined visual script, **not comparisons with scientific
+  thresholds**. Neither the farm, its land use capacity nor cattle rotation
+  turn these examples into real assessments of the selected location.
 
-Las tarjetas se ordenan por severidad y muestran motivo, indicadores, fuente,
-período y orientaciones generales. El nivel de demostración se identifica como
-tal en cada tarjeta. Las tablas se desplazan horizontalmente en móvil. La fecha
-de generación se muestra en la zona horaria de Costa Rica y permanece separada
-del período de observación. La interfaz y las respuestas relacionadas del
-asistente funcionan en español e inglés. No hay enlace de WhatsApp en Alertas.
+The cards are sorted by severity and show the reason, indicators, source,
+period and general guidance. The demo level is labeled as
+such on every card. Tables scroll horizontally on mobile. The generation
+date is shown in Costa Rica's time zone and stays separate
+from the observation period. The interface and the related assistant
+answers work in Spanish and English. There is no WhatsApp link in Alerts.
 
-## Estado de los datos reales
+## Status of the real data
 
-El frontend lee JSON reales de `public/data/alerts/climate/power/` y `alerts/climate/roni/`, valida
-su formato, conserva fechas y recupera copias locales si falla una actualización.
-RONI se mantiene separado de ONI y se valida el período estacional completo.
-POWER usa treinta ventanas históricas comparables de 1991–2020 para su anomalía.
-Solo se aplica al punto exacto consultado, con precisión de serialización de seis
-decimales; nunca se convierte en promedio de una subcuenca o de otra finca.
-Si no hay un archivo verificado aplicable, la copia antigua del prototipo sigue
-marcada sin verificar. La vertiente del prototipo tampoco adquiere una fecha
-inventada. La humedad POWER no se convierte en humedad volumétrica SMAP.
+The frontend reads real JSON from `public/data/alerts/climate/power/` and `alerts/climate/roni/`, validates
+its format, keeps dates and falls back to local copies if an update fails.
+RONI is kept separate from ONI and the full seasonal period is validated.
+POWER uses thirty comparable historical windows from 1991–2020 for its anomaly.
+It only applies to the exact point queried, with a serialization precision of six
+decimals; it is never turned into an average for a subwatershed or another farm.
+If there is no applicable verified file, the prototype's old copy stays
+marked as unverified. The prototype's slope side doesn't get an invented
+date either. POWER wetness is not turned into SMAP volumetric moisture.
 
-El lector IMERG está conectado al formato del pipeline: verifica huella de la
-capa geográfica, índice de elemento y contención del punto, sin asociar cuencas
-solo por su nombre. Falta la descarga autenticada real. Los cruces CNE por punto
-se publican, pero conservan fecha desconocida y estado sin verificar. Una consulta
-vacía no prueba ausencia de riesgo. SMAP, pendiente y suelo siguen pendientes de
-datos y fuente acordada. El historial 2014–2015 sigue siendo contexto histórico
-y no determina la severidad actual.
+The IMERG reader is wired to the pipeline format: it checks the fingerprint of the
+geographic layer, the feature index and point containment, without matching watersheds
+by name alone. The real authenticated download is still missing. The per-point CNE overlays
+are published, but keep an unknown date and unverified status. An empty query
+does not prove the absence of risk. SMAP, slope and soil are still pending
+data and an agreed source. The 2014–2015 history remains historical context
+and does not determine the current severity.
 
-Los cuatro evaluadores ya procesan políticas configurables y producen severidad,
-factores, versión y referencias. Solo aceptan políticas aprobadas con requisitos
-completos, unidades, producto, ventana y límites de antigüedad explícitos. El
-archivo `public/data/alerts/rules.json` está vacío porque el equipo aún no ha
-aprobado reglas. Consultar [formato de políticas](alert-policies.md) y
-[conectores sin Earthdata](../jobs/data-pipeline/CLIMATE.md).
+The four evaluators already process configurable policies and produce severity,
+factors, version and references. They only accept approved policies with complete
+requirements, units, product, window and explicit age limits. The
+file `public/data/alerts/rules.json` is empty because the team has not yet
+approved rules. See [policy format](alert-policies.md) and
+[connectors without Earthdata](../jobs/data-pipeline/CLIMATE.md).
 
-Los tipos de evidencia añadidos en `packages/domain/src/alerts` pertenecen a las
-alertas y reutilizan `Provenance`; no reemplazan el contrato global SPA-7 ni los
-tipos existentes `FieldAlert` y `EnvironmentalIndicator`.
+The evidence types added in `packages/domain/src/alerts` belong to
+alerts and reuse `Provenance`; they don't replace the global SPA-7 contract or the
+existing `FieldAlert` and `EnvironmentalIndicator` types.
 
-El motor distingue disponible, desactualizado, simulado, no disponible y sin
-verificar. Sin una regla de vigencia aprobada no asigna arbitrariamente un plazo
-de caducidad: conserva la fecha y marca la verificación pendiente.
+The engine distinguishes available, outdated, simulated, unavailable and
+unverified. Without an approved validity rule it doesn't arbitrarily assign an expiry
+period: it keeps the date and marks the verification as pending.
 
-## Verificación
+## Verification
 
-Con las dependencias y el entorno Python ya preparados:
+With the dependencies and the Python environment already set up:
 
 ```sh
 npm run verify:alerts
 ```
 
-El comando verifica tipos, lint, pruebas TypeScript, pruebas Python y compilación,
-y se detiene con error si falla algún control. Para añadir pruebas de Alertas
-en escritorio y móvil:
+The command checks types, lint, TypeScript tests, Python tests and the build,
+and stops with an error if any check fails. To add Alerts tests
+on desktop and mobile:
 
 ```sh
 npm run verify:alerts -- --browser
 ```
 
-En Windows utiliza Edge si está instalado y no se ha elegido otro canal con
-`PLAYWRIGHT_CHANNEL`. No instala dependencias, no consulta NASA/CNE y no modifica
-Git. Los ejemplos y las pruebas siguen sin requerir Earthdata. La validación de
-software no sustituye la aprobación científica ni resuelve indicadores faltantes.
+On Windows it uses Edge if installed and no other channel was chosen with
+`PLAYWRIGHT_CHANNEL`. It doesn't install dependencies, query NASA/CNE or change
+Git. The examples and tests still don't require Earthdata. Software
+validation does not replace scientific approval or resolve missing indicators.
 
-Los controles también pueden ejecutarse por separado:
+The checks can also be run separately:
 
 ```sh
 npm run typecheck
@@ -127,41 +127,41 @@ npm run lint
 npm test
 ```
 
-Para las pruebas de navegador con Edge instalado, en PowerShell:
+For the browser tests with Edge installed, in PowerShell:
 
 ```powershell
 $env:PLAYWRIGHT_CHANNEL = 'msedge'
 npm run test:e2e -- tests/e2e/alerts.spec.ts
 ```
 
-En Git Bash:
+In Git Bash:
 
 ```bash
 PLAYWRIGHT_CHANNEL=msedge npm run test:e2e -- tests/e2e/alerts.spec.ts
 ```
 
-Las pruebas cubren cuatro categorías, orden, cambio de escenario, salida limpia,
-procedencia, unidades, fechas, indicadores faltantes/desactualizados/simulados,
-ES/EN, accesibilidad y ausencia de solicitudes Earthdata. Los ejemplos no validan
-la capacidad predictiva de las futuras reglas de riesgo.
+The tests cover four categories, ordering, scenario switching, clean exit,
+provenance, units, dates, missing/outdated/simulated indicators,
+ES/EN, accessibility and the absence of Earthdata requests. The examples don't validate
+the predictive ability of the future risk rules.
 
-## Para activar evaluaciones reales después
+## To enable real assessments later
 
-Integrar el contrato y los identificadores geográficos acordados, cargar
-indicadores con calidad y vigencia verificadas, justificar y aprobar umbrales y
-reglas regionales, y validar los resultados con casos reproducibles. El conector
-IMERG y su configuración opcional de Earthdata se documentan en
-`jobs/data-pipeline/IMERG.md`; no se requieren para esta demostración.
+Integrate the agreed contract and geographic identifiers, load
+indicators with verified quality and validity, justify and approve thresholds and
+regional rules, and validate the results with reproducible cases. The IMERG
+connector and its optional Earthdata configuration are documented in
+`jobs/data-pipeline/IMERG.md`; they are not required for this demo.
 
-## Revisión de cierre del 15 de noviembre de 2026
+## Closing review of November 15, 2026
 
-Pasaron 84 pruebas TypeScript, 56 pruebas Python y las 46 pruebas completas de
-navegador en escritorio y móvil, incluyendo accesibilidad, idiomas y PWA sin
-conexión. El comando `verify:alerts` comprueba también tipos, lint y compilación
-y devuelve error ante un control fallido.
+84 TypeScript tests, 56 Python tests and the 46 full browser tests
+on desktop and mobile passed, including accessibility, languages and offline
+PWA. The `verify:alerts` command also checks types, lint and the build
+and returns an error on a failed check.
 
-Esta es una entrega funcional y probada, no el cierre de todas las tareas del
-proyecto Alerta. Permanecen pendientes la aprobación científica de reglas y
-vigencia, datos/ingesta SMAP, pendiente, fuente de suelos, verificación de capas
-locales y la descarga autenticada IMERG. No se activan valores ni aprobaciones
-ficticias para ocultar esas dependencias.
+This is a working, tested delivery, not the completion of every task in the
+Alerts project. Still pending: scientific approval of rules and
+validity, SMAP data/ingestion, slope, soil source, verification of local
+layers and the authenticated IMERG download. No fictional values or approvals
+are enabled to hide those dependencies.
