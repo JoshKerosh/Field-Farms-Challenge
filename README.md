@@ -45,7 +45,8 @@ Estado de dependencias al 14 de noviembre de 2026: `npm audit --omit=dev` no rep
 | ------------------------------- | --------------------------------------------------------------------- |
 | `apps/web`                      | React, rutas, pantallas, componentes e integraciones del dispositivo. |
 | `packages/domain`               | Tipos y reglas independientes de React, Supabase y Dexie.             |
-| `jobs/data-pipeline`            | Límite del futuro proceso Python de datos ambientales.                |
+| `jobs/data-pipeline`            | Procesos Python de datos; publica las capas de cuencas y del SAGA.    |
+| `functions`                     | Cloudflare Pages Functions (`/api/parcela`, consulta al SIRI).        |
 | `supabase`                      | Configuración y ubicación de futuras migraciones y pruebas.           |
 | `tests/e2e`                     | Navegación, accesibilidad, vigencia y uso sin conexión.               |
 | `references/prototype-v10.html` | Copia intacta del prototipo proporcionado.                            |
@@ -57,7 +58,8 @@ Los módulos están en `apps/web/src/features`. Registros integra mediciones de 
 
 - Seis secciones principales y accesos a beneficios, ambiente, asistente y fuentes.
 - Finca, fuentes, relaciones y observaciones ficticias claramente identificadas.
-- Mapa esquemático local con MapLibre, lista equivalente y gráficos acompañados de tablas.
+- Mi cuenca con datos reales: ubicar un punto (GPS o tocando el mapa) muestra la cuenca y subcuenca, el lindero de la finca según el catastro del SIRI, los ríos del IGN y las fuentes y ASADAS del SAGA cercanas, con un resumen textual equivalente y minimapa. Ver [cuencas reales](docs/architecture.md#mi-cuenca-con-capas-reales).
+- Gráficos acompañados de tablas.
 - Vistas demo de finquero, ASADA e institución; el selector no concede permisos.
 - Ayuda predefinida y lectura de voz cuando el dispositivo la permite.
 - Catálogo informativo de apoyos con procedencia y fecha de revisión.
@@ -78,7 +80,18 @@ Autenticación, sincronización, ingesta, cálculos monetarios y trámites exter
 
 ## Alojamiento
 
-Cloudflare Pages: instalar desde la raíz, comando `npm run build`, salida `apps/web/dist`. `_redirects` permite abrir rutas internas. Esta entrega no publica ni crea recursos externos.
+Cloudflare Pages: instalar desde la raíz, comando `npm run build`, salida `apps/web/dist`. `_redirects` permite abrir rutas internas. La carpeta `functions/` de la raíz se publica como Pages Functions y atiende `/api/parcela`; en `npm run dev` y `npm run preview` la misma lógica corre como middleware de Vite. Esta entrega no publica ni crea recursos externos.
+
+## Capas de cuencas y agua
+
+`apps/web/public/data/geo/` contiene las capas ya generadas (versionadas para que la app funcione con solo `npm install`). Para regenerarlas con los datasets de PNUD y el SAGA:
+
+```sh
+cd jobs/data-pipeline
+python -m venv .venv && .venv/bin/pip install -e ".[test]"
+.venv/bin/python -m field_farms_data.publish.basins --datasets <carpeta con los datasets de PNUD>
+.venv/bin/pytest
+```
 
 ## Referencias y licencias
 

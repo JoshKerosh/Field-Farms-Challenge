@@ -1,9 +1,14 @@
 import { Droplet, Layers, MapPin, RotateCcw, Trees, Waves, ZoomIn, ZoomOut } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { distText, fmtInt } from '../../../data/engine/format';
 import { RISK_LABEL, RISK_STYLE, terrainCards, type MapLayer, type SourceInfo } from '../../../data/engine/watershed';
+import { copy } from '../../../i18n';
 import { PageHeader, PageLink } from '../../../shared/ui';
 import { useField } from '../../../app/context/FieldContext';
+import type { BasinExplorerRepository } from '../data/basin-explorer.repository';
+
+// MapLibre and Turf load only when this page opens.
+const BasinExplorer = lazy(() => import('../components/BasinExplorer'));
 
 const LAYERS: { id: MapLayer; label: string; desc: string }[] = [
   { id: 'agua', label: 'Fuentes de agua', desc: 'Nacientes, pozos y halos de recarga de 1 km (SAGA).' },
@@ -11,8 +16,8 @@ const LAYERS: { id: MapLayer; label: string; desc: string }[] = [
   { id: 'orillas', label: 'Ríos sin bosque', desc: 'Cobertura en la franja de 15 m de los ríos según IGN 1:5 000 (2017).' },
 ];
 
-export function WatershedPage() {
-  const { ds, ctx, plan, basin, alerts, journey } = useField();
+export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository }) {
+  const { ds, ctx, plan, basin, alerts, journey, pickLatLon } = useField();
   const [layer, setLayer] = useState<MapLayer>('agua');
   const [zoom, setZoom] = useState(1);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
@@ -40,6 +45,21 @@ export function WatershedPage() {
         title={`Subcuenca ${ctx.sub.n}`}
         intro={`Cuenca ${basin.name} · Vertiente ${ctx.caribe ? 'Caribe' : 'Pacífico'} · ${fmtInt(ctx.sub.ha)} ha · ${fmtInt(ctx.sub.serv)} conexiones registradas`}
       />
+
+      <section className="v10-card" aria-labelledby="basin-explorer-title">
+        <h2 id="basin-explorer-title">{copy.watershed.explorer.title}</h2>
+        <p className="v10-muted">{copy.watershed.explorer.intro}</p>
+        <Suspense
+          fallback={
+            <p className="map-loading" role="status">
+              {copy.watershed.mapLoading}
+            </p>
+          }
+        >
+          {/* The chosen point also becomes the app's location, so this page and the others follow it. */}
+          <BasinExplorer repository={explorer} onLocate={(lng, lat) => pickLatLon(lat, lng)} />
+        </Suspense>
+      </section>
 
       <section className="v10-hero-card" aria-labelledby="limits-title">
         <span className="v10-tag" style={{ background: 'rgba(255,255,255,0.18)', color: '#fff' }}>

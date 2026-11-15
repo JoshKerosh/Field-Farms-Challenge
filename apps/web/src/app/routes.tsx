@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { demoRepositories as repositories } from '../demo/repositories';
+import { basinExplorer } from '../platform/geo/basin-explorer.adapter';
 import { FarmPage } from '../features/farms';
 import { WatershedPage } from '../features/watersheds';
 import { RestorationPage } from '../features/restoration';
@@ -27,7 +28,8 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="/guide" replace /> },
       { path: 'guide', element: <GuidePage /> },
       { path: 'farm', element: <FarmPage /> },
-      { path: 'watershed', element: <WatershedPage /> },
+      // Real layers (PNUD, SAGA, SIRI, IGN) for the basin map, loaded on demand.
+      { path: 'watershed', element: <WatershedPage explorer={basinExplorer} /> },
       { path: 'care', element: <RestorationPage /> },
       { path: 'alerts', element: <AlertsPage /> },
       { path: 'records', element: <RecordsPage /> },

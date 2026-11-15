@@ -1,7 +1,8 @@
 import { BookOpen } from 'lucide-react';
 import { useState } from 'react';
 import { REFERENCES } from '../../data/engine/assistant';
-import { PageHeader } from '../../shared/ui';
+import { copy } from '../../i18n';
+import { Badge, ExternalSource, PageHeader } from '../../shared/ui';
 
 type SourceFilter = 'all' | 'nasa' | 'local' | 'sim';
 
@@ -94,6 +95,20 @@ export function SourcesPage() {
               <BookOpen size={14} aria-hidden="true" style={{ marginTop: 3 }} />{' '}
               <span style={{ minWidth: 0 }}>{ref.sourceLabel}</span>
             </span>
+          </article>
+        ))}
+      </section>
+
+      <section className="v10-stack" aria-labelledby="connected-layers-title">
+        <h2 id="connected-layers-title">{copy.sources.connectedTitle}</h2>
+        {copy.sources.connectedRows.map((row) => (
+          <article key={row.title} className="v10-card">
+            <div className="v10-map-toolbar">
+              <h3 style={{ fontSize: '1.05rem' }}>{row.title}</h3>
+              <Badge tone="green">{copy.common.connected}</Badge>
+            </div>
+            <p className="v10-muted">{row.description}</p>
+            <ExternalSource href={row.url}>{copy.common.source}</ExternalSource>
           </article>
         ))}
       </section>

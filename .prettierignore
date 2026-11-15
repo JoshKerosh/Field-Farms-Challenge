@@ -6,3 +6,4 @@ apps/web/public/fonts/
 playwright-report/
 test-results/
 CONTEXTO_PROYECTO.md
+apps/web/public/data/

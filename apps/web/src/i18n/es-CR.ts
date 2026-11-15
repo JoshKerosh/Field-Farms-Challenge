@@ -47,6 +47,7 @@ export const esCR = {
     sourceLink: 'Consultar fuente externa',
     newTab: 'Abre en otra pestaña',
     futureIntegration: 'Integración pendiente',
+    connected: 'Conectada en Mi cuenca',
   },
   guide: {
     kicker: 'Fincas y acueductos comunales, juntos',
@@ -132,6 +133,95 @@ export const esCR = {
     zoomIn: 'Acercar',
     zoomOut: 'Alejar',
     resetBearing: 'Orientar el mapa al norte',
+    explorer: {
+      title: 'Ubicá tu finca en su cuenca',
+      intro:
+        'Si das permiso, el mapa usa tu ubicación al abrir. También podés tocar el mapa para elegir otro lugar. Vas a ver la cuenca, la subcuenca, el lindero de la finca según el catastro, los ríos y las fuentes de ASADAS cercanas.',
+      mapLabel: 'Mapa de cuencas de Costa Rica',
+      locate: 'Usar mi ubicación',
+      locating: 'Buscando tu ubicación…',
+      ready: 'Tocá un punto del mapa o usá tu ubicación.',
+      loadingBasins: 'Cargando las cuencas…',
+      basinsError: 'No se pudieron cargar las cuencas. Revisá la conexión y recargá la página.',
+      noGeolocation: 'Este dispositivo no permite obtener la ubicación. Tocá el mapa.',
+      permissionDenied: 'No diste permiso de ubicación. Podés tocar el mapa para elegir un punto.',
+      locationFailed: 'No se pudo obtener la ubicación. Podés tocar el mapa para elegir un punto.',
+      searchingParcel: 'Consultando la finca en el catastro…',
+      searchingWater: 'Buscando ríos y fuentes cercanas…',
+      offline: 'Sin conexión: el catastro (SIRI) y los ríos (IGN) necesitan internet.',
+      basemap: 'Fondo del mapa',
+      satellite: 'Satélite',
+      streets: 'Mapa',
+      scope: 'Mostrar agua en el mapa',
+      scopeNear: 'Solo cerca de la finca',
+      scopeBasins: 'Todo en las cuencas de la finca',
+      scopeNeedsPoint: 'Elegí un punto para ver el agua de las cuencas de esa finca.',
+      zoomHint: (items: string) => `Acercate para ver: ${items}.`,
+      layers: {
+        operators: 'Oficinas de ASADAS',
+        springs: 'Nacientes',
+        otherSources: 'Pozos, tomas y otras fuentes',
+        streams: 'Ríos y quebradas',
+      },
+      basin: 'Cuenca',
+      basinNumber: (n: number) => `Cuenca n.º ${n}`,
+      outsideBasins: 'Fuera de las 34 cuencas',
+      outsideBasinsDetail: 'El punto está en el mar, en una isla o fuera de Costa Rica.',
+      subbasin: 'Subcuenca',
+      noSubbasin: 'No hay subcuenca registrada en este punto.',
+      inMany: (count: number, noun: string) => `La finca está en ${count} ${noun}`,
+      basinsNoun: 'cuencas',
+      subbasinsNoun: 'subcuencas',
+      shareIntro: 'Parte del área de la finca en cada una:',
+      slope: (value: string) => `vertiente ${value}`,
+      parcel: 'Finca (catastro SIRI)',
+      parcelName: (number: string) => `Finca ${number}`,
+      publicRoad: (number: string) => `Vía pública (${number}), no es una finca`,
+      parcelDetail: (plan: string, area: string) => `Plano ${plan} · ${area}`,
+      noParcel: 'No hay parcela catastrada en este punto.',
+      parcelError: 'No se pudo consultar el catastro del SIRI. Intentá de nuevo en un momento.',
+      streams: (radius: number) => `Ríos y quebradas a ≤ ${radius} m (IGN 1:25 000)`,
+      streamsSummary: (count: number, crossing: number) =>
+        `${count} cerca` +
+        (crossing ? ` · ${crossing} ${crossing > 1 ? 'cruzan' : 'cruza'} la finca` : ''),
+      crosses: (inside: number) => `cruza · ${inside} m adentro`,
+      noStreams: 'Ninguno registrado',
+      streamsError: 'No se pudieron consultar los ríos del IGN.',
+      water: (radius: number) => `Fuentes de ASADAS a ≤ ${radius} m (SAGA)`,
+      waterSummary: (count: number, springs: number, inside: number) =>
+        `${count} ${count === 1 ? 'fuente' : 'fuentes'} (${springs} ${springs === 1 ? 'naciente' : 'nacientes'})` +
+        (inside ? ` · ${inside} dentro de la finca` : ''),
+      waterInside: (names: string) => `Dentro: ${names}.`,
+      waterNone: (radius: number, distance: string) =>
+        `Ninguna a ≤ ${radius} m · la más cercana a ${distance}`,
+      noWater: 'Ninguna registrada',
+      waterError: 'No se pudieron consultar las fuentes.',
+      proximity: 'La cercanía no prueba que la finca recargue o abastezca estas fuentes.',
+      operatorSources: (count: number) => `${count} ${count === 1 ? 'fuente' : 'fuentes'} cerca`,
+      operatorOwnsNearest: 'dueña de la fuente más cercana',
+      operatorOffice: (distance: string) => `oficina ${distance}`,
+      inParcel: 'en la finca',
+      inParcelLong: 'dentro de la finca',
+      distance: (meters: string) => `a ${meters}`,
+      services: (count: number | null) => `${count ?? '?'} servicios`,
+      operatorTotals: (sources: number, springs: number) =>
+        `${sources} fuentes (${springs} nacientes)`,
+      altitude: (meters: string) => `${meters} msnm`,
+      lastFlow: (value: string) => `último caudal registrado: ${value}`,
+      pointChosen: (coords: string) => `Punto elegido: ${coords}`,
+      yourLocation: (coords: string, accuracy: number) =>
+        `Tu ubicación: ${coords} (precisión ±${accuracy} m)`,
+      lowAccuracy: 'Precisión baja: cerca de un límite el resultado puede variar.',
+      minimap: 'Minimapa de Costa Rica: tocá para mover el mapa a ese lugar',
+      sourceKind: {
+        naciente: 'naciente',
+        pozo: 'pozo',
+        superficial: 'toma superficial',
+        'sin clasificar': 'fuente sin clasificar',
+      },
+      sources:
+        'Cuencas y subcuencas: PNUD (CRTM05), simplificadas a 10 y 5 m. Finca: catastro del SIRI, Registro Nacional. Ríos: IGN 1:25 000, SNIT. ASADAS y fuentes: SAGA del AyA, 11 nov 2026; el tipo de fuente se deduce del nombre y el caudal no indica su unidad.',
+    },
   },
   water: {
     readingsTitle: 'Caudal de la naciente de ejemplo',
@@ -267,7 +357,33 @@ export const esCR = {
       'Saber qué es un ejemplo y qué viene de una fuente externa también es parte de cuidar el agua.',
     demoTitle: 'Lo que estás viendo ahora',
     demoText:
-      'La finca, las fuentes, sus vínculos, mediciones y acciones son ejemplos ficticios. Las oportunidades de apoyo son referencias documentadas; su disponibilidad debe consultarse con la entidad.',
+      'La finca, las fuentes, sus vínculos, mediciones y acciones son ejemplos ficticios. Las oportunidades de apoyo son referencias documentadas; su disponibilidad debe consultarse con la entidad. El mapa de Mi cuenca es la excepción: usa las capas reales de abajo.',
+    connectedTitle: 'Capas reales en el mapa de Mi cuenca',
+    connectedRows: [
+      {
+        title: 'Cuencas y subcuencas (PNUD)',
+        description:
+          '34 cuencas y 1 868 subcuencas en CRTM05, entregadas por PNUD Costa Rica y simplificadas para la web.',
+        url: 'https://www.undp.org/es/costa-rica',
+      },
+      {
+        title: 'Catastro del SIRI (Registro Nacional)',
+        description:
+          'Lindero, número de finca y plano de la parcela bajo el punto elegido. Se consulta en el momento.',
+        url: 'https://siri.snitcr.go.cr/',
+      },
+      {
+        title: 'Cauces y drenajes del IGN 1:25 000 (SNIT)',
+        description: 'Ríos y quebradas alrededor de la finca. Se consultan en el momento.',
+        url: 'https://www.snitcr.go.cr/',
+      },
+      {
+        title: 'SAGA del AyA',
+        description:
+          'ASADAS y sus fuentes, con datos al 11 de noviembre de 2026. El tipo de fuente se deduce del nombre.',
+        url: 'https://www.aya.go.cr/',
+      },
+    ],
     catalogTitle: 'Fuentes para las próximas integraciones',
     rows: [
       {
