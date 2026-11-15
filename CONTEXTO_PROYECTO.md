@@ -52,9 +52,10 @@ La decisión central fue pasar de "plan de cultivos por finca" (v1–v6) a "visi
 | Separar capa NASA (global) de capa local, para replicar en otros países | Equipo | v8 |
 | Nombre: Field Farms Challenge | Equipo | v8 |
 | Mapas con pellizco para acercar y botones grandes (accesibilidad) | Equipo | v6 |
-| PWA; arquitectura sugerida: Firebase gratuito + robot de datos en GitHub Actions, migrar a Supabase después | Equipo (sin construir) | — |
+| PWA modular: React + TypeScript + Vite; backend Supabase/PostgreSQL/PostGIS; Python para datos; monorepo por funcionalidades. Sustituye la sugerencia inicial Firebase → Supabase | Equipo, arquitectura acordada | base 0.1 |
 | Marcar en la app qué dato es real, simulado o ilustrativo | Equipo | todas |
 | El finquero elige qué comparte (ubicación, cultivos, nombre, teléfono) | Equipo | diseño |
+| Sin Supabase: datos en archivos planos (`public/data/`) que publican conectores Python; registros a `registros/` del repo con una Pages Function | Equipo, 14 nov | hackathon |
 
 Las variantes de diseño v7 (tanque, números, gota, máquina del tiempo, voz, vecinos) quedaron guardadas para decidir el estilo.
 
@@ -93,7 +94,7 @@ La más urgente es el formato de la demo (video o slides), porque se entrega en 
 | Mostrar el ahorro y el apoyo al finquero | Pago por Servicios Ambientales (FONAFIFO), ahorro del plan de finca | Equipo + SINAC |
 | Conectar IMERG y SMAP reales | Hacerlo en el hackathon (cuenta Earthdata) o dejarlo simulado | Equipo |
 | Estilo de diseño final | Una de las 6 variantes v7 o el estilo actual | Equipo |
-| Construir la arquitectura | Firebase + GitHub Actions ahora, o quedarse con el prototipo | Equipo |
+| Construir la arquitectura | Decidido: base navegable modular con datos demo; persistencia Supabase y procesos Python por etapas | Equipo |
 | Cifras oficiales de GANAR (hectáreas, fincas) | Pedir a PNUD | PNUD |
 | Origen del archivo de lluvia cantonal | Confirmar si es del IMN | Equipo |
 | Validar con familia en Canaán de Rivas (lechería) | Entrevista o prueba de uso | Equipo |
@@ -117,6 +118,8 @@ Estamos bien alineados en la visión de cuenca y en las acciones de la finca; la
 Riesgo de foco: pantallas como clima, plan de cultivos y vecinos no sirven directo al objetivo y pueden abrumar en la demo.
 
 ## Próximos pasos
+
+Actualización de implementación: la base navegable conserva el prototipo v10 en `references/prototype-v10.html`. La web utiliza ejemplos tipados y el catálogo de apoyos documentado; no implica autenticación, sincronización ni datos NASA conectados. Ver `README.md` y `docs/architecture.md` para el estado técnico actual.
 
 - [ ] Revisar los links del SINAC y elegir qué entra en la app
 - [ ] Diseñar el puente finca–ASADA: una vista donde la ASADA ve las fincas de su zona de recarga y lo que hacen

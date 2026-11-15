@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-14T00:00:00Z",
+  "title": "Design System: Field Farms Challenge",
+  "extensions": {
+    "breakpoints": [
+      { "name": "compact", "value": "1100px" },
+      { "name": "mobile", "value": "760px" }
+    ],
+    "motion": [
+      {
+        "name": "state-change",
+        "value": "160ms ease-out",
+        "purpose": "Estados hover; respetar movimiento reducido."
+      }
+    ],
+    "shadows": []
+  },
+  "components": [
+    {
+      "name": "Acción principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Acción principal con texto e icono.",
+      "html": "<button class='ds-button'>Explorar mi finca</button>",
+      "css": ".ds-button{min-height:46px;padding:12px 20px;background:var(--color-primary);color:var(--color-surface);border:0;border-radius:12px;font:800 16px sans-serif}.ds-button:hover{background:var(--color-primary-deep)}.ds-button:focus-visible{outline:3px solid var(--color-primary);outline-offset:4px}"
+    },
+    {
+      "name": "Estado demo",
+      "kind": "chip",
+      "description": "Distingue ejemplos de observaciones.",
+      "html": "<span class='ds-demo'>Vista demo</span>",
+      "css": ".ds-demo{display:inline-flex;padding:4px 9px;border-radius:6px;background:var(--color-amber-tint);color:var(--color-amber-ink);font:800 13px sans-serif}"
+    },
+    {
+      "name": "Navegación",
+      "kind": "nav",
+      "description": "Sección actual con texto e icono.",
+      "html": "<a class='ds-nav' href='#' aria-current='page'>Mi cuenca</a>",
+      "css": ".ds-nav{display:flex;align-items:center;min-height:48px;padding:10px 14px;border-radius:12px;background:var(--color-water-tint);color:var(--color-primary);font:750 16px sans-serif;text-decoration:none}.ds-nav:hover{background:var(--color-canvas)}.ds-nav:focus-visible{outline:3px solid var(--color-primary);outline-offset:4px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "El agua se siembra",
+    "overview": "Se conserva la identidad del HTML v10: azul agua, verde bosque, fondos claros y controles legibles. Es una interfaz para operar en el campo: la tarea, el contexto y la procedencia de los datos preceden a la decoración.",
+    "keyCharacteristics": [
+      "Contexto de cuenca visible",
+      "Ejemplos identificados",
+      "Una tarea principal por vista"
+    ],
+    "rules": [],
+    "dos": [
+      "Do conservar el contexto de finca y cuenca entre secciones.",
+      "Do mostrar fuente y fecha junto a la información externa."
+    ],
+    "donts": [
+      "Don't presentar ejemplos, predicciones o ahorros como hechos observados.",
+      "Don't utilizar únicamente color, un mapa o un icono para transmitir información."
+    ]
+  }
+}

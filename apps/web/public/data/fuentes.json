@@ -1,0 +1,309 @@
+{
+ "actualizado": "2026-11-15T04:14:56Z",
+ "fuentes": [
+  {
+   "id": "nasa-power",
+   "titulo": "NASA POWER · lluvia, temperatura y humedad del suelo",
+   "institucion": "NASA Langley Research Center",
+   "tipo_servicio": "api",
+   "url": "https://power.larc.nasa.gov/api/temporal/daily/point",
+   "licencia": "Datos públicos de NASA, uso libre con cita",
+   "frecuencia": "diaria",
+   "capa": "nasa",
+   "simulado": false,
+   "estado": "ok",
+   "ultima_carga_buena": "2026-11-11",
+   "ultimo_error": null,
+   "archivos": [
+    "nasa/power/latest.json"
+   ],
+   "nota": "PRECTOTCORR, T2M_MAX y GWETROOT diarios en 6 puntos de referencia; normal 1991–2020."
+  },
+  {
+   "id": "noaa-roni",
+   "titulo": "NOAA · índice RONI de El Niño",
+   "institucion": "NOAA Climate Prediction Center",
+   "tipo_servicio": "archivo",
+   "url": "https://www.cpc.ncep.noaa.gov/data/indices/RONI.ascii.txt",
+   "licencia": "Dominio público (gobierno de EE. UU.)",
+   "frecuencia": "mensual",
+   "capa": "nasa",
+   "simulado": false,
+   "estado": "ok",
+   "ultima_carga_buena": "2026-10-31",
+   "ultimo_error": null,
+   "archivos": [
+    "noaa/roni/latest.json"
+   ],
+   "nota": "Índice oficial de El Niño de NOAA desde febrero de 2026. Va en la capa global junto a NASA."
+  },
+  {
+   "id": "nasa-modis",
+   "titulo": "NASA MODIS · verdor de la vegetación (NDVI 250 m)",
+   "institucion": "NASA LP DAAC, servicio web de ORNL DAAC",
+   "tipo_servicio": "api",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset",
+   "licencia": "Datos públicos de NASA, uso libre con cita (doi.org/10.5067/MODIS/MOD13Q1.061)",
+   "frecuencia": "quincenal",
+   "capa": "nasa",
+   "simulado": false,
+   "estado": "falla",
+   "ultima_carga_buena": null,
+   "ultimo_error": "RuntimeError: https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=10.55&longitude=-85.45&band=250m_16_days_NDVI&startDate=A2014289&endDate=A2014289&kmAboveBelow=1&kmLeftRight=1: HTTP Error 503: Service Unavailable",
+   "archivos": [
+    "nasa/modis/latest.json"
+   ],
+   "nota": "MOD13Q1 v061, imagen cada 16 días, en los 6 puntos de referencia."
+  },
+  {
+   "id": "nasa-imerg",
+   "titulo": "SIMULADO · NASA GPM IMERG (lluvia diaria)",
+   "institucion": "NASA GES DISC",
+   "tipo_servicio": "api",
+   "url": "https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDL_07/summary",
+   "licencia": "Datos públicos de NASA, uso libre con cita",
+   "frecuencia": "diaria",
+   "capa": "nasa",
+   "simulado": true,
+   "estado": "simulado",
+   "ultima_carga_buena": null,
+   "archivos": [
+    "ejemplos/imerg.json"
+   ],
+   "nota": "Valores de ejemplo hasta tener la cuenta NASA Earthdata (SPA-28)."
+  },
+  {
+   "id": "nasa-smap",
+   "titulo": "SIMULADO · NASA SMAP L4 (humedad del suelo)",
+   "institucion": "NASA NSIDC DAAC",
+   "tipo_servicio": "api",
+   "url": "https://nsidc.org/data/spl4smgp",
+   "licencia": "Datos públicos de NASA, uso libre con cita",
+   "frecuencia": "diaria",
+   "capa": "nasa",
+   "simulado": true,
+   "estado": "simulado",
+   "ultima_carga_buena": null,
+   "archivos": [
+    "ejemplos/smap.json"
+   ],
+   "nota": "Valores de ejemplo hasta tener la cuenta NASA Earthdata (SPA-29)."
+  },
+  {
+   "id": "indicadores-subcuenca",
+   "titulo": "SIMULADO · indicadores por subcuenca",
+   "institucion": "Field Farms Challenge",
+   "tipo_servicio": "metodo",
+   "url": "https://github.com/JoshKerosh/Field-Farms-Challenge",
+   "licencia": "Proyecto del equipo",
+   "frecuencia": "diaria",
+   "capa": "local",
+   "simulado": true,
+   "estado": "simulado",
+   "ultima_carga_buena": null,
+   "archivos": [
+    "ejemplos/indicadores-subcuenca.json"
+   ],
+   "nota": "Formato final con valores de ejemplo hasta que exista el cálculo real (SPA-21)."
+  },
+  {
+   "id": "minae-cuencas",
+   "titulo": "Cuencas y subcuencas de Costa Rica",
+   "institucion": "MINAE",
+   "tipo_servicio": "archivo",
+   "url": "https://www.snitcr.go.cr/ico_servicios_ogc",
+   "licencia": "Datos abiertos del Gobierno de Costa Rica",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "simulado": false,
+   "estado": "estatico",
+   "ultima_carga_buena": "2026-11-14",
+   "archivos": [
+    "geo/cuencas.geojson",
+    "geo/subcuencas/*"
+   ],
+   "nota": "34 cuencas y 1 868 subcuencas, de CRTM05 a WGS84. Publicado por publish.basins."
+  },
+  {
+   "id": "saga-asadas",
+   "titulo": "SAGA · ASADAS y fuentes de agua",
+   "institucion": "AyA, Sistema SAGA",
+   "tipo_servicio": "archivo",
+   "url": "https://www.aya.go.cr",
+   "licencia": "Archivo entregado al equipo",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "simulado": false,
+   "estado": "estatico",
+   "ultima_carga_buena": "2026-11-11",
+   "archivos": [
+    "geo/asadas.geojson",
+    "geo/fuentes/*"
+   ],
+   "nota": "1 334 operadores y 5 395 fuentes con ubicación; datos al 11 nov 2026."
+  },
+  {
+   "id": "cne-inundacion",
+   "titulo": "CNE · zonas con potencial de inundación",
+   "institucion": "CNE, vía SNIT",
+   "tipo_servicio": "wfs",
+   "url": "https://www.snitcr.go.cr/ico_servicios_ogc",
+   "licencia": "Datos abiertos del Gobierno de Costa Rica",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "simulado": false,
+   "estado": "ok",
+   "ultima_carga_buena": "2026-11-14",
+   "archivos": [
+    "geo/cne/inundacion.geojson"
+   ],
+   "nota": "116 polígonos de Huetar Norte, simplificados a unos 200 m.",
+   "ultimo_error": null
+  },
+  {
+   "id": "cne-deslizamientos",
+   "titulo": "CNE · deslizamientos y coronas de deslizamiento",
+   "institucion": "CNE, vía SNIT",
+   "tipo_servicio": "wfs",
+   "url": "https://www.snitcr.go.cr/ico_servicios_ogc",
+   "licencia": "Datos abiertos del Gobierno de Costa Rica",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "simulado": false,
+   "estado": "ok",
+   "ultima_carga_buena": "2026-11-14",
+   "archivos": [
+    "geo/cne/deslizamientos.geojson",
+    "geo/cne/coronas.geojson"
+   ],
+   "nota": "68 deslizamientos y 661 coronas como centroides, Huetar Norte.",
+   "ultimo_error": null
+  },
+  {
+   "id": "sinac-areas-protegidas",
+   "titulo": "SINAC · áreas protegidas del ACAHN",
+   "institucion": "SINAC, vía SNIT",
+   "tipo_servicio": "archivo",
+   "url": "https://www.snitcr.go.cr/ico_servicios_ogc",
+   "licencia": "Datos abiertos del Gobierno de Costa Rica",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "simulado": false,
+   "estado": "ok",
+   "ultima_carga_buena": "2026-11-14",
+   "archivos": [
+    "geo/sinac/areas_protegidas.geojson"
+   ],
+   "nota": "12 áreas (908 km²); 8 tienen contorno del mapa MINAET anterior.",
+   "ultimo_error": null
+  },
+  {
+   "id": "ign-orillas",
+   "titulo": "IGN 1:5 000 + NASA MODIS · orillas de ríos y verdor cada 1,5 km",
+   "institucion": "Instituto Geográfico Nacional y NASA",
+   "tipo_servicio": "wms",
+   "url": "https://geos.snitcr.go.cr/be/IGN_5/wms",
+   "licencia": "Datos abiertos del Gobierno de Costa Rica y datos públicos de NASA",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "simulado": false,
+   "estado": "ok",
+   "ultima_carga_buena": "2026-10-31",
+   "archivos": [
+    "local/orillas_verdor_1.5km.json"
+   ],
+   "nota": "27 987 cuadros: estado de la orilla de 15 m (IGN 2017) y verdor MODIS MOD13A3 nov 2025–oct 2026.",
+   "ultimo_error": null
+  },
+  {
+   "id": "riesgos-datosabiertos",
+   "titulo": "Capacidad de uso de la tierra y zonas inundables",
+   "institucion": "Paquete RIESGOS de datos abiertos",
+   "tipo_servicio": "archivo",
+   "url": "https://www.snitcr.go.cr/ico_servicios_ogc",
+   "licencia": "Datos abiertos del Gobierno de Costa Rica",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "simulado": false,
+   "estado": "estatico",
+   "ultima_carga_buena": "2026-11-13",
+   "archivos": [],
+   "nota": "Resumido en la grilla de 3 km empaquetada en apps/web/src/data/real/territory.json."
+  },
+  {
+   "id": "aya-fluc",
+   "titulo": "AyA · registro de FLUC",
+   "institucion": "AyA",
+   "tipo_servicio": "archivo",
+   "url": "https://www.aya.go.cr",
+   "licencia": "Archivo entregado al equipo",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "simulado": false,
+   "estado": "estatico",
+   "ultima_carga_buena": "2026-10-21",
+   "archivos": [],
+   "nota": "Federaciones, ligas y uniones de ASADAS. Empaquetado en apps/web/src/data/real/fluc.json."
+  },
+  {
+   "id": "sequia-2014-15",
+   "titulo": "Sequía 2014–15 · comunidades e infraestructura afectadas",
+   "institucion": "Paquete RIESGOS de datos abiertos",
+   "tipo_servicio": "archivo",
+   "url": "https://www.snitcr.go.cr/ico_servicios_ogc",
+   "licencia": "Datos abiertos del Gobierno de Costa Rica",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "simulado": false,
+   "estado": "estatico",
+   "ultima_carga_buena": "2015-12-31",
+   "archivos": [],
+   "nota": "470 puntos. Empaquetado en apps/web/src/data/real/history.json."
+  },
+  {
+   "id": "anomalia-cantonal",
+   "titulo": "Anomalía de lluvia por cantón, octubre 2026",
+   "institucion": "Por confirmar (¿IMN?)",
+   "tipo_servicio": "archivo",
+   "url": "https://www.imn.ac.cr",
+   "licencia": "Por confirmar",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "simulado": false,
+   "estado": "estatico",
+   "ultima_carga_buena": "2026-10-31",
+   "archivos": [],
+   "nota": "84 cantones. Institución de origen sin confirmar. Empaquetado en territory.json."
+  },
+  {
+   "id": "ley-forestal",
+   "titulo": "Ley Forestal 7575, artículo 33",
+   "institucion": "Asamblea Legislativa de Costa Rica",
+   "tipo_servicio": "metodo",
+   "url": "https://faolex.fao.org/docs/pdf/cos7778.pdf",
+   "licencia": "Norma pública",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "simulado": false,
+   "estado": "estatico",
+   "ultima_carga_buena": "1996-04-16",
+   "archivos": [],
+   "nota": "100 m alrededor de nacientes; 15 m (rural) o 10 m (urbano) a cada lado de ríos en plano, 50 m en quebrado."
+  },
+  {
+   "id": "fincas-demo",
+   "titulo": "SIMULADO · fincas, vecinos y modo demo",
+   "institucion": "Field Farms Challenge",
+   "tipo_servicio": "metodo",
+   "url": "https://github.com/JoshKerosh/Field-Farms-Challenge",
+   "licencia": "Proyecto del equipo",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "simulado": true,
+   "estado": "simulado",
+   "ultima_carga_buena": null,
+   "archivos": [],
+   "nota": "Perfiles de finca y eventos de ejemplo para mostrar cómo funciona la app (X-06)."
+  }
+ ]
+}

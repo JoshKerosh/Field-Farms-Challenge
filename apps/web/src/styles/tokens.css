@@ -1,0 +1,41 @@
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('/fonts/bricolage-grotesque-latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito Sans';
+  src: url('/fonts/nunito-sans-latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+:root {
+  --color-primary: #17617c;
+  --color-primary-deep: #10485d;
+  --color-forest: #2e7a43;
+  --color-canvas: #f3f6f1;
+  --color-surface: #ffffff;
+  --color-ink: #16231c;
+  --color-muted: #55665b;
+  --color-line: #dce4dd;
+  --color-water-tint: #e3eff3;
+  --color-forest-tint: #e2f1e5;
+  --color-amber: #f2b53a;
+  --color-amber-ink: #6b4505;
+  --color-amber-tint: #fdf1d6;
+  --color-danger: #8e2a21;
+  --font-headline: 'Bricolage Grotesque', 'Segoe UI', sans-serif;
+  --font-body: 'Nunito Sans', 'Segoe UI', sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+}
