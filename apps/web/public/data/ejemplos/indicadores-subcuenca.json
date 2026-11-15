@@ -1,0 +1,305 @@
+{
+ "meta": {
+  "fuente": "indicadores-subcuenca",
+  "url": "https://github.com/JoshKerosh/Field-Farms-Challenge",
+  "capa": "local",
+  "simulado": true,
+  "fecha_dato": "2026-11-13",
+  "fecha_carga": "2026-11-15T04:00:54Z",
+  "version": 1,
+  "nota": "SIMULADO: valores inventados con el formato final. No usar como dato real."
+ },
+ "datos": {
+  "unidad": "subcuenca",
+  "items": [
+   {
+    "id": "14-123",
+    "nombre": "Río San Carlos",
+    "indicadores": [
+     {
+      "id": "km_orillas_sin_bosque",
+      "nombre": "Orillas de río sin bosque",
+      "valor": 182.4,
+      "unidad": "km",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "ha_restaurar",
+      "nombre": "Hectáreas a restaurar primero",
+      "valor": 950,
+      "unidad": "ha",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "verdor",
+      "nombre": "Verdor promedio (NDVI)",
+      "valor": 0.71,
+      "unidad": "NDVI",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "nacientes_en_riesgo",
+      "nombre": "Nacientes en riesgo",
+      "valor": 12,
+      "unidad": "nacientes",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "conexiones",
+      "nombre": "Conexiones de agua abastecidas",
+      "valor": 8400,
+      "unidad": "conexiones",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "lluvia_30d_anomalia",
+      "nombre": "Lluvia frente a lo normal (30 días)",
+      "valor": 64,
+      "unidad": "%",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     }
+    ]
+   },
+   {
+    "id": "14-103",
+    "nombre": "Río Arenal",
+    "indicadores": [
+     {
+      "id": "km_orillas_sin_bosque",
+      "nombre": "Orillas de río sin bosque",
+      "valor": 61.0,
+      "unidad": "km",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "ha_restaurar",
+      "nombre": "Hectáreas a restaurar primero",
+      "valor": 310,
+      "unidad": "ha",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "verdor",
+      "nombre": "Verdor promedio (NDVI)",
+      "valor": 0.78,
+      "unidad": "NDVI",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "nacientes_en_riesgo",
+      "nombre": "Nacientes en riesgo",
+      "valor": 4,
+      "unidad": "nacientes",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "conexiones",
+      "nombre": "Conexiones de agua abastecidas",
+      "valor": 2100,
+      "unidad": "conexiones",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "lluvia_30d_anomalia",
+      "nombre": "Lluvia frente a lo normal (30 días)",
+      "valor": 41,
+      "unidad": "%",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     }
+    ]
+   },
+   {
+    "id": "14-86",
+    "nombre": "Río Peñas Blancas",
+    "indicadores": [
+     {
+      "id": "km_orillas_sin_bosque",
+      "nombre": "Orillas de río sin bosque",
+      "valor": 88.3,
+      "unidad": "km",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "ha_restaurar",
+      "nombre": "Hectáreas a restaurar primero",
+      "valor": 420,
+      "unidad": "ha",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "verdor",
+      "nombre": "Verdor promedio (NDVI)",
+      "valor": 0.74,
+      "unidad": "NDVI",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "nacientes_en_riesgo",
+      "nombre": "Nacientes en riesgo",
+      "valor": 9,
+      "unidad": "nacientes",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "conexiones",
+      "nombre": "Conexiones de agua abastecidas",
+      "valor": 3900,
+      "unidad": "conexiones",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "lluvia_30d_anomalia",
+      "nombre": "Lluvia frente a lo normal (30 días)",
+      "valor": 70,
+      "unidad": "%",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     }
+    ]
+   },
+   {
+    "id": "14-130",
+    "nombre": "Río Tres Amigos",
+    "indicadores": [
+     {
+      "id": "km_orillas_sin_bosque",
+      "nombre": "Orillas de río sin bosque",
+      "valor": 40.2,
+      "unidad": "km",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "ha_restaurar",
+      "nombre": "Hectáreas a restaurar primero",
+      "valor": 150,
+      "unidad": "ha",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "verdor",
+      "nombre": "Verdor promedio (NDVI)",
+      "valor": 0.69,
+      "unidad": "NDVI",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "nacientes_en_riesgo",
+      "nombre": "Nacientes en riesgo",
+      "valor": 2,
+      "unidad": "nacientes",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "conexiones",
+      "nombre": "Conexiones de agua abastecidas",
+      "valor": 900,
+      "unidad": "conexiones",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     },
+     {
+      "id": "lluvia_30d_anomalia",
+      "nombre": "Lluvia frente a lo normal (30 días)",
+      "valor": 55,
+      "unidad": "%",
+      "estado": "sin_evaluar",
+      "fuente": "indicadores-subcuenca",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "local"
+     }
+    ]
+   }
+  ]
+ }
+}

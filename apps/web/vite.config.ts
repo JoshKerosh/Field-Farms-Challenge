@@ -60,6 +60,17 @@ export default defineConfig({
             handler: 'StaleWhileRevalidate',
             options: { cacheName: 'geo-data', expiration: { maxEntries: 80 } },
           },
+          // NASA/NOAA indicators and the source catalog: fresh when online, last copy offline.
+          {
+            urlPattern: ({ url }) =>
+              url.pathname.startsWith('/data/') && url.pathname.endsWith('.json'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'indicator-data',
+              networkTimeoutSeconds: 4,
+              expiration: { maxEntries: 40 },
+            },
+          },
         ],
       },
     }),

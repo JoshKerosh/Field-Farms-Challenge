@@ -51,6 +51,11 @@ def publish_basins(datasets: Path, out: Path) -> pnud.Layer:
                 'type': 'Feature', 'geometry': geometry, 'properties': {
                     'nombre': record['N_SUBCUENC'].title(), 'gran_cuenca': record['GRAN_CUENC'].title(),
                     'vertiente': record['VERTIENTE'].title(), 'hectareas': round(record['HECTARES'], 1)}})
+    # El nombre se repite (una subcuenca con varias partes), así que cada parte lleva un id estable
+    # "<cuenca>-<orden>": es la llave que usan los archivos de indicadores por subcuenca.
+    for no, items in by_basin.items():
+        for i, item in enumerate(items):
+            item['properties'] = {'id': f'{no}-{i}', **item['properties']}
     sizes = [write(out / 'subcuencas' / f'{no}.geojson', items) for no, items in sorted(by_basin.items())]
     print(f'subcuencas/: {sum(map(len, by_basin.values()))} subcuencas en {len(sizes)} archivos, '
           f'{max(sizes) // 1024} KB máx.')

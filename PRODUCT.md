@@ -20,7 +20,7 @@ Una visión de cuenca conecta finca, fuente de agua y ASADA, combinando observac
 
 ## Operating Context
 
-Equipo con JavaScript y Python, presupuesto inicial de $0 y cliente PNUD Costa Rica, proyecto GANAR. Se conserva el prototipo v10 como referencia funcional. La implementación inicial utiliza React, TypeScript y Vite; Supabase/PostgreSQL/PostGIS y los procesos Python se incorporan por etapas.
+Equipo con JavaScript y Python, presupuesto inicial de $0 y cliente PNUD Costa Rica, proyecto GANAR. Se conserva el prototipo v10 como referencia funcional. La implementación utiliza React, TypeScript y Vite; los datos son archivos planos que publican procesos Python, sin base de datos.
 
 ## Capabilities and Constraints
 

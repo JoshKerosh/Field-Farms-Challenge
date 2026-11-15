@@ -1,0 +1,76 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://field-farms/data/esquemas/archivo-indicadores.schema.json",
+ "title": "Archivo de indicadores de Field Farms Challenge",
+ "description": "Mismo contrato que packages/domain/src/data/index.ts. Lo cumplen nasa/*/latest.json, noaa/*/latest.json y ejemplos/*.json.",
+ "type": "object",
+ "required": ["meta", "datos"],
+ "properties": {
+  "meta": { "$ref": "#/$defs/meta" },
+  "datos": {
+   "type": "object",
+   "required": ["unidad", "items"],
+   "properties": {
+    "unidad": { "enum": ["zona", "subcuenca", "cuadro", "pais"] },
+    "items": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": ["id", "nombre", "indicadores"],
+      "properties": {
+       "id": { "type": "string" },
+       "nombre": { "type": "string" },
+       "lat": { "type": "number" },
+       "lon": { "type": "number" },
+       "indicadores": { "type": "array", "items": { "$ref": "#/$defs/indicador" } },
+       "serie": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "required": ["fecha", "valores"],
+         "properties": {
+          "fecha": { "$ref": "#/$defs/fecha" },
+          "valores": { "type": "object", "additionalProperties": { "type": ["number", "null"] } }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "$defs": {
+  "fecha": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+  "capa": { "enum": ["nasa", "local"] },
+  "meta": {
+   "type": "object",
+   "required": ["fuente", "url", "capa", "simulado", "fecha_dato", "fecha_carga", "version"],
+   "properties": {
+    "fuente": { "type": "string", "description": "id en fuentes.json" },
+    "url": { "type": "string", "pattern": "^https?://" },
+    "capa": { "$ref": "#/$defs/capa" },
+    "simulado": { "type": "boolean" },
+    "fecha_dato": { "$ref": "#/$defs/fecha" },
+    "fecha_carga": { "type": "string", "format": "date-time" },
+    "version": { "type": "integer" },
+    "nota": { "type": "string" }
+   }
+  },
+  "indicador": {
+   "type": "object",
+   "required": ["id", "nombre", "valor", "unidad", "estado", "fuente", "fecha", "simulado", "capa"],
+   "properties": {
+    "id": { "type": "string" },
+    "nombre": { "type": "string" },
+    "valor": { "type": ["number", "null"] },
+    "unidad": { "type": "string" },
+    "estado": { "enum": ["bien", "atencion", "urgente", "sin_evaluar", "sin_dato"] },
+    "fuente": { "type": "string" },
+    "fecha": { "$ref": "#/$defs/fecha" },
+    "simulado": { "type": "boolean" },
+    "capa": { "$ref": "#/$defs/capa" }
+   }
+  }
+ }
+}

@@ -1,0 +1,4859 @@
+{
+ "meta": {
+  "fuente": "nasa-power",
+  "url": "https://power.larc.nasa.gov/api/temporal/daily/point",
+  "capa": "nasa",
+  "simulado": false,
+  "fecha_dato": "2026-11-11",
+  "fecha_carga": "2026-11-15T03:49:28Z",
+  "version": 1,
+  "nota": "Seis puntos de referencia, uno por zona. Normal 1991–2020 de la API de climatología. POWER publica con unos 3 días de rezago."
+ },
+ "datos": {
+  "unidad": "zona",
+  "items": [
+   {
+    "id": "N",
+    "nombre": "Zona Norte",
+    "lat": 10.8,
+    "lon": -85.08,
+    "indicadores": [
+     {
+      "id": "lluvia_30d",
+      "nombre": "Lluvia de los últimos 30 días",
+      "valor": 411.9,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_30d_normal",
+      "nombre": "Lluvia normal para esos 30 días (1991–2020)",
+      "valor": 180.2,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_30d_anomalia",
+      "nombre": "Lluvia frente a lo normal (30 días)",
+      "valor": 129,
+      "unidad": "%",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_7d",
+      "nombre": "Lluvia de los últimos 7 días",
+      "valor": 52.3,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "tmax_30d",
+      "nombre": "Temperatura máxima promedio (30 días)",
+      "valor": 29.1,
+      "unidad": "°C",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz_30d",
+      "nombre": "Humedad del suelo en raíces (30 días, 0 seco a 1 saturado)",
+      "valor": 0.84,
+      "unidad": "0-1",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz_30d_anomalia",
+      "nombre": "Humedad del suelo frente a lo normal (30 días)",
+      "valor": 0.12,
+      "unidad": "0-1",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     }
+    ],
+    "serie": [
+     {
+      "fecha": "2026-08-14",
+      "valores": {
+       "lluvia": 0.54,
+       "tmax": 33.05,
+       "humedad_raiz": 0.55
+      }
+     },
+     {
+      "fecha": "2026-08-15",
+      "valores": {
+       "lluvia": 10.5,
+       "tmax": 31.36,
+       "humedad_raiz": 0.55
+      }
+     },
+     {
+      "fecha": "2026-08-16",
+      "valores": {
+       "lluvia": 17.69,
+       "tmax": 31.56,
+       "humedad_raiz": 0.57
+      }
+     },
+     {
+      "fecha": "2026-08-17",
+      "valores": {
+       "lluvia": 32.7,
+       "tmax": 30.97,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-08-18",
+      "valores": {
+       "lluvia": 6.47,
+       "tmax": 28.89,
+       "humedad_raiz": 0.62
+      }
+     },
+     {
+      "fecha": "2026-08-19",
+      "valores": {
+       "lluvia": 0.69,
+       "tmax": 29.83,
+       "humedad_raiz": 0.61
+      }
+     },
+     {
+      "fecha": "2026-08-20",
+      "valores": {
+       "lluvia": 2.48,
+       "tmax": 31.51,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-08-21",
+      "valores": {
+       "lluvia": 3.4,
+       "tmax": 31.47,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-08-22",
+      "valores": {
+       "lluvia": 2.82,
+       "tmax": 31.55,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-08-23",
+      "valores": {
+       "lluvia": 7.38,
+       "tmax": 28.93,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-08-24",
+      "valores": {
+       "lluvia": 0.76,
+       "tmax": 31.3,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-08-25",
+      "valores": {
+       "lluvia": 2.56,
+       "tmax": 30.87,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-08-26",
+      "valores": {
+       "lluvia": 1.46,
+       "tmax": 32.64,
+       "humedad_raiz": 0.58
+      }
+     },
+     {
+      "fecha": "2026-08-27",
+      "valores": {
+       "lluvia": 6.37,
+       "tmax": 31.41,
+       "humedad_raiz": 0.58
+      }
+     },
+     {
+      "fecha": "2026-08-28",
+      "valores": {
+       "lluvia": 10.74,
+       "tmax": 30.41,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-08-29",
+      "valores": {
+       "lluvia": 4.75,
+       "tmax": 31.99,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-08-30",
+      "valores": {
+       "lluvia": 8.93,
+       "tmax": 31.83,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-08-31",
+      "valores": {
+       "lluvia": 3.18,
+       "tmax": 31.34,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-09-01",
+      "valores": {
+       "lluvia": 7.47,
+       "tmax": 31.42,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-09-02",
+      "valores": {
+       "lluvia": 8.66,
+       "tmax": 31.23,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-09-03",
+      "valores": {
+       "lluvia": 4.58,
+       "tmax": 30.25,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-09-04",
+      "valores": {
+       "lluvia": 4.23,
+       "tmax": 30.12,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-09-05",
+      "valores": {
+       "lluvia": 2.52,
+       "tmax": 30.91,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-09-06",
+      "valores": {
+       "lluvia": 6.12,
+       "tmax": 31.02,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-09-07",
+      "valores": {
+       "lluvia": 0.06,
+       "tmax": 30.25,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-09-08",
+      "valores": {
+       "lluvia": 2.39,
+       "tmax": 30.93,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-09-09",
+      "valores": {
+       "lluvia": 7.83,
+       "tmax": 31.78,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-09-10",
+      "valores": {
+       "lluvia": 4.88,
+       "tmax": 28.93,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-09-11",
+      "valores": {
+       "lluvia": 1.04,
+       "tmax": 31.22,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-09-12",
+      "valores": {
+       "lluvia": 2.57,
+       "tmax": 31.6,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-09-13",
+      "valores": {
+       "lluvia": 3.45,
+       "tmax": 29.8,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-09-14",
+      "valores": {
+       "lluvia": 1.18,
+       "tmax": 29.8,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-09-15",
+      "valores": {
+       "lluvia": 3.61,
+       "tmax": 29.15,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-09-16",
+      "valores": {
+       "lluvia": 0.37,
+       "tmax": 30.01,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-09-17",
+      "valores": {
+       "lluvia": 2.27,
+       "tmax": 31.72,
+       "humedad_raiz": 0.58
+      }
+     },
+     {
+      "fecha": "2026-09-18",
+      "valores": {
+       "lluvia": 38.03,
+       "tmax": 31.55,
+       "humedad_raiz": 0.6
+      }
+     },
+     {
+      "fecha": "2026-09-19",
+      "valores": {
+       "lluvia": 55.39,
+       "tmax": 29.08,
+       "humedad_raiz": 0.68
+      }
+     },
+     {
+      "fecha": "2026-09-20",
+      "valores": {
+       "lluvia": 37.85,
+       "tmax": 30.32,
+       "humedad_raiz": 0.73
+      }
+     },
+     {
+      "fecha": "2026-09-21",
+      "valores": {
+       "lluvia": 3.09,
+       "tmax": 27.78,
+       "humedad_raiz": 0.73
+      }
+     },
+     {
+      "fecha": "2026-09-22",
+      "valores": {
+       "lluvia": 2.48,
+       "tmax": 30.97,
+       "humedad_raiz": 0.71
+      }
+     },
+     {
+      "fecha": "2026-09-23",
+      "valores": {
+       "lluvia": 4.04,
+       "tmax": 30.95,
+       "humedad_raiz": 0.7
+      }
+     },
+     {
+      "fecha": "2026-09-24",
+      "valores": {
+       "lluvia": 5.81,
+       "tmax": 29.67,
+       "humedad_raiz": 0.69
+      }
+     },
+     {
+      "fecha": "2026-09-25",
+      "valores": {
+       "lluvia": 7.49,
+       "tmax": 29.04,
+       "humedad_raiz": 0.69
+      }
+     },
+     {
+      "fecha": "2026-09-26",
+      "valores": {
+       "lluvia": 18.22,
+       "tmax": 30.45,
+       "humedad_raiz": 0.71
+      }
+     },
+     {
+      "fecha": "2026-09-27",
+      "valores": {
+       "lluvia": 16.44,
+       "tmax": 28.4,
+       "humedad_raiz": 0.72
+      }
+     },
+     {
+      "fecha": "2026-09-28",
+      "valores": {
+       "lluvia": 5.39,
+       "tmax": 29.98,
+       "humedad_raiz": 0.72
+      }
+     },
+     {
+      "fecha": "2026-09-29",
+      "valores": {
+       "lluvia": 22.0,
+       "tmax": 29.64,
+       "humedad_raiz": 0.73
+      }
+     },
+     {
+      "fecha": "2026-09-30",
+      "valores": {
+       "lluvia": 9.29,
+       "tmax": 30.25,
+       "humedad_raiz": 0.74
+      }
+     },
+     {
+      "fecha": "2026-10-01",
+      "valores": {
+       "lluvia": 8.0,
+       "tmax": 30.43,
+       "humedad_raiz": 0.8
+      }
+     },
+     {
+      "fecha": "2026-10-02",
+      "valores": {
+       "lluvia": 24.92,
+       "tmax": 28.3,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-10-03",
+      "valores": {
+       "lluvia": 76.34,
+       "tmax": 27.66,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-10-04",
+      "valores": {
+       "lluvia": 9.49,
+       "tmax": 29.55,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-10-05",
+      "valores": {
+       "lluvia": 8.01,
+       "tmax": 30.24,
+       "humedad_raiz": 0.85
+      }
+     },
+     {
+      "fecha": "2026-10-06",
+      "valores": {
+       "lluvia": 5.15,
+       "tmax": 30.46,
+       "humedad_raiz": 0.84
+      }
+     },
+     {
+      "fecha": "2026-10-07",
+      "valores": {
+       "lluvia": 6.16,
+       "tmax": 30.36,
+       "humedad_raiz": 0.84
+      }
+     },
+     {
+      "fecha": "2026-10-08",
+      "valores": {
+       "lluvia": 4.34,
+       "tmax": 30.59,
+       "humedad_raiz": 0.83
+      }
+     },
+     {
+      "fecha": "2026-10-09",
+      "valores": {
+       "lluvia": 4.12,
+       "tmax": 30.23,
+       "humedad_raiz": 0.83
+      }
+     },
+     {
+      "fecha": "2026-10-10",
+      "valores": {
+       "lluvia": 8.9,
+       "tmax": 30.08,
+       "humedad_raiz": 0.83
+      }
+     },
+     {
+      "fecha": "2026-10-11",
+      "valores": {
+       "lluvia": 5.85,
+       "tmax": 27.78,
+       "humedad_raiz": 0.83
+      }
+     },
+     {
+      "fecha": "2026-10-12",
+      "valores": {
+       "lluvia": 3.12,
+       "tmax": 29.87,
+       "humedad_raiz": 0.83
+      }
+     },
+     {
+      "fecha": "2026-10-13",
+      "valores": {
+       "lluvia": 7.22,
+       "tmax": 29.6,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-10-14",
+      "valores": {
+       "lluvia": 5.83,
+       "tmax": 28.91,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-10-15",
+      "valores": {
+       "lluvia": 9.36,
+       "tmax": 30.14,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-10-16",
+      "valores": {
+       "lluvia": 6.59,
+       "tmax": 30.45,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-10-17",
+      "valores": {
+       "lluvia": 115.59,
+       "tmax": 29.62,
+       "humedad_raiz": 0.83
+      }
+     },
+     {
+      "fecha": "2026-10-18",
+      "valores": {
+       "lluvia": 12.42,
+       "tmax": 28.53,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-10-19",
+      "valores": {
+       "lluvia": 64.51,
+       "tmax": 28.65,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-10-20",
+      "valores": {
+       "lluvia": 25.45,
+       "tmax": 28.86,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-21",
+      "valores": {
+       "lluvia": 7.12,
+       "tmax": 28.94,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-22",
+      "valores": {
+       "lluvia": 3.56,
+       "tmax": 29.12,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-10-23",
+      "valores": {
+       "lluvia": 3.33,
+       "tmax": 29.25,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-10-24",
+      "valores": {
+       "lluvia": 1.88,
+       "tmax": 29.55,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-10-25",
+      "valores": {
+       "lluvia": 0.44,
+       "tmax": 28.96,
+       "humedad_raiz": 0.85
+      }
+     },
+     {
+      "fecha": "2026-10-26",
+      "valores": {
+       "lluvia": 0.63,
+       "tmax": 28.67,
+       "humedad_raiz": 0.84
+      }
+     },
+     {
+      "fecha": "2026-10-27",
+      "valores": {
+       "lluvia": 0.06,
+       "tmax": 28.9,
+       "humedad_raiz": 0.84
+      }
+     },
+     {
+      "fecha": "2026-10-28",
+      "valores": {
+       "lluvia": 0.18,
+       "tmax": 29.18,
+       "humedad_raiz": 0.83
+      }
+     },
+     {
+      "fecha": "2026-10-29",
+      "valores": {
+       "lluvia": 0.51,
+       "tmax": 29.35,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-10-30",
+      "valores": {
+       "lluvia": 2.7,
+       "tmax": 29.07,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-10-31",
+      "valores": {
+       "lluvia": 4.0,
+       "tmax": 29.38,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-11-01",
+      "valores": {
+       "lluvia": 6.61,
+       "tmax": 29.38,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-11-02",
+      "valores": {
+       "lluvia": 14.42,
+       "tmax": 27.59,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-11-03",
+      "valores": {
+       "lluvia": 15.26,
+       "tmax": 29.07,
+       "humedad_raiz": 0.83
+      }
+     },
+     {
+      "fecha": "2026-11-04",
+      "valores": {
+       "lluvia": 51.87,
+       "tmax": 27.98,
+       "humedad_raiz": 0.84
+      }
+     },
+     {
+      "fecha": "2026-11-05",
+      "valores": {
+       "lluvia": 13.13,
+       "tmax": 29.48,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-11-06",
+      "valores": {
+       "lluvia": 7.2,
+       "tmax": 28.06,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-11-07",
+      "valores": {
+       "lluvia": 5.26,
+       "tmax": 27.37,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-11-08",
+      "valores": {
+       "lluvia": 12.35,
+       "tmax": 28.2,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-11-09",
+      "valores": {
+       "lluvia": 6.71,
+       "tmax": 29.67,
+       "humedad_raiz": 0.85
+      }
+     },
+     {
+      "fecha": "2026-11-10",
+      "valores": {
+       "lluvia": 3.46,
+       "tmax": 29.99,
+       "humedad_raiz": 0.85
+      }
+     },
+     {
+      "fecha": "2026-11-11",
+      "valores": {
+       "lluvia": 4.23,
+       "tmax": 30.66,
+       "humedad_raiz": 0.85
+      }
+     }
+    ]
+   },
+   {
+    "id": "C",
+    "nombre": "Caribe húmedo",
+    "lat": 10.45,
+    "lon": -84.02,
+    "indicadores": [
+     {
+      "id": "lluvia_30d",
+      "nombre": "Lluvia de los últimos 30 días",
+      "valor": 513.1,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_30d_normal",
+      "nombre": "Lluvia normal para esos 30 días (1991–2020)",
+      "valor": 288.0,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_30d_anomalia",
+      "nombre": "Lluvia frente a lo normal (30 días)",
+      "valor": 78,
+      "unidad": "%",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_7d",
+      "nombre": "Lluvia de los últimos 7 días",
+      "valor": 65.8,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "tmax_30d",
+      "nombre": "Temperatura máxima promedio (30 días)",
+      "valor": 27.2,
+      "unidad": "°C",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz_30d",
+      "nombre": "Humedad del suelo en raíces (30 días, 0 seco a 1 saturado)",
+      "valor": 0.89,
+      "unidad": "0-1",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz_30d_anomalia",
+      "nombre": "Humedad del suelo frente a lo normal (30 días)",
+      "valor": -0.01,
+      "unidad": "0-1",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     }
+    ],
+    "serie": [
+     {
+      "fecha": "2026-08-14",
+      "valores": {
+       "lluvia": 7.4,
+       "tmax": 28.01,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-08-15",
+      "valores": {
+       "lluvia": 28.01,
+       "tmax": 27.56,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-08-16",
+      "valores": {
+       "lluvia": 41.27,
+       "tmax": 27.2,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-08-17",
+      "valores": {
+       "lluvia": 41.75,
+       "tmax": 27.26,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-18",
+      "valores": {
+       "lluvia": 34.58,
+       "tmax": 27.69,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-08-19",
+      "valores": {
+       "lluvia": 7.68,
+       "tmax": 27.71,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-20",
+      "valores": {
+       "lluvia": 7.92,
+       "tmax": 28.03,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-21",
+      "valores": {
+       "lluvia": 11.3,
+       "tmax": 27.77,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-22",
+      "valores": {
+       "lluvia": 10.91,
+       "tmax": 28.37,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-23",
+      "valores": {
+       "lluvia": 20.93,
+       "tmax": 27.19,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-24",
+      "valores": {
+       "lluvia": 8.78,
+       "tmax": 27.9,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-25",
+      "valores": {
+       "lluvia": 11.06,
+       "tmax": 27.57,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-26",
+      "valores": {
+       "lluvia": 10.53,
+       "tmax": 28.37,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-27",
+      "valores": {
+       "lluvia": 14.54,
+       "tmax": 28.09,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-28",
+      "valores": {
+       "lluvia": 22.27,
+       "tmax": 27.8,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-29",
+      "valores": {
+       "lluvia": 15.51,
+       "tmax": 28.18,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-30",
+      "valores": {
+       "lluvia": 21.51,
+       "tmax": 28.2,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-31",
+      "valores": {
+       "lluvia": 8.36,
+       "tmax": 28.68,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-01",
+      "valores": {
+       "lluvia": 21.29,
+       "tmax": 28.18,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-02",
+      "valores": {
+       "lluvia": 17.4,
+       "tmax": 29.25,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-03",
+      "valores": {
+       "lluvia": 8.92,
+       "tmax": 29.02,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-04",
+      "valores": {
+       "lluvia": 10.22,
+       "tmax": 27.81,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-05",
+      "valores": {
+       "lluvia": 9.45,
+       "tmax": 27.83,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-06",
+      "valores": {
+       "lluvia": 17.81,
+       "tmax": 27.54,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-07",
+      "valores": {
+       "lluvia": 5.96,
+       "tmax": 27.66,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-08",
+      "valores": {
+       "lluvia": 7.91,
+       "tmax": 27.96,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-09",
+      "valores": {
+       "lluvia": 15.59,
+       "tmax": 28.28,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-10",
+      "valores": {
+       "lluvia": 8.82,
+       "tmax": 27.26,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-11",
+      "valores": {
+       "lluvia": 5.83,
+       "tmax": 28.41,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-12",
+      "valores": {
+       "lluvia": 6.35,
+       "tmax": 28.36,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-13",
+      "valores": {
+       "lluvia": 8.55,
+       "tmax": 27.26,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-14",
+      "valores": {
+       "lluvia": 6.58,
+       "tmax": 27.25,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-15",
+      "valores": {
+       "lluvia": 4.0,
+       "tmax": 27.21,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-16",
+      "valores": {
+       "lluvia": 2.23,
+       "tmax": 27.68,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-17",
+      "valores": {
+       "lluvia": 4.82,
+       "tmax": 28.7,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-18",
+      "valores": {
+       "lluvia": 36.81,
+       "tmax": 28.94,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-19",
+      "valores": {
+       "lluvia": 43.35,
+       "tmax": 28.61,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-20",
+      "valores": {
+       "lluvia": 94.72,
+       "tmax": 28.62,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-21",
+      "valores": {
+       "lluvia": 36.42,
+       "tmax": 27.77,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-22",
+      "valores": {
+       "lluvia": 22.86,
+       "tmax": 29.79,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-23",
+      "valores": {
+       "lluvia": 16.51,
+       "tmax": 28.98,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-24",
+      "valores": {
+       "lluvia": 6.06,
+       "tmax": 28.23,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-25",
+      "valores": {
+       "lluvia": 11.98,
+       "tmax": 27.74,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-26",
+      "valores": {
+       "lluvia": 19.01,
+       "tmax": 28.17,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-27",
+      "valores": {
+       "lluvia": 14.46,
+       "tmax": 28.64,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-28",
+      "valores": {
+       "lluvia": 5.64,
+       "tmax": 28.23,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-29",
+      "valores": {
+       "lluvia": 23.19,
+       "tmax": 29.23,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-30",
+      "valores": {
+       "lluvia": 23.4,
+       "tmax": 27.92,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-10-01",
+      "valores": {
+       "lluvia": 16.83,
+       "tmax": 28.32,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-02",
+      "valores": {
+       "lluvia": 25.09,
+       "tmax": 27.9,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-03",
+      "valores": {
+       "lluvia": 42.79,
+       "tmax": 26.63,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-04",
+      "valores": {
+       "lluvia": 9.69,
+       "tmax": 28.39,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-05",
+      "valores": {
+       "lluvia": 9.6,
+       "tmax": 27.03,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-06",
+      "valores": {
+       "lluvia": 8.7,
+       "tmax": 28.32,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-07",
+      "valores": {
+       "lluvia": 5.92,
+       "tmax": 28.01,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-08",
+      "valores": {
+       "lluvia": 8.48,
+       "tmax": 28.23,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-10-09",
+      "valores": {
+       "lluvia": 8.05,
+       "tmax": 28.38,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-10-10",
+      "valores": {
+       "lluvia": 11.02,
+       "tmax": 27.52,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-10-11",
+      "valores": {
+       "lluvia": 24.53,
+       "tmax": 26.16,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-12",
+      "valores": {
+       "lluvia": 8.3,
+       "tmax": 27.27,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-13",
+      "valores": {
+       "lluvia": 5.36,
+       "tmax": 27.72,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-10-14",
+      "valores": {
+       "lluvia": 5.33,
+       "tmax": 28.08,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-10-15",
+      "valores": {
+       "lluvia": 7.45,
+       "tmax": 27.84,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-10-16",
+      "valores": {
+       "lluvia": 6.48,
+       "tmax": 28.62,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-10-17",
+      "valores": {
+       "lluvia": 99.45,
+       "tmax": 27.8,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-10-18",
+      "valores": {
+       "lluvia": 18.04,
+       "tmax": 25.22,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-19",
+      "valores": {
+       "lluvia": 20.45,
+       "tmax": 25.87,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-20",
+      "valores": {
+       "lluvia": 27.27,
+       "tmax": 26.82,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-21",
+      "valores": {
+       "lluvia": 22.64,
+       "tmax": 26.49,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-22",
+      "valores": {
+       "lluvia": 15.79,
+       "tmax": 26.67,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-23",
+      "valores": {
+       "lluvia": 14.06,
+       "tmax": 27.37,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-24",
+      "valores": {
+       "lluvia": 14.4,
+       "tmax": 27.48,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-25",
+      "valores": {
+       "lluvia": 2.2,
+       "tmax": 27.41,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-26",
+      "valores": {
+       "lluvia": 0.65,
+       "tmax": 27.0,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-10-27",
+      "valores": {
+       "lluvia": 0.24,
+       "tmax": 26.9,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-10-28",
+      "valores": {
+       "lluvia": 0.81,
+       "tmax": 27.23,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-10-29",
+      "valores": {
+       "lluvia": 2.08,
+       "tmax": 27.47,
+       "humedad_raiz": 0.85
+      }
+     },
+     {
+      "fecha": "2026-10-30",
+      "valores": {
+       "lluvia": 3.42,
+       "tmax": 27.31,
+       "humedad_raiz": 0.85
+      }
+     },
+     {
+      "fecha": "2026-10-31",
+      "valores": {
+       "lluvia": 34.19,
+       "tmax": 25.67,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-11-01",
+      "valores": {
+       "lluvia": 47.22,
+       "tmax": 26.91,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-11-02",
+      "valores": {
+       "lluvia": 74.42,
+       "tmax": 24.73,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-11-03",
+      "valores": {
+       "lluvia": 9.39,
+       "tmax": 26.78,
+       "humedad_raiz": 0.92
+      }
+     },
+     {
+      "fecha": "2026-11-04",
+      "valores": {
+       "lluvia": 15.96,
+       "tmax": 28.45,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-11-05",
+      "valores": {
+       "lluvia": 11.25,
+       "tmax": 28.06,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-11-06",
+      "valores": {
+       "lluvia": 10.3,
+       "tmax": 28.17,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-11-07",
+      "valores": {
+       "lluvia": 7.52,
+       "tmax": 27.45,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-11-08",
+      "valores": {
+       "lluvia": 11.64,
+       "tmax": 27.28,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-11-09",
+      "valores": {
+       "lluvia": 9.13,
+       "tmax": 27.53,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-11-10",
+      "valores": {
+       "lluvia": 9.55,
+       "tmax": 28.2,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-11-11",
+      "valores": {
+       "lluvia": 6.44,
+       "tmax": 28.73,
+       "humedad_raiz": 0.89
+      }
+     }
+    ]
+   },
+   {
+    "id": "S",
+    "nombre": "Pacífico seco",
+    "lat": 10.55,
+    "lon": -85.45,
+    "indicadores": [
+     {
+      "id": "lluvia_30d",
+      "nombre": "Lluvia de los últimos 30 días",
+      "valor": 333.2,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_30d_normal",
+      "nombre": "Lluvia normal para esos 30 días (1991–2020)",
+      "valor": 217.4,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_30d_anomalia",
+      "nombre": "Lluvia frente a lo normal (30 días)",
+      "valor": 53,
+      "unidad": "%",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_7d",
+      "nombre": "Lluvia de los últimos 7 días",
+      "valor": 72.3,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "tmax_30d",
+      "nombre": "Temperatura máxima promedio (30 días)",
+      "valor": 29.8,
+      "unidad": "°C",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz_30d",
+      "nombre": "Humedad del suelo en raíces (30 días, 0 seco a 1 saturado)",
+      "valor": 0.75,
+      "unidad": "0-1",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz_30d_anomalia",
+      "nombre": "Humedad del suelo frente a lo normal (30 días)",
+      "valor": -0.05,
+      "unidad": "0-1",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     }
+    ],
+    "serie": [
+     {
+      "fecha": "2026-08-14",
+      "valores": {
+       "lluvia": 0.1,
+       "tmax": 35.23,
+       "humedad_raiz": 0.49
+      }
+     },
+     {
+      "fecha": "2026-08-15",
+      "valores": {
+       "lluvia": 3.77,
+       "tmax": 33.57,
+       "humedad_raiz": 0.49
+      }
+     },
+     {
+      "fecha": "2026-08-16",
+      "valores": {
+       "lluvia": 9.41,
+       "tmax": 33.1,
+       "humedad_raiz": 0.5
+      }
+     },
+     {
+      "fecha": "2026-08-17",
+      "valores": {
+       "lluvia": 16.31,
+       "tmax": 32.23,
+       "humedad_raiz": 0.52
+      }
+     },
+     {
+      "fecha": "2026-08-18",
+      "valores": {
+       "lluvia": 5.34,
+       "tmax": 32.21,
+       "humedad_raiz": 0.53
+      }
+     },
+     {
+      "fecha": "2026-08-19",
+      "valores": {
+       "lluvia": 0.3,
+       "tmax": 33.43,
+       "humedad_raiz": 0.53
+      }
+     },
+     {
+      "fecha": "2026-08-20",
+      "valores": {
+       "lluvia": 0.69,
+       "tmax": 33.66,
+       "humedad_raiz": 0.53
+      }
+     },
+     {
+      "fecha": "2026-08-21",
+      "valores": {
+       "lluvia": 0.68,
+       "tmax": 33.89,
+       "humedad_raiz": 0.52
+      }
+     },
+     {
+      "fecha": "2026-08-22",
+      "valores": {
+       "lluvia": 0.64,
+       "tmax": 34.46,
+       "humedad_raiz": 0.52
+      }
+     },
+     {
+      "fecha": "2026-08-23",
+      "valores": {
+       "lluvia": 1.61,
+       "tmax": 31.48,
+       "humedad_raiz": 0.52
+      }
+     },
+     {
+      "fecha": "2026-08-24",
+      "valores": {
+       "lluvia": 0.33,
+       "tmax": 34.97,
+       "humedad_raiz": 0.52
+      }
+     },
+     {
+      "fecha": "2026-08-25",
+      "valores": {
+       "lluvia": 0.51,
+       "tmax": 34.07,
+       "humedad_raiz": 0.51
+      }
+     },
+     {
+      "fecha": "2026-08-26",
+      "valores": {
+       "lluvia": 1.15,
+       "tmax": 34.84,
+       "humedad_raiz": 0.51
+      }
+     },
+     {
+      "fecha": "2026-08-27",
+      "valores": {
+       "lluvia": 1.93,
+       "tmax": 33.93,
+       "humedad_raiz": 0.51
+      }
+     },
+     {
+      "fecha": "2026-08-28",
+      "valores": {
+       "lluvia": 3.69,
+       "tmax": 32.9,
+       "humedad_raiz": 0.51
+      }
+     },
+     {
+      "fecha": "2026-08-29",
+      "valores": {
+       "lluvia": 1.46,
+       "tmax": 34.63,
+       "humedad_raiz": 0.51
+      }
+     },
+     {
+      "fecha": "2026-08-30",
+      "valores": {
+       "lluvia": 5.05,
+       "tmax": 34.84,
+       "humedad_raiz": 0.51
+      }
+     },
+     {
+      "fecha": "2026-08-31",
+      "valores": {
+       "lluvia": 1.44,
+       "tmax": 34.68,
+       "humedad_raiz": 0.51
+      }
+     },
+     {
+      "fecha": "2026-09-01",
+      "valores": {
+       "lluvia": 2.35,
+       "tmax": 35.17,
+       "humedad_raiz": 0.51
+      }
+     },
+     {
+      "fecha": "2026-09-02",
+      "valores": {
+       "lluvia": 4.35,
+       "tmax": 34.47,
+       "humedad_raiz": 0.51
+      }
+     },
+     {
+      "fecha": "2026-09-03",
+      "valores": {
+       "lluvia": 0.86,
+       "tmax": 33.51,
+       "humedad_raiz": 0.51
+      }
+     },
+     {
+      "fecha": "2026-09-04",
+      "valores": {
+       "lluvia": 0.8,
+       "tmax": 33.9,
+       "humedad_raiz": 0.51
+      }
+     },
+     {
+      "fecha": "2026-09-05",
+      "valores": {
+       "lluvia": 0.5,
+       "tmax": 33.95,
+       "humedad_raiz": 0.5
+      }
+     },
+     {
+      "fecha": "2026-09-06",
+      "valores": {
+       "lluvia": 2.71,
+       "tmax": 34.16,
+       "humedad_raiz": 0.5
+      }
+     },
+     {
+      "fecha": "2026-09-07",
+      "valores": {
+       "lluvia": 0.28,
+       "tmax": 33.34,
+       "humedad_raiz": 0.5
+      }
+     },
+     {
+      "fecha": "2026-09-08",
+      "valores": {
+       "lluvia": 1.2,
+       "tmax": 34.12,
+       "humedad_raiz": 0.5
+      }
+     },
+     {
+      "fecha": "2026-09-09",
+      "valores": {
+       "lluvia": 3.04,
+       "tmax": 34.87,
+       "humedad_raiz": 0.5
+      }
+     },
+     {
+      "fecha": "2026-09-10",
+      "valores": {
+       "lluvia": 3.35,
+       "tmax": 31.59,
+       "humedad_raiz": 0.5
+      }
+     },
+     {
+      "fecha": "2026-09-11",
+      "valores": {
+       "lluvia": 0.73,
+       "tmax": 34.38,
+       "humedad_raiz": 0.5
+      }
+     },
+     {
+      "fecha": "2026-09-12",
+      "valores": {
+       "lluvia": 1.09,
+       "tmax": 33.19,
+       "humedad_raiz": 0.5
+      }
+     },
+     {
+      "fecha": "2026-09-13",
+      "valores": {
+       "lluvia": 0.79,
+       "tmax": 33.38,
+       "humedad_raiz": 0.5
+      }
+     },
+     {
+      "fecha": "2026-09-14",
+      "valores": {
+       "lluvia": 0.7,
+       "tmax": 33.38,
+       "humedad_raiz": 0.49
+      }
+     },
+     {
+      "fecha": "2026-09-15",
+      "valores": {
+       "lluvia": 0.8,
+       "tmax": 32.4,
+       "humedad_raiz": 0.49
+      }
+     },
+     {
+      "fecha": "2026-09-16",
+      "valores": {
+       "lluvia": 0.14,
+       "tmax": 33.67,
+       "humedad_raiz": 0.49
+      }
+     },
+     {
+      "fecha": "2026-09-17",
+      "valores": {
+       "lluvia": 2.69,
+       "tmax": 35.42,
+       "humedad_raiz": 0.49
+      }
+     },
+     {
+      "fecha": "2026-09-18",
+      "valores": {
+       "lluvia": 31.4,
+       "tmax": 34.19,
+       "humedad_raiz": 0.51
+      }
+     },
+     {
+      "fecha": "2026-09-19",
+      "valores": {
+       "lluvia": 49.53,
+       "tmax": 31.31,
+       "humedad_raiz": 0.59
+      }
+     },
+     {
+      "fecha": "2026-09-20",
+      "valores": {
+       "lluvia": 39.46,
+       "tmax": 31.51,
+       "humedad_raiz": 0.67
+      }
+     },
+     {
+      "fecha": "2026-09-21",
+      "valores": {
+       "lluvia": 12.31,
+       "tmax": 27.67,
+       "humedad_raiz": 0.69
+      }
+     },
+     {
+      "fecha": "2026-09-22",
+      "valores": {
+       "lluvia": 4.42,
+       "tmax": 30.35,
+       "humedad_raiz": 0.69
+      }
+     },
+     {
+      "fecha": "2026-09-23",
+      "valores": {
+       "lluvia": 5.11,
+       "tmax": 31.29,
+       "humedad_raiz": 0.68
+      }
+     },
+     {
+      "fecha": "2026-09-24",
+      "valores": {
+       "lluvia": 5.39,
+       "tmax": 30.68,
+       "humedad_raiz": 0.68
+      }
+     },
+     {
+      "fecha": "2026-09-25",
+      "valores": {
+       "lluvia": 7.28,
+       "tmax": 31.02,
+       "humedad_raiz": 0.68
+      }
+     },
+     {
+      "fecha": "2026-09-26",
+      "valores": {
+       "lluvia": 22.54,
+       "tmax": 31.07,
+       "humedad_raiz": 0.69
+      }
+     },
+     {
+      "fecha": "2026-09-27",
+      "valores": {
+       "lluvia": 10.87,
+       "tmax": 29.62,
+       "humedad_raiz": 0.72
+      }
+     },
+     {
+      "fecha": "2026-09-28",
+      "valores": {
+       "lluvia": 5.68,
+       "tmax": 31.26,
+       "humedad_raiz": 0.72
+      }
+     },
+     {
+      "fecha": "2026-09-29",
+      "valores": {
+       "lluvia": 26.06,
+       "tmax": 31.33,
+       "humedad_raiz": 0.73
+      }
+     },
+     {
+      "fecha": "2026-09-30",
+      "valores": {
+       "lluvia": 7.02,
+       "tmax": 31.61,
+       "humedad_raiz": 0.75
+      }
+     },
+     {
+      "fecha": "2026-10-01",
+      "valores": {
+       "lluvia": 5.58,
+       "tmax": 29.7,
+       "humedad_raiz": 0.7
+      }
+     },
+     {
+      "fecha": "2026-10-02",
+      "valores": {
+       "lluvia": 14.58,
+       "tmax": 28.76,
+       "humedad_raiz": 0.7
+      }
+     },
+     {
+      "fecha": "2026-10-03",
+      "valores": {
+       "lluvia": 75.38,
+       "tmax": 27.37,
+       "humedad_raiz": 0.76
+      }
+     },
+     {
+      "fecha": "2026-10-04",
+      "valores": {
+       "lluvia": 5.86,
+       "tmax": 30.63,
+       "humedad_raiz": 0.77
+      }
+     },
+     {
+      "fecha": "2026-10-05",
+      "valores": {
+       "lluvia": 6.56,
+       "tmax": 29.92,
+       "humedad_raiz": 0.76
+      }
+     },
+     {
+      "fecha": "2026-10-06",
+      "valores": {
+       "lluvia": 6.1,
+       "tmax": 31.33,
+       "humedad_raiz": 0.76
+      }
+     },
+     {
+      "fecha": "2026-10-07",
+      "valores": {
+       "lluvia": 9.69,
+       "tmax": 31.26,
+       "humedad_raiz": 0.75
+      }
+     },
+     {
+      "fecha": "2026-10-08",
+      "valores": {
+       "lluvia": 9.03,
+       "tmax": 31.73,
+       "humedad_raiz": 0.75
+      }
+     },
+     {
+      "fecha": "2026-10-09",
+      "valores": {
+       "lluvia": 4.02,
+       "tmax": 31.09,
+       "humedad_raiz": 0.75
+      }
+     },
+     {
+      "fecha": "2026-10-10",
+      "valores": {
+       "lluvia": 9.53,
+       "tmax": 31.14,
+       "humedad_raiz": 0.74
+      }
+     },
+     {
+      "fecha": "2026-10-11",
+      "valores": {
+       "lluvia": 5.23,
+       "tmax": 29.43,
+       "humedad_raiz": 0.75
+      }
+     },
+     {
+      "fecha": "2026-10-12",
+      "valores": {
+       "lluvia": 2.47,
+       "tmax": 30.96,
+       "humedad_raiz": 0.74
+      }
+     },
+     {
+      "fecha": "2026-10-13",
+      "valores": {
+       "lluvia": 8.16,
+       "tmax": 30.94,
+       "humedad_raiz": 0.73
+      }
+     },
+     {
+      "fecha": "2026-10-14",
+      "valores": {
+       "lluvia": 5.19,
+       "tmax": 30.14,
+       "humedad_raiz": 0.73
+      }
+     },
+     {
+      "fecha": "2026-10-15",
+      "valores": {
+       "lluvia": 8.72,
+       "tmax": 30.96,
+       "humedad_raiz": 0.73
+      }
+     },
+     {
+      "fecha": "2026-10-16",
+      "valores": {
+       "lluvia": 5.06,
+       "tmax": 31.0,
+       "humedad_raiz": 0.73
+      }
+     },
+     {
+      "fecha": "2026-10-17",
+      "valores": {
+       "lluvia": 16.31,
+       "tmax": 29.27,
+       "humedad_raiz": 0.73
+      }
+     },
+     {
+      "fecha": "2026-10-18",
+      "valores": {
+       "lluvia": 1.25,
+       "tmax": 28.51,
+       "humedad_raiz": 0.74
+      }
+     },
+     {
+      "fecha": "2026-10-19",
+      "valores": {
+       "lluvia": 47.94,
+       "tmax": 30.48,
+       "humedad_raiz": 0.74
+      }
+     },
+     {
+      "fecha": "2026-10-20",
+      "valores": {
+       "lluvia": 24.93,
+       "tmax": 28.59,
+       "humedad_raiz": 0.79
+      }
+     },
+     {
+      "fecha": "2026-10-21",
+      "valores": {
+       "lluvia": 5.18,
+       "tmax": 29.8,
+       "humedad_raiz": 0.78
+      }
+     },
+     {
+      "fecha": "2026-10-22",
+      "valores": {
+       "lluvia": 3.99,
+       "tmax": 30.58,
+       "humedad_raiz": 0.77
+      }
+     },
+     {
+      "fecha": "2026-10-23",
+      "valores": {
+       "lluvia": 5.54,
+       "tmax": 30.45,
+       "humedad_raiz": 0.76
+      }
+     },
+     {
+      "fecha": "2026-10-24",
+      "valores": {
+       "lluvia": 9.99,
+       "tmax": 30.31,
+       "humedad_raiz": 0.77
+      }
+     },
+     {
+      "fecha": "2026-10-25",
+      "valores": {
+       "lluvia": 1.22,
+       "tmax": 30.14,
+       "humedad_raiz": 0.76
+      }
+     },
+     {
+      "fecha": "2026-10-26",
+      "valores": {
+       "lluvia": 0.35,
+       "tmax": 29.89,
+       "humedad_raiz": 0.75
+      }
+     },
+     {
+      "fecha": "2026-10-27",
+      "valores": {
+       "lluvia": 0.11,
+       "tmax": 30.09,
+       "humedad_raiz": 0.73
+      }
+     },
+     {
+      "fecha": "2026-10-28",
+      "valores": {
+       "lluvia": 0.04,
+       "tmax": 30.39,
+       "humedad_raiz": 0.72
+      }
+     },
+     {
+      "fecha": "2026-10-29",
+      "valores": {
+       "lluvia": 0.0,
+       "tmax": 30.72,
+       "humedad_raiz": 0.71
+      }
+     },
+     {
+      "fecha": "2026-10-30",
+      "valores": {
+       "lluvia": 1.15,
+       "tmax": 30.38,
+       "humedad_raiz": 0.7
+      }
+     },
+     {
+      "fecha": "2026-10-31",
+      "valores": {
+       "lluvia": 3.45,
+       "tmax": 30.66,
+       "humedad_raiz": 0.7
+      }
+     },
+     {
+      "fecha": "2026-11-01",
+      "valores": {
+       "lluvia": 2.8,
+       "tmax": 30.94,
+       "humedad_raiz": 0.69
+      }
+     },
+     {
+      "fecha": "2026-11-02",
+      "valores": {
+       "lluvia": 12.02,
+       "tmax": 29.69,
+       "humedad_raiz": 0.69
+      }
+     },
+     {
+      "fecha": "2026-11-03",
+      "valores": {
+       "lluvia": 10.13,
+       "tmax": 29.17,
+       "humedad_raiz": 0.7
+      }
+     },
+     {
+      "fecha": "2026-11-04",
+      "valores": {
+       "lluvia": 87.37,
+       "tmax": 25.58,
+       "humedad_raiz": 0.76
+      }
+     },
+     {
+      "fecha": "2026-11-05",
+      "valores": {
+       "lluvia": 13.11,
+       "tmax": 28.47,
+       "humedad_raiz": 0.8
+      }
+     },
+     {
+      "fecha": "2026-11-06",
+      "valores": {
+       "lluvia": 9.3,
+       "tmax": 27.99,
+       "humedad_raiz": 0.8
+      }
+     },
+     {
+      "fecha": "2026-11-07",
+      "valores": {
+       "lluvia": 14.02,
+       "tmax": 25.97,
+       "humedad_raiz": 0.8
+      }
+     },
+     {
+      "fecha": "2026-11-08",
+      "valores": {
+       "lluvia": 21.57,
+       "tmax": 27.34,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-11-09",
+      "valores": {
+       "lluvia": 4.09,
+       "tmax": 30.9,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-11-10",
+      "valores": {
+       "lluvia": 4.22,
+       "tmax": 31.46,
+       "humedad_raiz": 0.8
+      }
+     },
+     {
+      "fecha": "2026-11-11",
+      "valores": {
+       "lluvia": 6.0,
+       "tmax": 31.99,
+       "humedad_raiz": 0.8
+      }
+     }
+    ]
+   },
+   {
+    "id": "M",
+    "nombre": "Pacífico central",
+    "lat": 9.55,
+    "lon": -84.35,
+    "indicadores": [
+     {
+      "id": "lluvia_30d",
+      "nombre": "Lluvia de los últimos 30 días",
+      "valor": 433.1,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_30d_normal",
+      "nombre": "Lluvia normal para esos 30 días (1991–2020)",
+      "valor": 247.9,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_30d_anomalia",
+      "nombre": "Lluvia frente a lo normal (30 días)",
+      "valor": 75,
+      "unidad": "%",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_7d",
+      "nombre": "Lluvia de los últimos 7 días",
+      "valor": 48.5,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "tmax_30d",
+      "nombre": "Temperatura máxima promedio (30 días)",
+      "valor": 28.7,
+      "unidad": "°C",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz_30d",
+      "nombre": "Humedad del suelo en raíces (30 días, 0 seco a 1 saturado)",
+      "valor": 0.89,
+      "unidad": "0-1",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz_30d_anomalia",
+      "nombre": "Humedad del suelo frente a lo normal (30 días)",
+      "valor": -0.01,
+      "unidad": "0-1",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     }
+    ],
+    "serie": [
+     {
+      "fecha": "2026-08-14",
+      "valores": {
+       "lluvia": 3.29,
+       "tmax": 30.36,
+       "humedad_raiz": 0.92
+      }
+     },
+     {
+      "fecha": "2026-08-15",
+      "valores": {
+       "lluvia": 29.63,
+       "tmax": 29.08,
+       "humedad_raiz": 0.92
+      }
+     },
+     {
+      "fecha": "2026-08-16",
+      "valores": {
+       "lluvia": 72.13,
+       "tmax": 28.49,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-08-17",
+      "valores": {
+       "lluvia": 38.86,
+       "tmax": 27.67,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-08-18",
+      "valores": {
+       "lluvia": 75.47,
+       "tmax": 28.42,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-08-19",
+      "valores": {
+       "lluvia": 16.97,
+       "tmax": 29.59,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-08-20",
+      "valores": {
+       "lluvia": 8.68,
+       "tmax": 30.19,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-08-21",
+      "valores": {
+       "lluvia": 6.84,
+       "tmax": 30.3,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-08-22",
+      "valores": {
+       "lluvia": 10.22,
+       "tmax": 30.06,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-08-23",
+      "valores": {
+       "lluvia": 17.24,
+       "tmax": 29.44,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-08-24",
+      "valores": {
+       "lluvia": 9.99,
+       "tmax": 29.89,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-08-25",
+      "valores": {
+       "lluvia": 13.04,
+       "tmax": 29.93,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-08-26",
+      "valores": {
+       "lluvia": 11.21,
+       "tmax": 29.87,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-08-27",
+      "valores": {
+       "lluvia": 12.41,
+       "tmax": 29.82,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-08-28",
+      "valores": {
+       "lluvia": 78.52,
+       "tmax": 29.45,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-08-29",
+      "valores": {
+       "lluvia": 11.16,
+       "tmax": 30.24,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-08-30",
+      "valores": {
+       "lluvia": 25.24,
+       "tmax": 29.93,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-08-31",
+      "valores": {
+       "lluvia": 15.04,
+       "tmax": 29.59,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-01",
+      "valores": {
+       "lluvia": 18.26,
+       "tmax": 28.79,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-02",
+      "valores": {
+       "lluvia": 34.71,
+       "tmax": 29.67,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-03",
+      "valores": {
+       "lluvia": 4.38,
+       "tmax": 30.17,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-04",
+      "valores": {
+       "lluvia": 5.16,
+       "tmax": 28.98,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-05",
+      "valores": {
+       "lluvia": 21.71,
+       "tmax": 29.2,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-06",
+      "valores": {
+       "lluvia": 79.32,
+       "tmax": 28.24,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-07",
+      "valores": {
+       "lluvia": 0.68,
+       "tmax": 29.03,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-08",
+      "valores": {
+       "lluvia": 3.71,
+       "tmax": 30.26,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-09",
+      "valores": {
+       "lluvia": 12.05,
+       "tmax": 29.84,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-10",
+      "valores": {
+       "lluvia": 11.21,
+       "tmax": 28.59,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-11",
+      "valores": {
+       "lluvia": 7.96,
+       "tmax": 30.03,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-12",
+      "valores": {
+       "lluvia": 4.39,
+       "tmax": 29.44,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-09-13",
+      "valores": {
+       "lluvia": 22.4,
+       "tmax": 30.08,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-09-14",
+      "valores": {
+       "lluvia": 31.31,
+       "tmax": 29.94,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-15",
+      "valores": {
+       "lluvia": 2.94,
+       "tmax": 29.59,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-16",
+      "valores": {
+       "lluvia": 1.56,
+       "tmax": 29.86,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-09-17",
+      "valores": {
+       "lluvia": 11.4,
+       "tmax": 29.35,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-09-18",
+      "valores": {
+       "lluvia": 21.06,
+       "tmax": 30.08,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-19",
+      "valores": {
+       "lluvia": 52.38,
+       "tmax": 30.42,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-20",
+      "valores": {
+       "lluvia": 61.39,
+       "tmax": 28.34,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-21",
+      "valores": {
+       "lluvia": 21.58,
+       "tmax": 27.25,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-22",
+      "valores": {
+       "lluvia": 1.62,
+       "tmax": 29.28,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-23",
+      "valores": {
+       "lluvia": 13.3,
+       "tmax": 28.59,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-24",
+      "valores": {
+       "lluvia": 10.32,
+       "tmax": 29.06,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-25",
+      "valores": {
+       "lluvia": 44.64,
+       "tmax": 26.77,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-26",
+      "valores": {
+       "lluvia": 13.7,
+       "tmax": 28.28,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-27",
+      "valores": {
+       "lluvia": 14.56,
+       "tmax": 28.33,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-28",
+      "valores": {
+       "lluvia": 42.36,
+       "tmax": 28.98,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-29",
+      "valores": {
+       "lluvia": 9.85,
+       "tmax": 28.56,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-30",
+      "valores": {
+       "lluvia": 6.21,
+       "tmax": 29.33,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-10-01",
+      "valores": {
+       "lluvia": 11.88,
+       "tmax": 28.42,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-10-02",
+      "valores": {
+       "lluvia": 55.07,
+       "tmax": 27.74,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-10-03",
+      "valores": {
+       "lluvia": 43.46,
+       "tmax": 27.73,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-04",
+      "valores": {
+       "lluvia": 3.68,
+       "tmax": 28.66,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-05",
+      "valores": {
+       "lluvia": 8.61,
+       "tmax": 28.13,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-10-06",
+      "valores": {
+       "lluvia": 9.02,
+       "tmax": 29.02,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-10-07",
+      "valores": {
+       "lluvia": 46.25,
+       "tmax": 28.94,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-10-08",
+      "valores": {
+       "lluvia": 106.52,
+       "tmax": 27.34,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-10-09",
+      "valores": {
+       "lluvia": 13.09,
+       "tmax": 27.98,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-10-10",
+      "valores": {
+       "lluvia": 72.78,
+       "tmax": 26.12,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-10-11",
+      "valores": {
+       "lluvia": 8.71,
+       "tmax": 27.27,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-12",
+      "valores": {
+       "lluvia": 7.65,
+       "tmax": 29.39,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-10-13",
+      "valores": {
+       "lluvia": 6.78,
+       "tmax": 29.48,
+       "humedad_raiz": 0.92
+      }
+     },
+     {
+      "fecha": "2026-10-14",
+      "valores": {
+       "lluvia": 8.23,
+       "tmax": 29.33,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-15",
+      "valores": {
+       "lluvia": 12.1,
+       "tmax": 28.29,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-16",
+      "valores": {
+       "lluvia": 5.98,
+       "tmax": 29.18,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-17",
+      "valores": {
+       "lluvia": 64.23,
+       "tmax": 26.73,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-18",
+      "valores": {
+       "lluvia": 7.22,
+       "tmax": 28.29,
+       "humedad_raiz": 0.92
+      }
+     },
+     {
+      "fecha": "2026-10-19",
+      "valores": {
+       "lluvia": 8.72,
+       "tmax": 29.07,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-20",
+      "valores": {
+       "lluvia": 10.41,
+       "tmax": 29.07,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-21",
+      "valores": {
+       "lluvia": 8.7,
+       "tmax": 29.37,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-22",
+      "valores": {
+       "lluvia": 18.1,
+       "tmax": 29.74,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-23",
+      "valores": {
+       "lluvia": 32.1,
+       "tmax": 27.9,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-24",
+      "valores": {
+       "lluvia": 15.43,
+       "tmax": 28.83,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-25",
+      "valores": {
+       "lluvia": 7.62,
+       "tmax": 29.57,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-26",
+      "valores": {
+       "lluvia": 4.29,
+       "tmax": 29.67,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-27",
+      "valores": {
+       "lluvia": 6.47,
+       "tmax": 29.74,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-10-28",
+      "valores": {
+       "lluvia": 1.89,
+       "tmax": 29.24,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-10-29",
+      "valores": {
+       "lluvia": 2.8,
+       "tmax": 29.55,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-10-30",
+      "valores": {
+       "lluvia": 1.42,
+       "tmax": 29.9,
+       "humedad_raiz": 0.85
+      }
+     },
+     {
+      "fecha": "2026-10-31",
+      "valores": {
+       "lluvia": 63.52,
+       "tmax": 29.61,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-11-01",
+      "valores": {
+       "lluvia": 9.98,
+       "tmax": 29.34,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-11-02",
+      "valores": {
+       "lluvia": 45.68,
+       "tmax": 28.65,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-11-03",
+      "valores": {
+       "lluvia": 7.85,
+       "tmax": 27.29,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-11-04",
+      "valores": {
+       "lluvia": 35.14,
+       "tmax": 27.32,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-11-05",
+      "valores": {
+       "lluvia": 11.4,
+       "tmax": 27.11,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-11-06",
+      "valores": {
+       "lluvia": 9.87,
+       "tmax": 26.94,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-11-07",
+      "valores": {
+       "lluvia": 3.19,
+       "tmax": 27.12,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-11-08",
+      "valores": {
+       "lluvia": 11.11,
+       "tmax": 27.28,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-11-09",
+      "valores": {
+       "lluvia": 3.0,
+       "tmax": 29.15,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-11-10",
+      "valores": {
+       "lluvia": 4.29,
+       "tmax": 29.29,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-11-11",
+      "valores": {
+       "lluvia": 5.62,
+       "tmax": 29.84,
+       "humedad_raiz": 0.86
+      }
+     }
+    ]
+   },
+   {
+    "id": "U",
+    "nombre": "Pacífico sur",
+    "lat": 9.25,
+    "lon": -83.55,
+    "indicadores": [
+     {
+      "id": "lluvia_30d",
+      "nombre": "Lluvia de los últimos 30 días",
+      "valor": 592.7,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_30d_normal",
+      "nombre": "Lluvia normal para esos 30 días (1991–2020)",
+      "valor": 223.8,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_30d_anomalia",
+      "nombre": "Lluvia frente a lo normal (30 días)",
+      "valor": 165,
+      "unidad": "%",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_7d",
+      "nombre": "Lluvia de los últimos 7 días",
+      "valor": 68.7,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "tmax_30d",
+      "nombre": "Temperatura máxima promedio (30 días)",
+      "valor": 26.2,
+      "unidad": "°C",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz_30d",
+      "nombre": "Humedad del suelo en raíces (30 días, 0 seco a 1 saturado)",
+      "valor": 0.93,
+      "unidad": "0-1",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz_30d_anomalia",
+      "nombre": "Humedad del suelo frente a lo normal (30 días)",
+      "valor": 0.02,
+      "unidad": "0-1",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     }
+    ],
+    "serie": [
+     {
+      "fecha": "2026-08-14",
+      "valores": {
+       "lluvia": 2.49,
+       "tmax": 26.77,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-08-15",
+      "valores": {
+       "lluvia": 27.1,
+       "tmax": 24.75,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-08-16",
+      "valores": {
+       "lluvia": 47.36,
+       "tmax": 23.6,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-17",
+      "valores": {
+       "lluvia": 46.9,
+       "tmax": 24.03,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-08-18",
+      "valores": {
+       "lluvia": 54.94,
+       "tmax": 24.91,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-08-19",
+      "valores": {
+       "lluvia": 10.51,
+       "tmax": 25.49,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-08-20",
+      "valores": {
+       "lluvia": 8.87,
+       "tmax": 26.71,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-21",
+      "valores": {
+       "lluvia": 12.09,
+       "tmax": 26.88,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-22",
+      "valores": {
+       "lluvia": 12.2,
+       "tmax": 26.4,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-23",
+      "valores": {
+       "lluvia": 27.3,
+       "tmax": 24.98,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-08-24",
+      "valores": {
+       "lluvia": 7.06,
+       "tmax": 25.92,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-25",
+      "valores": {
+       "lluvia": 15.0,
+       "tmax": 25.34,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-08-26",
+      "valores": {
+       "lluvia": 7.58,
+       "tmax": 25.79,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-27",
+      "valores": {
+       "lluvia": 11.88,
+       "tmax": 25.91,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-08-28",
+      "valores": {
+       "lluvia": 57.7,
+       "tmax": 25.36,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-08-29",
+      "valores": {
+       "lluvia": 12.09,
+       "tmax": 26.72,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-08-30",
+      "valores": {
+       "lluvia": 26.16,
+       "tmax": 25.46,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-08-31",
+      "valores": {
+       "lluvia": 17.14,
+       "tmax": 25.88,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-01",
+      "valores": {
+       "lluvia": 22.56,
+       "tmax": 24.58,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-02",
+      "valores": {
+       "lluvia": 29.07,
+       "tmax": 27.09,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-03",
+      "valores": {
+       "lluvia": 13.18,
+       "tmax": 26.76,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-04",
+      "valores": {
+       "lluvia": 11.46,
+       "tmax": 26.62,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-05",
+      "valores": {
+       "lluvia": 12.07,
+       "tmax": 25.22,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-06",
+      "valores": {
+       "lluvia": 53.31,
+       "tmax": 25.34,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-07",
+      "valores": {
+       "lluvia": 0.52,
+       "tmax": 25.56,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-08",
+      "valores": {
+       "lluvia": 4.78,
+       "tmax": 26.48,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-09",
+      "valores": {
+       "lluvia": 20.62,
+       "tmax": 25.83,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-10",
+      "valores": {
+       "lluvia": 9.36,
+       "tmax": 24.75,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-11",
+      "valores": {
+       "lluvia": 5.02,
+       "tmax": 26.22,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-12",
+      "valores": {
+       "lluvia": 5.87,
+       "tmax": 25.81,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-13",
+      "valores": {
+       "lluvia": 21.28,
+       "tmax": 25.52,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-14",
+      "valores": {
+       "lluvia": 15.88,
+       "tmax": 26.62,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-15",
+      "valores": {
+       "lluvia": 2.63,
+       "tmax": 25.31,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-16",
+      "valores": {
+       "lluvia": 1.42,
+       "tmax": 25.22,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-17",
+      "valores": {
+       "lluvia": 7.89,
+       "tmax": 26.09,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-09-18",
+      "valores": {
+       "lluvia": 36.21,
+       "tmax": 27.21,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-19",
+      "valores": {
+       "lluvia": 56.93,
+       "tmax": 26.68,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-20",
+      "valores": {
+       "lluvia": 43.76,
+       "tmax": 25.17,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-21",
+      "valores": {
+       "lluvia": 9.98,
+       "tmax": 23.62,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-22",
+      "valores": {
+       "lluvia": 1.91,
+       "tmax": 27.12,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-23",
+      "valores": {
+       "lluvia": 14.95,
+       "tmax": 25.84,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-24",
+      "valores": {
+       "lluvia": 9.5,
+       "tmax": 26.34,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-09-25",
+      "valores": {
+       "lluvia": 30.07,
+       "tmax": 23.07,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-26",
+      "valores": {
+       "lluvia": 17.9,
+       "tmax": 22.88,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-27",
+      "valores": {
+       "lluvia": 13.95,
+       "tmax": 24.57,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-28",
+      "valores": {
+       "lluvia": 24.98,
+       "tmax": 23.03,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-29",
+      "valores": {
+       "lluvia": 10.08,
+       "tmax": 25.79,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-09-30",
+      "valores": {
+       "lluvia": 5.91,
+       "tmax": 24.74,
+       "humedad_raiz": 1.0
+      }
+     },
+     {
+      "fecha": "2026-10-01",
+      "valores": {
+       "lluvia": 17.89,
+       "tmax": 26.84,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-10-02",
+      "valores": {
+       "lluvia": 68.75,
+       "tmax": 26.0,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-10-03",
+      "valores": {
+       "lluvia": 176.37,
+       "tmax": 23.61,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-04",
+      "valores": {
+       "lluvia": 11.27,
+       "tmax": 27.0,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-10-05",
+      "valores": {
+       "lluvia": 15.01,
+       "tmax": 25.67,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-06",
+      "valores": {
+       "lluvia": 29.91,
+       "tmax": 26.62,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-07",
+      "valores": {
+       "lluvia": 82.62,
+       "tmax": 26.31,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-08",
+      "valores": {
+       "lluvia": 44.66,
+       "tmax": 26.03,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-10-09",
+      "valores": {
+       "lluvia": 23.92,
+       "tmax": 25.68,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-10",
+      "valores": {
+       "lluvia": 65.05,
+       "tmax": 23.11,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-10-11",
+      "valores": {
+       "lluvia": 21.09,
+       "tmax": 24.31,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-10-12",
+      "valores": {
+       "lluvia": 17.14,
+       "tmax": 26.47,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-13",
+      "valores": {
+       "lluvia": 11.61,
+       "tmax": 27.55,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-14",
+      "valores": {
+       "lluvia": 10.46,
+       "tmax": 27.2,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-10-15",
+      "valores": {
+       "lluvia": 15.5,
+       "tmax": 26.6,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-10-16",
+      "valores": {
+       "lluvia": 9.13,
+       "tmax": 27.34,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-10-17",
+      "valores": {
+       "lluvia": 122.78,
+       "tmax": 24.33,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-10-18",
+      "valores": {
+       "lluvia": 18.61,
+       "tmax": 24.93,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-19",
+      "valores": {
+       "lluvia": 12.32,
+       "tmax": 26.88,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-20",
+      "valores": {
+       "lluvia": 38.93,
+       "tmax": 25.85,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-10-21",
+      "valores": {
+       "lluvia": 14.34,
+       "tmax": 26.07,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-22",
+      "valores": {
+       "lluvia": 18.59,
+       "tmax": 27.11,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-10-23",
+      "valores": {
+       "lluvia": 31.98,
+       "tmax": 24.58,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-24",
+      "valores": {
+       "lluvia": 26.71,
+       "tmax": 25.72,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-25",
+      "valores": {
+       "lluvia": 5.27,
+       "tmax": 26.13,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-10-26",
+      "valores": {
+       "lluvia": 4.61,
+       "tmax": 26.14,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-10-27",
+      "valores": {
+       "lluvia": 8.2,
+       "tmax": 26.85,
+       "humedad_raiz": 0.92
+      }
+     },
+     {
+      "fecha": "2026-10-28",
+      "valores": {
+       "lluvia": 4.57,
+       "tmax": 26.12,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-29",
+      "valores": {
+       "lluvia": 2.49,
+       "tmax": 27.36,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-30",
+      "valores": {
+       "lluvia": 1.53,
+       "tmax": 27.13,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-31",
+      "valores": {
+       "lluvia": 51.55,
+       "tmax": 26.01,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-11-01",
+      "valores": {
+       "lluvia": 20.01,
+       "tmax": 26.48,
+       "humedad_raiz": 0.92
+      }
+     },
+     {
+      "fecha": "2026-11-02",
+      "valores": {
+       "lluvia": 53.46,
+       "tmax": 25.87,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-11-03",
+      "valores": {
+       "lluvia": 16.39,
+       "tmax": 23.42,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-11-04",
+      "valores": {
+       "lluvia": 24.96,
+       "tmax": 25.69,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-11-05",
+      "valores": {
+       "lluvia": 14.26,
+       "tmax": 25.39,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-11-06",
+      "valores": {
+       "lluvia": 15.61,
+       "tmax": 25.24,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-11-07",
+      "valores": {
+       "lluvia": 6.22,
+       "tmax": 24.93,
+       "humedad_raiz": 0.92
+      }
+     },
+     {
+      "fecha": "2026-11-08",
+      "valores": {
+       "lluvia": 13.45,
+       "tmax": 26.32,
+       "humedad_raiz": 0.92
+      }
+     },
+     {
+      "fecha": "2026-11-09",
+      "valores": {
+       "lluvia": 5.98,
+       "tmax": 26.67,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-11-10",
+      "valores": {
+       "lluvia": 6.22,
+       "tmax": 27.47,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-11-11",
+      "valores": {
+       "lluvia": 6.97,
+       "tmax": 27.59,
+       "humedad_raiz": 0.9
+      }
+     }
+    ]
+   },
+   {
+    "id": "V",
+    "nombre": "Valle Central",
+    "lat": 10.02,
+    "lon": -84.25,
+    "indicadores": [
+     {
+      "id": "lluvia_30d",
+      "nombre": "Lluvia de los últimos 30 días",
+      "valor": 516.7,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_30d_normal",
+      "nombre": "Lluvia normal para esos 30 días (1991–2020)",
+      "valor": 209.8,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_30d_anomalia",
+      "nombre": "Lluvia frente a lo normal (30 días)",
+      "valor": 146,
+      "unidad": "%",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_7d",
+      "nombre": "Lluvia de los últimos 7 días",
+      "valor": 61.1,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "tmax_30d",
+      "nombre": "Temperatura máxima promedio (30 días)",
+      "valor": 27.4,
+      "unidad": "°C",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz_30d",
+      "nombre": "Humedad del suelo en raíces (30 días, 0 seco a 1 saturado)",
+      "valor": 0.94,
+      "unidad": "0-1",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz_30d_anomalia",
+      "nombre": "Humedad del suelo frente a lo normal (30 días)",
+      "valor": 0.18,
+      "unidad": "0-1",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-power",
+      "fecha": "2026-11-11",
+      "simulado": false,
+      "capa": "nasa"
+     }
+    ],
+    "serie": [
+     {
+      "fecha": "2026-08-14",
+      "valores": {
+       "lluvia": 1.26,
+       "tmax": 29.45,
+       "humedad_raiz": 0.73
+      }
+     },
+     {
+      "fecha": "2026-08-15",
+      "valores": {
+       "lluvia": 10.93,
+       "tmax": 27.61,
+       "humedad_raiz": 0.73
+      }
+     },
+     {
+      "fecha": "2026-08-16",
+      "valores": {
+       "lluvia": 29.46,
+       "tmax": 26.62,
+       "humedad_raiz": 0.76
+      }
+     },
+     {
+      "fecha": "2026-08-17",
+      "valores": {
+       "lluvia": 42.93,
+       "tmax": 26.79,
+       "humedad_raiz": 0.79
+      }
+     },
+     {
+      "fecha": "2026-08-18",
+      "valores": {
+       "lluvia": 49.21,
+       "tmax": 27.83,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-08-19",
+      "valores": {
+       "lluvia": 7.43,
+       "tmax": 27.78,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-08-20",
+      "valores": {
+       "lluvia": 4.56,
+       "tmax": 29.17,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-08-21",
+      "valores": {
+       "lluvia": 3.62,
+       "tmax": 29.37,
+       "humedad_raiz": 0.8
+      }
+     },
+     {
+      "fecha": "2026-08-22",
+      "valores": {
+       "lluvia": 4.38,
+       "tmax": 29.31,
+       "humedad_raiz": 0.8
+      }
+     },
+     {
+      "fecha": "2026-08-23",
+      "valores": {
+       "lluvia": 9.1,
+       "tmax": 27.42,
+       "humedad_raiz": 0.8
+      }
+     },
+     {
+      "fecha": "2026-08-24",
+      "valores": {
+       "lluvia": 3.59,
+       "tmax": 28.85,
+       "humedad_raiz": 0.8
+      }
+     },
+     {
+      "fecha": "2026-08-25",
+      "valores": {
+       "lluvia": 5.6,
+       "tmax": 28.89,
+       "humedad_raiz": 0.79
+      }
+     },
+     {
+      "fecha": "2026-08-26",
+      "valores": {
+       "lluvia": 4.8,
+       "tmax": 29.25,
+       "humedad_raiz": 0.79
+      }
+     },
+     {
+      "fecha": "2026-08-27",
+      "valores": {
+       "lluvia": 7.6,
+       "tmax": 28.91,
+       "humedad_raiz": 0.79
+      }
+     },
+     {
+      "fecha": "2026-08-28",
+      "valores": {
+       "lluvia": 28.27,
+       "tmax": 28.26,
+       "humedad_raiz": 0.8
+      }
+     },
+     {
+      "fecha": "2026-08-29",
+      "valores": {
+       "lluvia": 4.66,
+       "tmax": 29.39,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-08-30",
+      "valores": {
+       "lluvia": 14.56,
+       "tmax": 29.11,
+       "humedad_raiz": 0.8
+      }
+     },
+     {
+      "fecha": "2026-08-31",
+      "valores": {
+       "lluvia": 6.9,
+       "tmax": 29.62,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-09-01",
+      "valores": {
+       "lluvia": 11.17,
+       "tmax": 28.56,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-09-02",
+      "valores": {
+       "lluvia": 22.1,
+       "tmax": 29.56,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-09-03",
+      "valores": {
+       "lluvia": 2.82,
+       "tmax": 29.65,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-09-04",
+      "valores": {
+       "lluvia": 3.23,
+       "tmax": 28.34,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-09-05",
+      "valores": {
+       "lluvia": 5.47,
+       "tmax": 28.47,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-09-06",
+      "valores": {
+       "lluvia": 34.57,
+       "tmax": 27.63,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-09-07",
+      "valores": {
+       "lluvia": 0.33,
+       "tmax": 28.36,
+       "humedad_raiz": 0.83
+      }
+     },
+     {
+      "fecha": "2026-09-08",
+      "valores": {
+       "lluvia": 2.41,
+       "tmax": 28.88,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-09-09",
+      "valores": {
+       "lluvia": 9.07,
+       "tmax": 28.69,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-09-10",
+      "valores": {
+       "lluvia": 7.33,
+       "tmax": 26.87,
+       "humedad_raiz": 0.82
+      }
+     },
+     {
+      "fecha": "2026-09-11",
+      "valores": {
+       "lluvia": 3.87,
+       "tmax": 29.4,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-09-12",
+      "valores": {
+       "lluvia": 3.24,
+       "tmax": 29.03,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-09-13",
+      "valores": {
+       "lluvia": 10.18,
+       "tmax": 28.26,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-09-14",
+      "valores": {
+       "lluvia": 9.94,
+       "tmax": 29.21,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-09-15",
+      "valores": {
+       "lluvia": 1.41,
+       "tmax": 28.04,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-09-16",
+      "valores": {
+       "lluvia": 0.53,
+       "tmax": 29.09,
+       "humedad_raiz": 0.8
+      }
+     },
+     {
+      "fecha": "2026-09-17",
+      "valores": {
+       "lluvia": 11.0,
+       "tmax": 29.73,
+       "humedad_raiz": 0.79
+      }
+     },
+     {
+      "fecha": "2026-09-18",
+      "valores": {
+       "lluvia": 41.73,
+       "tmax": 29.62,
+       "humedad_raiz": 0.81
+      }
+     },
+     {
+      "fecha": "2026-09-19",
+      "valores": {
+       "lluvia": 59.79,
+       "tmax": 29.08,
+       "humedad_raiz": 0.86
+      }
+     },
+     {
+      "fecha": "2026-09-20",
+      "valores": {
+       "lluvia": 51.7,
+       "tmax": 26.7,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-09-21",
+      "valores": {
+       "lluvia": 8.95,
+       "tmax": 25.03,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-09-22",
+      "valores": {
+       "lluvia": 2.23,
+       "tmax": 28.53,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-09-23",
+      "valores": {
+       "lluvia": 13.04,
+       "tmax": 28.0,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-09-24",
+      "valores": {
+       "lluvia": 7.72,
+       "tmax": 27.97,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-09-25",
+      "valores": {
+       "lluvia": 25.51,
+       "tmax": 24.67,
+       "humedad_raiz": 0.87
+      }
+     },
+     {
+      "fecha": "2026-09-26",
+      "valores": {
+       "lluvia": 21.85,
+       "tmax": 26.18,
+       "humedad_raiz": 0.88
+      }
+     },
+     {
+      "fecha": "2026-09-27",
+      "valores": {
+       "lluvia": 14.79,
+       "tmax": 26.32,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-09-28",
+      "valores": {
+       "lluvia": 21.5,
+       "tmax": 28.11,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-09-29",
+      "valores": {
+       "lluvia": 20.12,
+       "tmax": 27.06,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-09-30",
+      "valores": {
+       "lluvia": 6.64,
+       "tmax": 27.47,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-01",
+      "valores": {
+       "lluvia": 19.05,
+       "tmax": 27.86,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-10-02",
+      "valores": {
+       "lluvia": 106.17,
+       "tmax": 26.03,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-03",
+      "valores": {
+       "lluvia": 69.73,
+       "tmax": 25.24,
+       "humedad_raiz": 0.99
+      }
+     },
+     {
+      "fecha": "2026-10-04",
+      "valores": {
+       "lluvia": 8.18,
+       "tmax": 27.46,
+       "humedad_raiz": 0.98
+      }
+     },
+     {
+      "fecha": "2026-10-05",
+      "valores": {
+       "lluvia": 11.0,
+       "tmax": 27.08,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-10-06",
+      "valores": {
+       "lluvia": 11.4,
+       "tmax": 28.52,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-07",
+      "valores": {
+       "lluvia": 26.37,
+       "tmax": 28.38,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-08",
+      "valores": {
+       "lluvia": 26.08,
+       "tmax": 27.1,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-09",
+      "valores": {
+       "lluvia": 18.76,
+       "tmax": 26.92,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-10",
+      "valores": {
+       "lluvia": 61.81,
+       "tmax": 24.73,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-10-11",
+      "valores": {
+       "lluvia": 11.73,
+       "tmax": 24.31,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-10-12",
+      "valores": {
+       "lluvia": 6.32,
+       "tmax": 28.62,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-13",
+      "valores": {
+       "lluvia": 7.67,
+       "tmax": 28.82,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-14",
+      "valores": {
+       "lluvia": 5.72,
+       "tmax": 28.1,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-10-15",
+      "valores": {
+       "lluvia": 16.86,
+       "tmax": 27.82,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-10-16",
+      "valores": {
+       "lluvia": 6.49,
+       "tmax": 29.0,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-10-17",
+      "valores": {
+       "lluvia": 149.48,
+       "tmax": 24.99,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-18",
+      "valores": {
+       "lluvia": 4.01,
+       "tmax": 25.41,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-10-19",
+      "valores": {
+       "lluvia": 16.9,
+       "tmax": 27.9,
+       "humedad_raiz": 0.97
+      }
+     },
+     {
+      "fecha": "2026-10-20",
+      "valores": {
+       "lluvia": 13.35,
+       "tmax": 27.34,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-21",
+      "valores": {
+       "lluvia": 13.79,
+       "tmax": 27.12,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-10-22",
+      "valores": {
+       "lluvia": 11.25,
+       "tmax": 27.97,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-23",
+      "valores": {
+       "lluvia": 13.94,
+       "tmax": 27.63,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-24",
+      "valores": {
+       "lluvia": 17.25,
+       "tmax": 27.14,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-10-25",
+      "valores": {
+       "lluvia": 2.5,
+       "tmax": 28.07,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-10-26",
+      "valores": {
+       "lluvia": 2.21,
+       "tmax": 28.08,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-10-27",
+      "valores": {
+       "lluvia": 2.46,
+       "tmax": 28.21,
+       "humedad_raiz": 0.92
+      }
+     },
+     {
+      "fecha": "2026-10-28",
+      "valores": {
+       "lluvia": 1.44,
+       "tmax": 28.33,
+       "humedad_raiz": 0.91
+      }
+     },
+     {
+      "fecha": "2026-10-29",
+      "valores": {
+       "lluvia": 1.0,
+       "tmax": 28.66,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-10-30",
+      "valores": {
+       "lluvia": 1.3,
+       "tmax": 28.09,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-10-31",
+      "valores": {
+       "lluvia": 24.09,
+       "tmax": 27.93,
+       "humedad_raiz": 0.89
+      }
+     },
+     {
+      "fecha": "2026-11-01",
+      "valores": {
+       "lluvia": 11.11,
+       "tmax": 28.36,
+       "humedad_raiz": 0.9
+      }
+     },
+     {
+      "fecha": "2026-11-02",
+      "valores": {
+       "lluvia": 84.54,
+       "tmax": 26.04,
+       "humedad_raiz": 0.92
+      }
+     },
+     {
+      "fecha": "2026-11-03",
+      "valores": {
+       "lluvia": 11.06,
+       "tmax": 25.87,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-11-04",
+      "valores": {
+       "lluvia": 37.19,
+       "tmax": 25.35,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-11-05",
+      "valores": {
+       "lluvia": 10.85,
+       "tmax": 25.22,
+       "humedad_raiz": 0.96
+      }
+     },
+     {
+      "fecha": "2026-11-06",
+      "valores": {
+       "lluvia": 10.38,
+       "tmax": 26.0,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-11-07",
+      "valores": {
+       "lluvia": 4.97,
+       "tmax": 25.9,
+       "humedad_raiz": 0.95
+      }
+     },
+     {
+      "fecha": "2026-11-08",
+      "valores": {
+       "lluvia": 14.97,
+       "tmax": 26.15,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-11-09",
+      "valores": {
+       "lluvia": 6.28,
+       "tmax": 28.27,
+       "humedad_raiz": 0.94
+      }
+     },
+     {
+      "fecha": "2026-11-10",
+      "valores": {
+       "lluvia": 5.32,
+       "tmax": 28.94,
+       "humedad_raiz": 0.93
+      }
+     },
+     {
+      "fecha": "2026-11-11",
+      "valores": {
+       "lluvia": 8.31,
+       "tmax": 29.3,
+       "humedad_raiz": 0.92
+      }
+     }
+    ]
+   }
+  ]
+ }
+}
