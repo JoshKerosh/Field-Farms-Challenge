@@ -39,6 +39,15 @@ test('a goal in the plan is recorded only in Records and survives corrections an
   await page.reload();
   await expect(goal.getByRole('progressbar')).toHaveAttribute('value', '80');
   await expect(goal.getByRole('img')).toHaveCount(1);
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  await expect.poll(() => page.evaluate(() => !!navigator.serviceWorker.controller)).toBe(true);
+  await page.context().setOffline(true);
+  await page.reload();
+  await expect(goal.getByRole('progressbar')).toHaveAttribute('value', '80');
+  await expect(goal.getByRole('img')).toHaveCount(1);
+  await page.context().setOffline(false);
   await page.getByRole('link', { name: 'Definir o editar metas en el plan', exact: true }).click();
   await expect(page.locator('.recovery-goal progress')).toHaveAttribute('value', '80');
   await page
@@ -49,6 +58,45 @@ test('a goal in the plan is recorded only in Records and survives corrections an
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
     .analyze();
   expect(result.violations).toEqual([]);
+  await page.getByRole('link', { name: 'Beneficios', exact: true }).click();
+  await expect(page.locator('.benefit-summary dd')).toHaveText(['0', '1', '1']);
+  for (const article of await page.locator('article.opportunity').all()) {
+    await article.locator('summary').click();
+    await expect(article.getByRole('heading', { name: 'Qué preparar', exact: true })).toBeVisible();
+    await expect(
+      article.getByRole('heading', { name: 'Costos y compromisos', exact: true }),
+    ).toBeVisible();
+    await expect(article.locator('.opportunity-details a')).not.toHaveCount(0);
+  }
+  await page.screenshot({
+    path: `output/benefits-expanded-${test.info().project.name}.png`,
+    fullPage: true,
+  });
+  await page.evaluate(() => {
+    localStorage.setItem(
+      'ffc.v10.farmSite',
+      JSON.stringify({
+        lat: 9.8556,
+        lng: -83.9126,
+        accuracyM: 15,
+        parcel: null,
+        provisionalId: 'draft:another-test-farm',
+      }),
+    );
+    const saved = JSON.parse(localStorage.getItem('ffc.v10.farm')!);
+    saved.my.name = 'Otra finca del equipo';
+    localStorage.setItem('ffc.v10.farm', JSON.stringify(saved));
+  });
+  const other = await page.context().newPage();
+  await other.goto('http://127.0.0.1:4173/care');
+  await expect(
+    other.getByRole('heading', { name: 'Otra finca del equipo', exact: true }),
+  ).toBeVisible();
+  await expect(other.locator('.recovery-goal')).toHaveCount(0);
+  await expect(other.locator('.context-location')).not.toContainText('Upala');
+  await other.close();
+  await page.goto('/care');
+  await expect(page.locator('.recovery-goal progress')).toHaveAttribute('value', '80');
 });
 
 test('water measurements require a source and preserve a measured zero rainfall', async ({

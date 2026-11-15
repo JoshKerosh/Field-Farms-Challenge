@@ -14,9 +14,9 @@ export const interfaceCopy = {
     locateAction: 'Ubicar mi finca',
     locateHelp: 'Selecciona un punto o usa tu ubicación.',
     watershedHelp: 'Consulta las fuentes de agua y la información de tu cuenca.',
-    careHelp: 'Define metas para tu finca y registra avances y gastos.',
+    careHelp: 'Define las necesidades y metas de tu finca. Anota los avances en Registros.',
     recordsHelp:
-      'Guarda mediciones de caudal y observaciones. Revisa las fechas antes de comparar resultados.',
+      'Registra avances, fotos y gastos de tus metas. Las mediciones del agua tienen su propio apartado.',
     localHelp: 'Los registros se guardan en este dispositivo. Descarga una copia desde Registros.',
     territoryHelp:
       'Los indicadores ambientales orientan la observación. Una conexión entre tu finca y una fuente necesita validación técnica.',
@@ -71,8 +71,9 @@ export const interfaceCopy = {
     locateAction: 'Locate my farm',
     locateHelp: 'Select a point or use your location.',
     watershedHelp: 'Explore water sources and information about your watershed.',
-    careHelp: 'Set goals for your farm and record progress and expenses.',
-    recordsHelp: 'Save flow measurements and observations. Check dates before comparing results.',
+    careHelp: 'Define your farm’s needs and goals. Record progress in Records.',
+    recordsHelp:
+      'Record goal progress, photos and expenses. Water measurements have their own section.',
     localHelp: 'Records are stored on this device. Download a copy from Records.',
     territoryHelp:
       'Environmental indicators help guide observations. A connection between your farm and a water source requires technical validation.',

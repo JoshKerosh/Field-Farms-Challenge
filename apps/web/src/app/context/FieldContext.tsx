@@ -97,7 +97,6 @@ export interface FieldContextValue {
   ctx: PlaceContext | null;
   approx: boolean;
   demo: DemoScenario | null;
-  setDemo: (d: DemoScenario | null) => void;
   pickLocation: (
     loc: Loc,
     opts?: {
@@ -191,7 +190,7 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
       ? null
       : readJson<FarmSite | null>(LS_KEYS.farmSite, null),
   );
-  const [demo, setDemo] = useState<DemoScenario | null>(null);
+  const demo: DemoScenario | null = null;
   const [alertSources, setAlertSources] = useState<AlertSources>(emptyAlertSources);
   const [spatialAlertEvidence, setSpatialAlertEvidence] = useState<AlertSources['spatial']>(null);
   useEffect(() => {
@@ -229,6 +228,14 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
   }, []);
   const ctx = useMemo<PlaceContext | null>(() => {
     if (!ds) return null;
+    // The active farm is authoritative, including when an older contextual location was saved.
+    if (farmSite) {
+      const loc = getGeo(ds).llToLocal(farmSite.lat, farmSite.lng);
+      const samePoint =
+        storedLoc && Math.abs(storedLoc.x - loc.x) < 1e-6 && Math.abs(storedLoc.y - loc.y) < 1e-6;
+      const resolved = placeAt(ds, loc, samePoint ? storedLoc.subId : null);
+      if (resolved) return resolved;
+    }
     if (storedLoc) {
       const resolved = placeAt(ds, { x: storedLoc.x, y: storedLoc.y }, storedLoc.subId);
       if (resolved) return resolved;
@@ -236,7 +243,7 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     const geo = getGeo(ds);
     const upalaLoc = geo.llToLocal(10.8, -85.08);
     return placeAt(ds, upalaLoc, null);
-  }, [ds, storedLoc, messageLanguage()]);
+  }, [ds, storedLoc, farmSite, messageLanguage()]);
   useEffect(() => {
     if (!ds || !ctx) return;
     let alive = true;
@@ -468,7 +475,6 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     ctx,
     approx: Boolean(storedLoc?.approx),
     demo,
-    setDemo,
     pickLocation,
     pickLatLon,
     farmSite,
@@ -497,7 +503,6 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
       setFarmState({ key: 'mia', my: null });
       setFarmSiteState(null);
       setStoredLoc(null);
-      setDemo(null);
     },
     farm,
     saveMyFarm,

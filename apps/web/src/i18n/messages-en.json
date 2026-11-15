@@ -597,7 +597,7 @@
   "m552087b6a491": "Pacific",
   "m2f8c77aebed4": "· Active Simulation (ZXQ0QXZ)",
   "mcec1b0702e1b": "Share alert by WhatsApp",
-  "ma2c2049557a1": "Simulate extreme events and watch satellite",
+  "ma2c2049557a1": "View weather and satellite",
   "md9cd6157e5f4": "Risk cards at your farm",
   "m7db38a325a30": "1px solid var(--color-line)",
   "ma9a06f722ad0": "What to do now:",
@@ -1325,5 +1325,14 @@
   "alerts.conditions.source": "Observation source",
   "alerts.conditions.limits": "Initial project cutoffs awaiting local calibration. Green means none of these three conditions were triggered, not an absence of danger. POWER GWETROOT and agricultural land capability do not replace saturation and geotechnical susceptibility.",
   "alerts.nasa.powerLink": "NASA POWER ZXQ0QXZ",
-  "alerts.nasa.terrainLink": "SRTM / Open Topo Data"
+  "alerts.nasa.terrainLink": "SRTM / Open Topo Data",
+  "alerts.futureTitle": "What can be assessed today",
+  "alerts.futureNotice": "There is not enough information yet to assess every risk on your farm. Available regional rainfall, wetness and terrain observations provide context. This section can be expanded with new measurements, verified sources and approved rules. It does not replace official CNE or IMN advisories.",
+  "alerts.assessmentPending": "Not enough information to assess",
+  "alerts.missingEvidence": "Missing information",
+  "alerts.rulesPending": "Approved assessment rules are missing",
+  "alerts.history.rain1d": "Rainfall on the latest observed day",
+  "alerts.history.rain7d": "Accumulated rainfall over 7 days",
+  "alerts.history.wetness30d": "Relative root-zone wetness · 30-day average (0–1)",
+  "alerts.history.pointSummary": "Observations at point ZXQ0QXZ, ZXQ1QXZ, through ZXQ2QXZ. These totals do not themselves determine a risk level."
 }

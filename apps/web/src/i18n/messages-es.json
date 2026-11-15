@@ -597,7 +597,7 @@
   "m552087b6a491": "Pacífico",
   "m2f8c77aebed4": " · Simulación activa (ZXQ0QXZ)",
   "mcec1b0702e1b": "Compartir alerta por WhatsApp",
-  "ma2c2049557a1": "Simular eventos extremos y ver satélite",
+  "ma2c2049557a1": "Consultar clima y satélite",
   "md9cd6157e5f4": "Tarjetas de riesgo en tu finca",
   "m7db38a325a30": "1px solid var(--color-line)",
   "ma9a06f722ad0": "Qué hacer ahora:",
@@ -1325,5 +1325,14 @@
   "alerts.conditions.source": "Fuente del dato",
   "alerts.conditions.limits": "Cortes iniciales del proyecto, pendientes de calibración local. Verde significa que no se activó ninguna de estas tres condiciones, no ausencia de peligro. POWER GWETROOT y la capacidad de uso agrícola no sustituyen saturación y susceptibilidad geotécnica.",
   "alerts.nasa.powerLink": "NASA POWER ZXQ0QXZ",
-  "alerts.nasa.terrainLink": "SRTM / Open Topo Data"
+  "alerts.nasa.terrainLink": "SRTM / Open Topo Data",
+  "alerts.futureTitle": "Qué podemos evaluar hoy",
+  "alerts.futureNotice": "Todavía no hay información suficiente para evaluar todos los riesgos en tu finca. La lluvia, la humedad y el relieve regionales disponibles se muestran como contexto. Esta sección podrá ampliarse con nuevas mediciones, fuentes verificadas y reglas aprobadas. No sustituye los avisos oficiales de la CNE o el IMN.",
+  "alerts.assessmentPending": "Aún no se puede evaluar",
+  "alerts.missingEvidence": "Información que falta",
+  "alerts.rulesPending": "Faltan reglas de evaluación aprobadas",
+  "alerts.history.rain1d": "Lluvia del último día con datos",
+  "alerts.history.rain7d": "Lluvia acumulada de 7 días",
+  "alerts.history.wetness30d": "Humedad relativa de raíces · promedio de 30 días (0–1)",
+  "alerts.history.pointSummary": "Observaciones del punto ZXQ0QXZ, ZXQ1QXZ, hasta ZXQ2QXZ. Estos totales no determinan por sí solos el nivel de riesgo."
 }

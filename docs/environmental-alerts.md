@@ -1,23 +1,18 @@
-# Alertas ambientales sin Earthdata
+# Alertas ambientales de Sow Water
 
-La pantalla `/alerts` permite probar cuatro categorías: sequía, inundación,
-exceso de agua en el suelo y deslizamiento. No necesita cuentas, tokens ni
-servicios externos para abrir o usar los escenarios de demostración.
+La pantalla `/alerts` muestra únicamente observaciones reales publicadas. Se retiraron los
+controles de simulación y el estado compartido de simulación de la aplicación. Los ejemplos
+puros del motor permanecen aislados para pruebas; no hay una ruta que los active en la interfaz.
 
-## Probar
-
-Desde la raíz, ejecutar `npm run dev` y abrir `/alerts` en la dirección que
-indique Vite. Usar **Simular sequía**, **Simular lluvias intensas** o **Simular
-calor**. Al salir de la simulación vuelven las evaluaciones pendientes y no se
-conservan valores ficticios como si fueran datos reales.
-
-El modo de simulación es el mismo estado compartido que utiliza Ambiente. No
-se persiste al recargar la página. Los controles global y local permiten salir.
+Para consultar la vista, ubicar y registrar una finca y abrir Alertas. Se conservan las cuatro
+categorías, con una explicación de los datos o reglas que faltan. Las evaluaciones incompletas
+se presentan contraídas y no incluyen tablas de celdas vacías. Un mapa de condiciones sin
+observaciones se sustituye por una explicación, conservando el mapa de antecedentes CNE cuando
+existe cartografía para la ubicación consultada.
 
 ## Historial, comparación y cartografía
 
-Debajo de los escenarios aparecen tres vistas de datos reales que no cambian al
-activar una simulación y no asignan severidad:
+La vista ofrece observaciones y cartografía reales, sin convertirlas por sí solas en alertas oficiales:
 
 - **Historial:** serie de hasta 90 días de precipitación y humedad relativa de
   raíces POWER. Permite elegir indicador y mostrar 7, 30 o 90 días, con tabla
@@ -45,23 +40,16 @@ Las fuentes se actualizan con los comandos documentados en
 `jobs/data-pipeline/CLIMATE.md`. El historial usa datos estáticos publicados y el
 último día disponible; no es una consulta meteorológica en vivo al navegador.
 
-## Dos modos separados
+## Evaluaciones y límites
 
-- **Datos disponibles:** las cuatro evaluaciones reales son indeterminadas hasta
-  contar con indicadores verificables y reglas científicas aprobadas. El motor
-  nunca transforma ausencia de datos en riesgo bajo.
-- **Simulación:** todos los indicadores proceden del ejemplo aislado de
-  `apps/web/src/demo/fixtures/environmental-alerts.ts`, incluidos sus períodos.
-  Los niveles son un guion visual predefinido, **no comparaciones con umbrales
-  científicos**. Ni la finca, ni su capacidad de uso, ni la rotación ganadera
-  convierten estos ejemplos en evaluaciones reales de la ubicación seleccionada.
-
-Las tarjetas se ordenan por severidad y muestran motivo, indicadores, fuente,
-período y orientaciones generales. El nivel de demostración se identifica como
-tal en cada tarjeta. Las tablas se desplazan horizontalmente en móvil. La fecha
-de generación se muestra en la zona horaria de Costa Rica y permanece separada
-del período de observación. La interfaz y las respuestas relacionadas del
-asistente funcionan en español e inglés. No hay enlace de WhatsApp en Alertas.
+Las evaluaciones continúan pendientes mientras no existan indicadores verificables y reglas
+aprobadas. GWETROOT es humedad relativa de raíces; no reemplaza humedad volumétrica SMAP.
+Las muestras de pendiente regionales no reemplazan un DEM o HAND de la parcela. No se usan los
+archivos de ejemplo para completar datos faltantes. Se muestran las observaciones disponibles y
+se explica que nuevas mediciones, fuentes verificadas y reglas aprobadas permitirán ampliar la vista.
+El historial puntual resume la lluvia del último día y de siete días, y el promedio de humedad
+relativa de treinta días, únicamente para ventanas completas. No aplica estos totales a otra finca.
+La información está disponible en español e inglés. No sustituye avisos oficiales de CNE o IMN.
 
 ## Estado de los datos reales
 
@@ -140,8 +128,8 @@ En Git Bash:
 PLAYWRIGHT_CHANNEL=msedge npm run test:e2e -- tests/e2e/alerts.spec.ts
 ```
 
-Las pruebas cubren cuatro categorías, orden, cambio de escenario, salida limpia,
-procedencia, unidades, fechas, indicadores faltantes/desactualizados/simulados,
+Las pruebas cubren cuatro categorías, observaciones reales, ausencia de simulación,
+procedencia, unidades, fechas e indicadores faltantes o desactualizados,
 ES/EN, accesibilidad y ausencia de solicitudes Earthdata. Los ejemplos no validan
 la capacidad predictiva de las futuras reglas de riesgo.
 
@@ -155,10 +143,10 @@ IMERG y su configuración opcional de Earthdata se documentan en
 
 ## Revisión de cierre del 15 de noviembre de 2026
 
-Pasaron 84 pruebas TypeScript, 56 pruebas Python y las 46 pruebas completas de
-navegador en escritorio y móvil, incluyendo accesibilidad, idiomas y PWA sin
-conexión. El comando `verify:alerts` comprueba también tipos, lint y compilación
-y devuelve error ante un control fallido.
+El pulido de Sow Water pasó 1141 pruebas TypeScript y 92 pruebas de navegador en escritorio
+y móvil, con verificaciones de accesibilidad, idiomas, conexión con Registros y PWA sin conexión.
+El código Python y la adquisición ambiental no cambian en este pulido. El comando
+`verify:alerts` permite comprobar también el pipeline, tipos, lint y compilación.
 
 Esta es una entrega funcional y probada, no el cierre de todas las tareas del
 proyecto Alerta. Permanecen pendientes la aprobación científica de reglas y

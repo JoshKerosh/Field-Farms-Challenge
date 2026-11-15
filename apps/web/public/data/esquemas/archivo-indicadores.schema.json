@@ -1,7 +1,7 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "https://field-farms/data/esquemas/archivo-indicadores.schema.json",
- "title": "Archivo de indicadores de Field Farms Challenge",
+ "title": "Archivo de indicadores de Sow Water",
  "description": "Mismo contrato que packages/domain/src/data/index.ts. Lo cumplen nasa/*/latest.json, noaa/*/latest.json y ejemplos/*.json.",
  "type": "object",
  "required": ["meta", "datos"],

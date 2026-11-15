@@ -44,7 +44,6 @@ test('explores real history, equal-period comparison and CNE layers without chan
   await map.getByRole('button', { name: 'Restablecer vista', exact: true }).click();
   await expect(map.getByRole('img')).toHaveAttribute('viewBox', '0 0 480 320');
   await expect(map).toContainText('Cero registros no significa ausencia de riesgo');
-  await page.getByRole('button', { name: 'Simular sequía', exact: true }).click();
   await expect(history.locator('tbody tr')).toHaveCount(90);
   await expect(map.getByRole('img')).toBeVisible();
   expect(
@@ -90,6 +89,12 @@ test('inspects the published reference without applying it to a different farm l
   await page.addInitScript(
     (value) => localStorage.setItem('ffc.v10.loc', JSON.stringify(value)),
     saved,
+  );
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      'ffc.v10.farmSite',
+      JSON.stringify({ lat: 9.86444, lng: -83.91944, accuracyM: 15, parcel: null }),
+    ),
   );
   await page.goto('/alerts');
   await page.getByRole('button', { name: 'Ver punto con datos', exact: true }).click();

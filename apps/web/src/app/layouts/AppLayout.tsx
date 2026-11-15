@@ -40,7 +40,7 @@ export function AppLayout() {
   ];
   const { pathname } = useLocation();
   const navigationState = useNavigation();
-  const { ctx, demo, setDemo, loading, error, myFarm, farmSite } = useField();
+  const { ctx, loading, error, myFarm, farmSite } = useField();
   const flow = useFarmFlowCopy();
   const shortNavigation: Record<string, string> = {
     '/care': flow.plan,
@@ -84,9 +84,7 @@ export function AppLayout() {
           <span className="brand-mark">
             <Droplet size={25} aria-hidden="true" />
           </span>
-          <span>
-            {message('m29e912511fcd')}
-          </span>
+          <span>{message('m29e912511fcd')}</span>
         </Link>
 
         <nav className="primary-nav" aria-label={c.mainNav}>
@@ -137,17 +135,6 @@ export function AppLayout() {
           </Link>
           <Preferences />
         </header>
-        {demo ? (
-          <div className="demo-banner demo-banner--active" role="status">
-            <span className="demo-label">
-              {c.simulation}: {{ seco: c.drought, inund: c.flood, calor: c.heat }[demo]}
-            </span>
-            <p>{c.simulationHint}</p>
-            <button type="button" className="v10-pill-btn" onClick={() => setDemo(null)}>
-              {c.exit}
-            </button>
-          </div>
-        ) : null}
         <main
           id="main"
           className="main-content"

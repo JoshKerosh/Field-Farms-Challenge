@@ -19,7 +19,14 @@ de datos y borrado. «Borrar registro» pide confirmación y elimina la ficha, l
 plan asociado (incluida su copia provisional conocida), con sus fotos y gastos. Mantiene otros
 planes. Ante un fallo al limpiar la ficha intenta restaurar los planes eliminados.
 
-El plan permite editar meta, plazo, lugar y presupuesto. La unidad queda fija cuando existen
+El plan permite editar meta, plazo, lugar y presupuesto. Cada meta enlaza a
+`/records?section=plan&goal=<id>`: Registros es el único lugar para capturar y corregir
+avances, fotos y gastos. Ambas vistas y el resumen de Beneficios usan el mismo plan de
+IndexedDB mediante `useRecoveryPlan`, sin duplicar registros ni cambiar el formato anterior.
+El historial, el respaldo/restauración y la impresión están en Registros. El catálogo de
+programas se muestra únicamente en Beneficios.
+
+La unidad queda fija cuando existen
 mediciones para no reinterpretar los registros anteriores. Los avances permiten corregir fecha,
 cantidad, nota y gasto sin perder las fotos. El respaldo JSON incluye fotos codificadas y puede
 restaurarse con confirmación: reemplaza el plan actual, no suma gastos duplicados. Se rechazan
@@ -29,6 +36,10 @@ vincularse explícitamente a la finca actual. La importación admite archivos de
 Las cantidades son acumuladas a la fecha indicada: el avance usa la última medición, no suma
 mediciones repetidas. Si dos registros tienen la misma fecha, prevalece el agregado después.
 Los gastos sí se suman. Completar una tarea no demuestra recuperación ambiental.
+Las mediciones de agua se consultan en `/records?section=water`. Exigen ubicación y
+selección de fuente para caudal y eventos; lluvia admite cero y conserva la ubicación.
+Los ejemplos antiguos y las acciones sin meta se conservan aparte, sin alimentar metas ni
+tendencias reales. Los paneles de ASADA e institución son resúmenes locales, sin sincronización.
 Se admiten tres fotos por registro, JPG/PNG/WebP de hasta 20 MB cada una. Se redimensionan a
 1600 píxeles y guardan como JPEG, junto con notas y gastos. Los fallos de guardado no muestran
 éxito ni borran el formulario. La impresión permite compartir un resumen, sin envíos automáticos.

@@ -44,6 +44,41 @@ export function ClimateHistoryPanel({ history }: { history: ClimateHistory | nul
         <p>{message('alerts.history.noData')}</p>
       ) : (
         <>
+          <p>
+            {message(
+              'alerts.history.pointSummary',
+              history.latitude,
+              history.longitude,
+              history.observedEnd,
+            )}
+          </p>
+          <dl className="alert-observed-summary">
+            <div>
+              <dt>{message('alerts.history.rain1d')}</dt>
+              <dd>
+                {compareClimatePeriods(history, 'precipitationMm', 1).current.value === null
+                  ? message('alerts.noValue')
+                  : `${number(compareClimatePeriods(history, 'precipitationMm', 1).current.value!, 2)} mm`}
+              </dd>
+            </div>
+            <div>
+              <dt>{message('alerts.history.rain7d')}</dt>
+              <dd>
+                {compareClimatePeriods(history, 'precipitationMm', 7).current.value === null
+                  ? message('alerts.noValue')
+                  : `${number(compareClimatePeriods(history, 'precipitationMm', 7).current.value!, 2)} mm`}
+              </dd>
+            </div>
+            <div>
+              <dt>{message('alerts.history.wetness30d')}</dt>
+              <dd>
+                {compareClimatePeriods(history, 'rootZoneWetness', 30).current.value === null
+                  ? message('alerts.noValue')
+                  : number(compareClimatePeriods(history, 'rootZoneWetness', 30).current.value!, 3)}
+              </dd>
+            </div>
+          </dl>
+          <p>{message('alerts.history.wetnessNote')}</p>
           <div className="alert-observation-controls">
             <label className="alert-data-control" htmlFor="alert-history-metric">
               {message('alerts.history.indicator')}
