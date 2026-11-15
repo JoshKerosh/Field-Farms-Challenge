@@ -27,46 +27,13 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/guide" replace /> },
       { path: 'guide', element: <GuidePage /> },
-      { path: 'farm', loader: () => repositories.farms.getFarm(), element: <FarmPage /> },
-      {
-        path: 'watershed',
-        loader: async () => {
-          const [watershed, farm, sources, organizations] = await Promise.all([
-            repositories.watersheds.getWatershed(),
-            repositories.farms.getFarm(),
-            repositories.water.listSources(),
-            repositories.organizations.listOrganizations(),
-          ]);
-          // Real layers (PNUD, SAGA, SIRI, IGN), loaded on demand by the explorer.
-          return { watershed, farm, sources, organizations, explorer: basinExplorer };
-        },
-        element: <WatershedPage />,
-      },
-      {
-        path: 'care',
-        loader: () => repositories.restoration.listActions(),
-        element: <RestorationPage />,
-      },
-      { path: 'alerts', loader: () => repositories.alerts.listAlerts(), element: <AlertsPage /> },
-      {
-        path: 'records',
-        loader: async () => {
-          const [readings, sources, actions, incidents, organizations] = await Promise.all([
-            repositories.water.listReadings(),
-            repositories.water.listSources(),
-            repositories.restoration.listActions(),
-            repositories.alerts.listIncidents(),
-            repositories.organizations.listOrganizations(),
-          ]);
-          return { readings, sources, actions, incidents, organizations };
-        },
-        element: <RecordsPage />,
-      },
-      {
-        path: 'environment',
-        loader: () => repositories.environment.listIndicators(),
-        element: <EnvironmentPage />,
-      },
+      { path: 'farm', element: <FarmPage /> },
+      // Real layers (PNUD, SAGA, SIRI, IGN) for the basin map, loaded on demand.
+      { path: 'watershed', element: <WatershedPage explorer={basinExplorer} /> },
+      { path: 'care', element: <RestorationPage /> },
+      { path: 'alerts', element: <AlertsPage /> },
+      { path: 'records', element: <RecordsPage /> },
+      { path: 'environment', element: <EnvironmentPage /> },
       {
         path: 'benefits',
         loader: () => repositories.benefits.listOpportunities(),

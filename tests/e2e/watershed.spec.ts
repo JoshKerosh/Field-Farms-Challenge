@@ -16,9 +16,6 @@ test('muestra el explorador de cuencas con controles accesibles', async ({ page 
     page.getByText('Elegí un punto para ver el agua de las cuencas de esa finca.'),
   ).toBeVisible();
 
-  // The demo example stays below the real map.
-  await expect(page.getByText('Administrada por: ASADA de ejemplo')).toHaveCount(2);
-
   const result = await new AxeBuilder({ page })
     .exclude('.basin-map')
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])

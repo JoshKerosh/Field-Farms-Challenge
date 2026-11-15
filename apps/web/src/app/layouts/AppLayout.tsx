@@ -8,6 +8,7 @@ FORM: Extensión del prototipo aprobado: seis secciones, flujo adaptable y naveg
 import {
   BookOpen,
   ClipboardList,
+  CloudSun,
   Droplet,
   HandCoins,
   Map,
@@ -18,9 +19,11 @@ import {
 } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigation } from 'react-router-dom';
+import { DEMO_SCENARIOS } from '../../data/engine/climate';
 import { copy } from '../../i18n';
 import { ConnectionStatus } from '../../platform/offline/ConnectionStatus';
 import { PwaStatus } from '../../platform/offline/PwaStatus';
+import { useField } from '../context/FieldContext';
 
 const navigation = [
   { to: '/farm', label: copy.nav.farm, icon: MapPin },
@@ -34,12 +37,21 @@ const navigation = [
 export function AppLayout() {
   const { pathname } = useLocation();
   const navigationState = useNavigation();
+  const { ctx, demo, setDemo, loading, error, farmKey, myFarm } = useField();
+
   useEffect(() => {
+    if (loading) return;
     const title = document.getElementById('page-title');
     document.title = `${title?.textContent ?? copy.brand.name} · ${copy.brand.name}`;
     title?.focus({ preventScroll: true });
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [pathname, loading]);
+
+  const locationText = ctx
+    ? `${ctx.canton.n} · ${ctx.sub.n}`
+    : loading
+      ? 'Cargando territorio…'
+      : 'Costa Rica';
 
   return (
     <div className="app-shell">
@@ -69,6 +81,10 @@ export function AppLayout() {
           ))}
         </nav>
         <nav className="secondary-nav" aria-label={copy.common.secondaryNav}>
+          <NavLink to="/environment" className="secondary-link">
+            <CloudSun size={20} aria-hidden="true" />
+            {copy.nav.environment}
+          </NavLink>
           <NavLink to="/benefits" className="secondary-link">
             <HandCoins size={20} aria-hidden="true" />
             {copy.nav.benefits}
@@ -79,38 +95,66 @@ export function AppLayout() {
           </NavLink>
         </nav>
         <div className="sidebar-foot">
-          <span className="small-label">{copy.common.region}</span>
+          <span className="small-label">{ctx ? `Vertiente ${ctx.caribe ? 'Caribe' : 'Pacífico'}` : copy.common.region}</span>
           <ConnectionStatus />
         </div>
       </aside>
       <div className="app-body">
         <header className="topbar">
           <div>
-            <span className="small-label">{copy.common.context}</span>
-            <span className="context-location">
+            <span className="small-label">Ubicación activa</span>
+            <Link to="/farm" className="context-location">
               <MapPin size={16} aria-hidden="true" />
-              Upala · {copy.common.example}
-            </span>
+              <span>{locationText}</span>
+            </Link>
           </div>
           <Link className="source-button" to="/sources">
             <BookOpen size={18} aria-hidden="true" />
             <span>{copy.nav.sources}</span>
           </Link>
         </header>
-        <div className="demo-banner">
-          <span className="demo-label">{copy.demo.label}</span>
-          <p>{copy.demo.notice}</p>
-        </div>
+        {demo ? (
+          <div className="demo-banner demo-banner--active" role="status">
+            <span className="demo-label">Simulación: {DEMO_SCENARIOS[demo].name}</span>
+            <p>
+              Estás probando cómo responde tu finca ante un evento extremo. Los datos territoriales siguen siendo reales.
+            </p>
+            <button type="button" className="v10-pill-btn" onClick={() => setDemo(null)}>
+              Salir de la simulación
+            </button>
+          </div>
+        ) : (
+          <div className="demo-banner">
+            <span className="demo-label">Datos reales</span>
+            <p>
+              SAGA/AyA, SNIT/IGN, CNE, NASA POWER/MODIS y NOAA RONI.
+              {farmKey === 'mia' && myFarm
+                ? ` Finca activa: ${myFarm.name || 'Tu finca'}.`
+                : ' Perfil de finca de ejemplo (configuralo en Mi finca).'}
+            </p>
+          </div>
+        )}
         <main
           id="main"
           className="main-content"
           tabIndex={-1}
-          aria-busy={navigationState.state === 'loading'}
+          aria-busy={navigationState.state === 'loading' || loading}
         >
-          <Outlet />
+          {error ? (
+            <div className="v10-alert-box v10-alert-box--danger" role="alert">
+              <strong>No se pudieron cargar los datos territoriales</strong>
+              <p>{error}</p>
+            </div>
+          ) : loading ? (
+            <p className="loading-page" role="status">
+              Cargando cuencas, nacientes y series de satélite…
+            </p>
+          ) : (
+            <Outlet />
+          )}
         </main>
         <footer className="app-footer">
-          <span>{copy.common.noSharing}</span>
+          <span>Los registros se guardan solo en este dispositivo.</span>
           <Link to="/sources">{copy.nav.sources}</Link>
           <ConnectionStatus />
           <PwaStatus />

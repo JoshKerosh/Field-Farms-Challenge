@@ -45,10 +45,19 @@ const collection = (features: Feature[]): FeatureCollection => ({
   features,
 });
 
-export default function BasinExplorer({ repository }: { repository: BasinExplorerRepository }) {
+export default function BasinExplorer({
+  repository,
+  onLocate,
+}: {
+  repository: BasinExplorerRepository;
+  /** Called with every chosen point (GPS or tap), e.g. to share it with the rest of the app. */
+  onLocate?: (lng: number, lat: number) => void;
+}) {
   const c = copy.watershed.explorer;
   const mapRef = useRef<BasinMapHandle>(null);
   const requestId = useRef(0);
+  const onLocateRef = useRef(onLocate);
+  onLocateRef.current = onLocate;
   const [basins, setBasins] = useState<FeatureCollection<
     Polygon | MultiPolygon,
     BasinProperties
@@ -101,6 +110,7 @@ export default function BasinExplorer({ repository }: { repository: BasinExplore
       if (!basins) return;
       const id = ++requestId.current;
       const stale = () => id !== requestId.current;
+      onLocateRef.current?.(lng, lat);
       const pointBasin =
         basinBoxes.find(({ feature }) => geometryContains(feature.geometry, lng, lat))?.feature ??
         null;
