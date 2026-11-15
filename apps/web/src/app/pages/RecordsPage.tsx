@@ -17,10 +17,11 @@ import {
   type RecordType,
 } from '../../data/engine/records';
 import { nearbySources } from '../../data/engine/watershed';
+import { message, messageLanguage, useMessageLanguage } from '../../i18n/messages';
 import { PageHeader } from '../../shared/ui';
 import { useField } from '../context/FieldContext';
-
 export function RecordsPage() {
+  useMessageLanguage();
   const {
     ds,
     ctx,
@@ -36,8 +37,10 @@ export function RecordsPage() {
     flucShare,
     setFlucShare,
   } = useField();
-
-  const sourcesNear = useMemo(() => (ds && ctx ? nearbySources(ds, ctx) : []), [ds, ctx]);
+  const sourcesNear = useMemo(
+    () => (ds && ctx ? nearbySources(ds, ctx) : []),
+    [ds, ctx, messageLanguage()],
+  );
   const [recTab, setRecTab] = useState<RecordType>('caudal');
   const [srcIndex, setSrcIndex] = useState<number>(() => sourcesNear[0]?.i ?? 0);
   const [dateVal, setDateVal] = useState('2026-11-14');
@@ -49,19 +52,16 @@ export function RecordsPage() {
   const [note, setNote] = useState('');
   const [share, setShare] = useState(true);
   const [formMsg, setFormMsg] = useState('');
-
   const effectiveSource = sourcesNear.find((s) => s.i === srcIndex) ?? sourcesNear[0];
   const effectiveSrcIdx = effectiveSource?.i ?? 0;
-
   if (!ds || !ctx || !plan || !fluc) return null;
-
   const bucketFlow = flowFromBucket(liters, seconds);
   const chart = flowChart(ds, ctx, recs);
   const projection = flowProjection(ds, recs);
   const nDone = Object.values(acts).filter((v) => v === 'hecho').length;
   const activeOp: [string, number] = effectiveSource
-    ? (ds.sources.ops[effectiveSource.q[2]] ?? ['ASADA local', 0])
-    : ['ASADA local', 0];
+    ? (ds.sources.ops[effectiveSource.q[2]] ?? [message('mdfa423b34ab2'), 0])
+    : [message('mdfa423b34ab2'), 0];
   const asadaBoard = sharedBoard(
     ds,
     ctx,
@@ -72,12 +72,11 @@ export function RecordsPage() {
   const instBoard = institutionalView(ds, ctx, plan, fluc.nReg);
   const csvHref = `data:text/csv;charset=utf-8,${encodeURIComponent(recordsCsv(ds, recs))}`;
   const hasDemoRecs = recs.some((r) => r.demo);
-
   const handleSaveRecord = (e: FormEvent) => {
     e.preventDefault();
     if (recTab === 'caudal') {
       if (!bucketFlow.valid || bucketFlow.lps <= 0) {
-        setFormMsg('Escribe los litros del balde y los segundos mayores a cero.');
+        setFormMsg(message('m221309d3b880'));
         return;
       }
       addRecord({
@@ -88,7 +87,7 @@ export function RecordsPage() {
         note: note.trim() || undefined,
         share,
       });
-      setFormMsg(`Caudal guardado: ${bucketFlow.lpsText} L/s.`);
+      setFormMsg(message('m636815000314', bucketFlow.lpsText));
     } else if (recTab === 'accion') {
       addRecord({
         t: 'accion',
@@ -97,7 +96,7 @@ export function RecordsPage() {
         note: note.trim() || undefined,
         share,
       });
-      setFormMsg(`Acción registrada: ${actionPick}.`);
+      setFormMsg(message('ma68054bbade4', actionPick));
     } else if (recTab === 'evento') {
       addRecord({
         t: 'evento',
@@ -107,11 +106,11 @@ export function RecordsPage() {
         note: note.trim() || undefined,
         share,
       });
-      setFormMsg(`Evento registrado: ${eventPick}.`);
+      setFormMsg(message('m596d65848e1f', eventPick));
     } else {
       const mm = Number(rainMm);
       if (!(mm > 0)) {
-        setFormMsg('Ingresa la lluvia en milímetros mayor a cero.');
+        setFormMsg(message('m5f1a35af9546'));
         return;
       }
       addRecord({
@@ -121,20 +120,16 @@ export function RecordsPage() {
         note: note.trim() || undefined,
         share,
       });
-      setFormMsg(`Lluvia registrada: ${mm} mm.`);
+      setFormMsg(message('m04aa96478529', mm));
     }
     setNote('');
   };
-
   return (
     <div className="v10-stack">
-      <PageHeader
-        title="Registros del agua y monitoreo"
-        intro="Anota mediciones de caudal con balde, lluvia, acciones o eventos. Cambia de vista entre Finquero, ASADA e Institución."
-      />
+      <PageHeader title={message('md75645157c9e')} intro={message('introRecordsPage')} />
 
       <fieldset className="role-selector">
-        <legend>Ver tablero según tu rol</legend>
+        <legend>{message('m6ea89b060e1e')}</legend>
         <div>
           {VIEW_ROLES.map((r) => (
             <button
@@ -154,30 +149,36 @@ export function RecordsPage() {
         <section className="v10-card" aria-labelledby="asada-board-title">
           <div className="v10-map-toolbar">
             <div>
-              <h2 id="asada-board-title">Tablero de la ASADA · {asadaBoard.op}</h2>
+              <h2 id="asada-board-title">
+                {message('m0d1239d50773')}
+                {asadaBoard.op}
+              </h2>
               <p className="v10-muted">
-                Fuente prioritaria: {asadaBoard.src} ({asadaBoard.conn} conexiones abastecidas)
+                {message('mb79b02a4c209')}
+                {asadaBoard.src} ({asadaBoard.conn}
+                {message('mc1906aaec70a')}
               </p>
             </div>
             <span className="v10-tag" style={{ background: '#E3EFF3', color: '#0D3A4B' }}>
-              Último caudal: {asadaBoard.lastQ}
+              {message('m3885d793d409')}
+              {asadaBoard.lastQ}
             </span>
           </div>
           <div className="v10-grid-4">
             <div className="v10-kpi">
-              <span className="v10-small">Fincas en recarga (simulado)</span>
+              <span className="v10-small">{message('m4e630454fb52')}</span>
               <span className="v10-kpi-num">{asadaBoard.farms}</span>
             </div>
             <div className="v10-kpi">
-              <span className="v10-small">Con acciones activas</span>
+              <span className="v10-small">{message('m30fb70be4f5f')}</span>
               <span className="v10-kpi-num">{asadaBoard.care}</span>
             </div>
             <div className="v10-kpi">
-              <span className="v10-small">Eventos compartidos</span>
+              <span className="v10-small">{message('mf1baf36ece78')}</span>
               <span className="v10-kpi-num">{asadaBoard.events}</span>
             </div>
             <div className="v10-kpi">
-              <span className="v10-small">Acciones compartidas</span>
+              <span className="v10-small">{message('m167ebfeb1d9b')}</span>
               <span className="v10-kpi-num">{asadaBoard.actions}</span>
             </div>
           </div>
@@ -187,22 +188,22 @@ export function RecordsPage() {
 
       {role === 'inst' && (
         <section className="v10-card" aria-labelledby="inst-board-title">
-          <h2 id="inst-board-title">Vista institucional (CNE · Municipalidades · FLUC)</h2>
+          <h2 id="inst-board-title">{message('md7815c31b45c')}</h2>
           <div className="v10-grid-4">
             <div className="v10-kpi">
-              <span className="v10-small">Nacientes con baja simulada (&ge;15 %)</span>
+              <span className="v10-small">{message('me2e7a2118ac8')}</span>
               <span className="v10-kpi-num">{instBoard.nDown}</span>
             </div>
             <div className="v10-kpi">
-              <span className="v10-small">Nacientes en prioridad en subcuenca</span>
+              <span className="v10-small">{message('m651a4d32c51d')}</span>
               <span className="v10-kpi-num">{instBoard.prot}</span>
             </div>
             <div className="v10-kpi">
-              <span className="v10-small">Organizaciones FLUC en región</span>
+              <span className="v10-small">{message('m65abde731c5e')}</span>
               <span className="v10-kpi-num">{instBoard.fl}</span>
             </div>
             <div className="v10-kpi">
-              <span className="v10-small">Subcuenca activa</span>
+              <span className="v10-small">{message('mcaafb7b09c14')}</span>
               <strong style={{ fontSize: '1rem' }}>{ctx.sub.n}</strong>
             </div>
           </div>
@@ -224,7 +225,8 @@ export function RecordsPage() {
       <section className="v10-card" aria-labelledby="new-rec-title">
         <div className="v10-map-toolbar">
           <h2 id="new-rec-title">
-            <PlusCircle size={18} aria-hidden="true" /> Registrar una medición o acción
+            <PlusCircle size={18} aria-hidden="true" />
+            {message('m7053b8d97ffc')}
           </h2>
           <div className="v10-pill-row">
             <button
@@ -232,17 +234,17 @@ export function RecordsPage() {
               className="v10-pill-btn"
               onClick={() => loadDemoRecords(effectiveSrcIdx)}
             >
-              Cargar 5 meses de ejemplo
+              {message('m64a79c8e1e91')}
             </button>
             {hasDemoRecs && (
               <button type="button" className="v10-pill-btn" onClick={clearDemoRecords}>
-                Quitar ejemplos
+                {message('mca9a477fddd2')}
               </button>
             )}
           </div>
         </div>
 
-        <div className="v10-pill-row" role="tablist" aria-label="Tipo de registro">
+        <div className="v10-pill-row" role="tablist" aria-label={message('mffc69bba602f')}>
           {RECORD_TYPES.map((rt) => (
             <button
               key={rt.id}
@@ -260,7 +262,7 @@ export function RecordsPage() {
         <form onSubmit={handleSaveRecord} className="v10-stack">
           <div className="v10-form-grid">
             <div className="v10-field">
-              <label htmlFor="rec-date">Fecha</label>
+              <label htmlFor="rec-date">{message('m93b2a9ef782c')}</label>
               <input
                 id="rec-date"
                 type="date"
@@ -272,7 +274,7 @@ export function RecordsPage() {
 
             {(recTab === 'caudal' || recTab === 'evento') && sourcesNear.length > 0 && (
               <div className="v10-field">
-                <label htmlFor="rec-src">Fuente de agua cercana</label>
+                <label htmlFor="rec-src">{message('m24f8aab5d9dd')}</label>
                 <select
                   id="rec-src"
                   value={effectiveSrcIdx}
@@ -280,7 +282,11 @@ export function RecordsPage() {
                 >
                   {sourcesNear.map((s) => (
                     <option key={s.i} value={s.i}>
-                      {s.q[4]} ({s.d < 1 ? `${Math.round(s.d * 1000)} m` : `${s.d.toFixed(1)} km`})
+                      {s.q[4]} (
+                      {s.d < 1
+                        ? message('mc444f0831828', Math.round(s.d * 1000))
+                        : message('m930217329456', s.d.toFixed(1))}
+                      )
                     </option>
                   ))}
                 </select>
@@ -290,7 +296,7 @@ export function RecordsPage() {
             {recTab === 'caudal' && (
               <>
                 <div className="v10-field">
-                  <label htmlFor="rec-liters">Capacidad del balde (litros)</label>
+                  <label htmlFor="rec-liters">{message('m24d73e323da1')}</label>
                   <input
                     id="rec-liters"
                     type="number"
@@ -301,7 +307,7 @@ export function RecordsPage() {
                   />
                 </div>
                 <div className="v10-field">
-                  <label htmlFor="rec-seconds">Segundos que tarda en llenarse</label>
+                  <label htmlFor="rec-seconds">{message('mfe2f24a0f240')}</label>
                   <input
                     id="rec-seconds"
                     type="number"
@@ -311,9 +317,11 @@ export function RecordsPage() {
                     onChange={(e) => setSeconds(e.target.value)}
                   />
                   <span className="v10-small">
-                    Caudal calculado:{' '}
+                    {message('m6b410412cbe5')}{' '}
                     <strong>
-                      {bucketFlow.valid ? `${bucketFlow.lpsText} L/s (${bucketFlow.lpdText} L/día)` : '—'}
+                      {bucketFlow.valid
+                        ? message('m84533460c612', bucketFlow.lpsText, bucketFlow.lpdText)
+                        : '—'}
                     </strong>
                   </span>
                 </div>
@@ -322,7 +330,7 @@ export function RecordsPage() {
 
             {recTab === 'accion' && (
               <div className="v10-field">
-                <label htmlFor="rec-action">Acción realizada</label>
+                <label htmlFor="rec-action">{message('maf3c627693cb')}</label>
                 <select
                   id="rec-action"
                   value={actionPick}
@@ -339,7 +347,7 @@ export function RecordsPage() {
 
             {recTab === 'evento' && (
               <div className="v10-field">
-                <label htmlFor="rec-event">Evento observado</label>
+                <label htmlFor="rec-event">{message('m9d477c349426')}</label>
                 <select
                   id="rec-event"
                   value={eventPick}
@@ -356,7 +364,7 @@ export function RecordsPage() {
 
             {recTab === 'lluvia' && (
               <div className="v10-field">
-                <label htmlFor="rec-rain">Lluvia medida (mm)</label>
+                <label htmlFor="rec-rain">{message('m5de85dc4d3c0')}</label>
                 <input
                   id="rec-rain"
                   type="number"
@@ -369,34 +377,40 @@ export function RecordsPage() {
             )}
 
             <div className="v10-field">
-              <label htmlFor="rec-note">Nota breve (opcional)</label>
+              <label htmlFor="rec-note">{message('m8a7fdf5bd719')}</label>
               <input
                 id="rec-note"
                 type="text"
                 maxLength={120}
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                placeholder="Ej. Agua clara, después de aguacero…"
+                placeholder={message('m4f5a84b9d729')}
               />
             </div>
           </div>
 
-          <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+          <label
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
+          >
             <input
               type="checkbox"
               checked={share}
               onChange={(e) => setShare(e.target.checked)}
               style={{ width: 20, height: 20 }}
             />
-            <span>Marcar para compartir en el tablero comunal (local en este dispositivo)</span>
+            <span>{message('m380c35df0b61')}</span>
           </label>
 
           <div className="v10-pill-row">
             <button type="submit" className="v10-pill-btn v10-pill-btn--primary">
-              Guardar registro
+              {message('m73b38a657c47')}
             </button>
             {formMsg && (
-              <span className="v10-tag" style={{ background: '#E2F1E5', color: '#1F5A32' }} role="status">
+              <span
+                className="v10-tag"
+                style={{ background: '#E2F1E5', color: '#1F5A32' }}
+                role="status"
+              >
                 {formMsg}
               </span>
             )}
@@ -406,7 +420,7 @@ export function RecordsPage() {
 
       <section className="v10-grid-2">
         <article className="v10-card">
-          <h2>Lluvia (NASA POWER) y caudal medido</h2>
+          <h2>{message('mfbc890cc75aa')}</h2>
           {chart.has ? (
             <>
               <p className="v10-muted">{chart.text}</p>
@@ -414,9 +428,9 @@ export function RecordsPage() {
                 <table>
                   <thead>
                     <tr>
-                      <th>Mes</th>
-                      <th>Lluvia NASA (mm)</th>
-                      <th>Caudal (L/s)</th>
+                      <th>{message('m024261f9bfba')}</th>
+                      <th>{message('mddab5aaa7fdd')}</th>
+                      <th>{message('m8abd46522862')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -424,7 +438,7 @@ export function RecordsPage() {
                       <tr key={b.m}>
                         <th>{b.m}</th>
                         <td>{b.rain} mm</td>
-                        <td>{b.hasQ ? `${b.qv} L/s` : '—'}</td>
+                        <td>{b.hasQ ? message('m5d031782b006', b.qv) : '—'}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -432,17 +446,23 @@ export function RecordsPage() {
               </div>
             </>
           ) : (
-            <p className="v10-muted">
-              Anota al menos 2 mediciones de caudal (o pulsa «Cargar 5 meses de ejemplo») para comparar la tendencia de la naciente con la lluvia de NASA POWER.
-            </p>
+            <p className="v10-muted">{message('mc925dbbcf6b1')}</p>
           )}
         </article>
 
         <article className="v10-card">
-          <h2>Proyección del caudal a 2 meses</h2>
+          <h2>{message('m993b7288be55')}</h2>
           {projection.has ? (
-            <div className={`v10-alert-box ${projection.down ? 'v10-alert-box--danger' : 'v10-alert-box--ok'}`}>
-              <strong>Tendencia: {projection.slope}</strong>
+            <div
+              className={message(
+                'm0321e84a4d5f',
+                projection.down ? 'v10-alert-box--danger' : 'v10-alert-box--ok',
+              )}
+            >
+              <strong>
+                {message('m12a5ee47e691')}
+                {projection.slope}
+              </strong>
               <p>{projection.msg}</p>
               <a
                 href={projection.whatsapp}
@@ -451,28 +471,32 @@ export function RecordsPage() {
                 className="v10-pill-btn"
                 style={{ width: 'fit-content', marginTop: 6 }}
               >
-                <Share2 size={15} aria-hidden="true" /> Enviar aviso por WhatsApp
+                <Share2 size={15} aria-hidden="true" />
+                {message('medb48ff90083')}
               </a>
             </div>
           ) : (
-            <p className="v10-muted">
-              Con 3 o más mediciones de caudal en fechas distintas se activa la proyección lineal preventiva para avisar a la ASADA antes de que baje el nivel.
-            </p>
+            <p className="v10-muted">{message('m6aae7329c4c7')}</p>
           )}
         </article>
       </section>
 
       <section className="v10-card" aria-labelledby="rec-list-title">
         <div className="v10-map-toolbar">
-          <h2 id="rec-list-title">Historial guardado ({recs.length})</h2>
+          <h2 id="rec-list-title">
+            {message('m6bf5b9630e02')}
+            {recs.length})
+          </h2>
           {recs.length > 0 && (
             <div className="v10-pill-row">
               <a className="v10-pill-btn" href={csvHref} download="registros-field-farms.csv">
-                <Download size={16} aria-hidden="true" /> Exportar CSV
+                <Download size={16} aria-hidden="true" />
+                {message('m2f7cd80aedf2')}
               </a>
               {hasDemoRecs && (
                 <button type="button" className="v10-pill-btn" onClick={clearDemoRecords}>
-                  <Trash2 size={16} aria-hidden="true" /> Borrar ejemplos
+                  <Trash2 size={16} aria-hidden="true" />
+                  {message('m250ccbc4892f')}
                 </button>
               )}
             </div>
@@ -480,7 +504,7 @@ export function RecordsPage() {
         </div>
 
         {recs.length === 0 ? (
-          <p className="v10-muted">Todavía no hay mediciones guardadas en este dispositivo.</p>
+          <p className="v10-muted">{message('m5a036601276d')}</p>
         ) : (
           <ul className="v10-list">
             {recs.map((r) => (
@@ -499,9 +523,15 @@ export function RecordsPage() {
       <section className="v10-card" aria-labelledby="fluc-title">
         <div className="v10-map-toolbar">
           <div>
-            <h2 id="fluc-title">Red de ASADAS y FLUC en {fluc.region}</h2>
+            <h2 id="fluc-title">
+              {message('m5b5899042c6e')}
+              {fluc.region}
+            </h2>
             <p className="v10-muted">
-              {fluc.nReg} organizaciones regionales activas en registro AyA, agrupando {fluc.nAsadas} ASADAS.
+              {fluc.nReg}
+              {message('ma9ceee36dda7')}
+              {fluc.nAsadas}
+              {message('m70106e886a76')}
             </p>
           </div>
           <button
@@ -510,7 +540,7 @@ export function RecordsPage() {
             aria-pressed={flucShare}
             onClick={() => setFlucShare(!flucShare)}
           >
-            {flucShare ? '✓ Compartiendo registros con la red (simulado)' : 'Compartir registros con la red'}
+            {flucShare ? message('m660adaa559e4') : message('mdb8c46ca57a9')}
           </button>
         </div>
 
@@ -520,13 +550,16 @@ export function RecordsPage() {
               <div className="v10-map-toolbar">
                 <strong>{org.name}</strong>
                 <span className="v10-tag" style={{ background: '#E3EFF3', color: '#0D3A4B' }}>
-                  <span aria-hidden="true" style={{ color: org.col }}>●</span> {org.kind}
+                  <span aria-hidden="true" style={{ color: org.col }}>
+                    ●
+                  </span>{' '}
+                  {org.kind}
                 </span>
               </div>
               <span className="v10-small">
                 {org.meta}
-                {org.national ? ' · Alcance nacional' : ''}
-                {org.hasStatus ? ` · ${org.status}` : ''}
+                {org.national ? message('md49a6242839a') : ''}
+                {org.hasStatus ? message('m0c74f86b9027', org.status) : ''}
               </span>
             </li>
           ))}

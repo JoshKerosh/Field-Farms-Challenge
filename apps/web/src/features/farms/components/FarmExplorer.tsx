@@ -4,6 +4,7 @@ import { LocateFixed } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { FarmSite } from '../../../app/context/FieldContext';
 import { copy } from '../../../i18n';
+import { message, messageLanguage, useMessageLanguage } from '../../../i18n/messages';
 import type { ParcelFeature } from '../../../platform/siri/parcel';
 import {
   STREAMS_RADIUS_M,
@@ -14,10 +15,6 @@ import {
   toParcel,
   type BasinProperties,
 } from '../../watersheds/analysis/parcel-analysis';
-import type {
-  BasinExplorerRepository,
-  Bounds,
-} from '../../watersheds/data/basin-explorer.repository';
 import BasinMap, {
   type BasinMapHandle,
   type MapScene,
@@ -26,6 +23,7 @@ import BasinMap, {
 import { BasinMinimap } from '../../watersheds/components/BasinMinimap';
 import { formatDistance } from '../../watersheds/components/BasinResults';
 import type { FarmResult } from '../../watersheds/components/explorer-result';
+import { LegendMark } from '../../watersheds/components/map-icons';
 import {
   EMPTY,
   collection,
@@ -33,11 +31,12 @@ import {
   streamTooltip,
   withTooltip,
 } from '../../watersheds/components/map-tooltips';
-import { LegendMark } from '../../watersheds/components/map-icons';
+import type {
+  BasinExplorerRepository,
+  Bounds,
+} from '../../watersheds/data/basin-explorer.repository';
 import { FarmResults } from './FarmResults';
-
 type LayerKey = 'operators' | 'springs' | 'otherSources' | 'streams';
-
 /** Real map of "Mi finca": the SIRI parcel under the point and the water near it. */
 export default function FarmExplorer({
   repository,
@@ -50,6 +49,7 @@ export default function FarmExplorer({
   /** Called with the chosen point, and again with its parcel once the SIRI answers. */
   onSite: (site: FarmSite) => void;
 }) {
+  useMessageLanguage();
   const c = copy.watershed.explorer;
   const mapRef = useRef<BasinMapHandle>(null);
   const requestId = useRef(0);
@@ -69,7 +69,6 @@ export default function FarmExplorer({
     streams: true,
   });
   const [result, setResult] = useState<FarmResult | null>(null);
-
   useEffect(() => {
     repository.listBasins().then(
       (data) => {
@@ -79,7 +78,6 @@ export default function FarmExplorer({
       () => setStatus(c.basinsError),
     );
   }, [repository, c]);
-
   /**
    * Looks up the farm at the point. With `known` (a farm chosen earlier) the SIRI is not asked
    * again and the app's location is left as it is.
@@ -107,7 +105,6 @@ export default function FarmExplorer({
       };
       setResult(base);
       setStatus(c.searchingParcel);
-
       let parcelFeature: ParcelFeature | null = known ?? null;
       let parcelError = false;
       if (report) {
@@ -119,7 +116,6 @@ export default function FarmExplorer({
         if (stale()) return;
         if (!parcelError) onSiteRef.current({ lng, lat, accuracyM, parcel: parcelFeature });
       }
-
       const withParcel: FarmResult = {
         ...base,
         parcel: parcelError
@@ -140,7 +136,6 @@ export default function FarmExplorer({
       const parcel = parcelFeature;
       if (fit) mapRef.current?.fitBounds(bbox(parcel) as Bounds, 17);
       setStatus(c.searchingWater);
-
       const streamsTask = repository
         .listStreams(bbox(searchZone(parcel, STREAMS_RADIUS_M)) as Bounds)
         .then((streams) => {
@@ -180,7 +175,6 @@ export default function FarmExplorer({
           operators.features,
         ),
       );
-
       const [streams, water] = await Promise.allSettled([streamsTask, waterTask]);
       if (stale()) return;
       setResult({
@@ -208,9 +202,8 @@ export default function FarmExplorer({
         mapRef.current?.fitBounds(bbox(collection(framed)) as Bounds, 17);
       }
     },
-    [basins, repository, c],
+    [basins, repository, c, messageLanguage()],
   );
-
   /**
    * Asks the device for its position. When `auto` (on page open), a point picked on the map
    * meanwhile wins, and a refusal stays quiet: the user did not press the button.
@@ -232,10 +225,9 @@ export default function FarmExplorer({
         { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 },
       );
     },
-    [locate, c],
+    [locate, c, messageLanguage()],
   );
   const useMyLocation = () => requestPosition(false);
-
   // On open, show the farm chosen earlier or else use the user's location; tapping still picks.
   const started = useRef(false);
   useEffect(() => {
@@ -244,7 +236,6 @@ export default function FarmExplorer({
     if (site) void locate(site.lng, site.lat, site.accuracyM, true, site.parcel);
     else requestPosition(true);
   }, [basins, site, locate, requestPosition]);
-
   // Another picker on the page (district, sub-basin, example places) replaced the farm.
   useEffect(() => {
     if (site || !started.current) return;
@@ -252,7 +243,6 @@ export default function FarmExplorer({
     setResult(null);
     setStatus(c.ready);
   }, [site, c]);
-
   const scene = useMemo<MapScene>(() => {
     const water = result?.water.state === 'done' ? result.water.value : null;
     const parcel = result?.parcel.state === 'done' ? result.parcel.value?.feature : null;
@@ -264,7 +254,7 @@ export default function FarmExplorer({
           .map((s) =>
             withTooltip(turfPoint(s.coordinates, { tipo: s.kind }), [
               s.name,
-              `${c.sourceKind[s.kind]} · ${s.operatorName}`,
+              message('ma417ac239419', c.sourceKind[s.kind], s.operatorName),
               s.distanceM === 0 ? c.inParcelLong : c.distance(formatDistance(s.distanceM)),
               sourceDetail(s.altitudeM, s.lastFlow),
             ]),
@@ -276,7 +266,7 @@ export default function FarmExplorer({
           .map((o) =>
             withTooltip(turfPoint(o.office!.coordinates), [
               o.name,
-              `${o.office!.kind} · ${c.services(o.office!.services)}`,
+              message('ma417ac239419', o.office!.kind, c.services(o.office!.services)),
               c.operatorOffice(
                 o.office!.distanceM === 0
                   ? c.inParcelLong
@@ -304,8 +294,7 @@ export default function FarmExplorer({
           ])
         : EMPTY,
     };
-  }, [result, layers, basemap, c]);
-
+  }, [result, layers, basemap, c, messageLanguage()]);
   return (
     <div className="basin-explorer">
       <div className="basin-toolbar">

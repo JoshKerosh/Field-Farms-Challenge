@@ -1,31 +1,45 @@
 import { Droplet, Layers, MapPin, RotateCcw, Trees, Waves, ZoomIn, ZoomOut } from 'lucide-react';
 import { lazy, Suspense, useMemo, useState } from 'react';
-import { distText, fmtInt } from '../../../data/engine/format';
-import { RISK_LABEL, RISK_STYLE, terrainCards, type MapLayer, type SourceInfo } from '../../../data/engine/watershed';
-import { copy } from '../../../i18n';
-import { PageHeader, PageLink } from '../../../shared/ui';
 import { useField } from '../../../app/context/FieldContext';
+import { distText, fmtInt } from '../../../data/engine/format';
+import {
+  RISK_LABEL,
+  RISK_STYLE,
+  terrainCards,
+  type MapLayer,
+  type SourceInfo,
+} from '../../../data/engine/watershed';
+import { copy } from '../../../i18n';
+import {
+  localizedResource,
+  message,
+  messageLanguage,
+  useMessageLanguage,
+} from '../../../i18n/messages';
+import { PageHeader, PageLink } from '../../../shared/ui';
 import type { BasinExplorerRepository } from '../data/basin-explorer.repository';
-
 // MapLibre and Turf load only when this page opens.
 const BasinExplorer = lazy(() => import('../components/BasinExplorer'));
-
-const LAYERS: { id: MapLayer; label: string; desc: string }[] = [
-  { id: 'agua', label: 'Fuentes de agua', desc: 'Nacientes, pozos y halos de recarga de 1 km (SAGA).' },
-  { id: 'restaurar', label: 'Dónde restaurar', desc: 'Celdas de 1,5 km priorizadas por verdor que baja, ríos sin bosque y cercanía a nacientes.' },
-  { id: 'orillas', label: 'Ríos sin bosque', desc: 'Cobertura en la franja de 15 m de los ríos según IGN 1:5 000 (2017).' },
-];
-
+const LAYERS: {
+  id: MapLayer;
+  label: string;
+  desc: string;
+}[] = localizedResource(() => [
+  { id: 'agua', label: message('m65f873eb7216'), desc: message('m992b306bff5a') },
+  { id: 'restaurar', label: message('m5858dca281ee'), desc: message('m31c9cfade08a') },
+  { id: 'orillas', label: message('mfc14a4ac2968'), desc: message('m863bfe33bfad') },
+]);
 export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository }) {
+  useMessageLanguage();
   const { ds, ctx, plan, basin, alerts, journey, farmSite } = useField();
   const [layer, setLayer] = useState<MapLayer>('agua');
   const [zoom, setZoom] = useState(1);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
-
-  const terrain = useMemo(() => (ds && ctx ? terrainCards(ds, ctx) : []), [ds, ctx]);
-
+  const terrain = useMemo(
+    () => (ds && ctx ? terrainCards(ds, ctx) : []),
+    [ds, ctx, messageLanguage()],
+  );
   if (!ds || !ctx || !plan || !basin || !alerts || !journey) return null;
-
   const pin = ctx.geo.toPx(ctx.loc.x, ctx.loc.y);
   const BW = ctx.geo.box.BW;
   const BH = ctx.geo.box.BH;
@@ -38,12 +52,17 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
   const zvx = zoom <= 1 ? 0 : Math.max(0, Math.min(BW - zw, focus.x - zw / 2));
   const zvy = zoom <= 1 ? 0 : Math.max(0, Math.min(BH - zh, focus.y - zh / 2));
   const maxRain = Math.max(40, ...plan.forecast.flatMap((m) => [m.n, m.e]));
-
   return (
     <div className="v10-stack">
       <PageHeader
-        title={`Subcuenca ${ctx.sub.n}`}
-        intro={`Cuenca ${basin.name} · Vertiente ${ctx.caribe ? 'Caribe' : 'Pacífico'} · ${fmtInt(ctx.sub.ha)} ha · ${fmtInt(ctx.sub.serv)} conexiones registradas`}
+        title={message('m4cbfd1e09d31', ctx.sub.n)}
+        intro={message(
+          'mf51b423186e9',
+          basin.name,
+          ctx.caribe ? message('m89a4695c099e') : message('m552087b6a491'),
+          fmtInt(ctx.sub.ha),
+          fmtInt(ctx.sub.serv),
+        )}
       />
 
       <section className="v10-card" aria-labelledby="basin-explorer-title">
@@ -63,7 +82,8 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
 
       <section className="v10-hero-card" aria-labelledby="limits-title">
         <span className="v10-tag" style={{ background: 'rgba(255,255,255,0.18)', color: '#fff' }}>
-          <Waves size={14} aria-hidden="true" /> El agua no conoce límites de finca
+          <Waves size={14} aria-hidden="true" />
+          {message('m94cdd6e4ed39')}
         </span>
         <h2 id="limits-title" style={{ color: '#fff', fontSize: '1.35rem' }}>
           {basin.msg}
@@ -71,41 +91,54 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
         <p>{plan.goal}</p>
       </section>
 
-      <section className="v10-grid-3" aria-label="Indicadores de la subcuenca">
+      <section className="v10-grid-3" aria-label={message('m058195f4387e')}>
         <article className="v10-kpi">
-          <span className="v10-small">Nacientes y fuentes SAGA</span>
+          <span className="v10-small">{message('m943bd46c90d4')}</span>
           <span className="v10-kpi-num">{plan.sources.length}</span>
           <span className="v10-small">
-            {plan.nNac} nacientes · {plan.nHi} en riesgo medio/alto
+            {plan.nNac}
+            {message('m2a631da57122')}
+            {plan.nHi}
+            {message('mdda90586e635')}
           </span>
         </article>
         <article className="v10-kpi">
-          <span className="v10-small">Conexiones comunales</span>
+          <span className="v10-small">{message('m7bd30e6f1392')}</span>
           <span className="v10-kpi-num">{plan.conn}</span>
           <span className="v10-small">
-            {plan.connRisk > 0 ? `${fmtInt(plan.connRisk)} en nacientes con prioridad` : 'Todas en fuentes de riesgo bajo'}
+            {plan.connRisk > 0
+              ? message('m6b6b7b7ae11d', fmtInt(plan.connRisk))
+              : message('m7bf774477eb5')}
           </span>
         </article>
         <article className="v10-kpi">
-          <span className="v10-small">Orillas de río sin bosque (IGN)</span>
-          <span className="v10-kpi-num">{plan.rip.has ? `${plan.rip.kmNo} km` : 'Sin tramos'}</span>
+          <span className="v10-small">{message('m72fa31ada5cf')}</span>
+          <span className="v10-kpi-num">
+            {plan.rip.has ? message('m930217329456', plan.rip.kmNo) : message('m8812a973c3ab')}
+          </span>
           <span className="v10-small">
-            {plan.rip.has ? `${plan.rip.haUrg} ha prioritarias para restaurar · NDVI ${plan.ndvi}` : `NDVI promedio ${plan.ndvi}`}
+            {plan.rip.has
+              ? message('m505fe23d95f0', plan.rip.haUrg, plan.ndvi)
+              : message('m82d6f1bad185', plan.ndvi)}
           </span>
         </article>
       </section>
 
       <section className="v10-card" aria-labelledby="hydro-title">
-        <h2 id="hydro-title">Cómo viaja el agua desde tu potrero hasta la ASADA</h2>
+        <h2 id="hydro-title">{message('m556b7b961ed0')}</h2>
         <svg
           viewBox="0 0 640 150"
           className="v10-svg-canvas"
           style={{ background: '#EFF6F2' }}
           role="img"
-          aria-label={`Diagrama del viaje del agua: la lluvia se infiltra en tu finca, recarga el acuífero y alimenta la fuente ${journey.src} a ${journey.dist}, administrada por ${journey.op}.`}
+          aria-label={message('m58a6c2ddaf74', journey.src, journey.dist, journey.op)}
         >
           <path d="M0,78 Q160,55 320,88 T640,104 L640,150 L0,150 Z" fill="#C7DFCE" />
-          <path d="M0,108 Q180,98 340,114 T640,124 L640,150 L0,150 Z" fill="#9BC9DC" opacity="0.7" />
+          <path
+            d="M0,108 Q180,98 340,114 T640,124 L640,150 L0,150 Z"
+            fill="#9BC9DC"
+            opacity="0.7"
+          />
           <path
             d="M110,68 C170,115 280,118 390,106 C450,100 500,98 555,102"
             fill="none"
@@ -115,10 +148,10 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
           />
           <circle cx="110" cy="64" r="10" fill="#2E7A43" />
           <text x="110" y="34" textAnchor="middle" fontSize="13" fontWeight="700" fill="#16231C">
-            Tu finca
+            {message('mfd1c360fc8ac')}
           </text>
           <text x="110" y="48" textAnchor="middle" fontSize="11" fill="#46574C">
-            Infiltración en suelo
+            {message('m2e1c91eeb606')}
           </text>
 
           <circle cx="345" cy="108" r="11" fill="#17617C" />
@@ -129,12 +162,22 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
             A {journey.dist}
           </text>
 
-          <rect x="505" y="78" width="110" height="44" rx="10" fill="#FFFFFF" stroke="#17617C" strokeWidth="2" />
+          <rect
+            x="505"
+            y="78"
+            width="110"
+            height="44"
+            rx="10"
+            fill="#FFFFFF"
+            stroke="#17617C"
+            strokeWidth="2"
+          />
           <text x="560" y="98" textAnchor="middle" fontSize="12" fontWeight="800" fill="#0D3A4B">
             {journey.op.slice(0, 18)}
           </text>
           <text x="560" y="113" textAnchor="middle" fontSize="11" fill="#46574C">
-            {journey.conn} conexiones
+            {journey.conn}
+            {message('me8ca53293c9d')}
           </text>
         </svg>
       </section>
@@ -142,8 +185,12 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
       <section className="v10-svg-box" aria-labelledby="map-layers-title">
         <div className="v10-map-toolbar">
           <div>
-            <h2 id="map-layers-title" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-              <Layers size={18} aria-hidden="true" /> Mapa interactivo de la subcuenca
+            <h2
+              id="map-layers-title"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
+            >
+              <Layers size={18} aria-hidden="true" />
+              {message('me45eee95dad0')}
             </h2>
             <p className="v10-small">{LAYERS.find((l) => l.id === layer)?.desc}</p>
           </div>
@@ -165,44 +212,54 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
         <div className="v10-map-toolbar">
           <div className="v10-legend-row">
             <span className="v10-legend-dot">
-              <i style={{ background: '#17617C' }} /> Tu finca
+              <i style={{ background: '#17617C' }} />
+              {message('mfd1c360fc8ac')}
             </span>
             {layer === 'agua' && (
               <>
                 <span className="v10-legend-dot">
-                  <i style={{ background: '#2F7FC1' }} /> Riesgo bajo
+                  <i style={{ background: '#2F7FC1' }} />
+                  {message('m4c65c6b78b08')}
                 </span>
                 <span className="v10-legend-dot">
-                  <i style={{ background: '#E0A030' }} /> Riesgo medio
+                  <i style={{ background: '#E0A030' }} />
+                  {message('m5693d7652b9a')}
                 </span>
                 <span className="v10-legend-dot">
-                  <i style={{ background: '#D9534F' }} /> Riesgo alto
+                  <i style={{ background: '#D9534F' }} />
+                  {message('m9102470142ed')}
                 </span>
               </>
             )}
             {layer === 'restaurar' && (
               <>
                 <span className="v10-legend-dot">
-                  <i style={{ background: '#D9534F' }} /> Prioridad alta (restaurar primero)
+                  <i style={{ background: '#D9534F' }} />
+                  {message('m9edaf7daca3f')}
                 </span>
                 <span className="v10-legend-dot">
-                  <i style={{ background: '#F6D98B' }} /> Prioridad media
+                  <i style={{ background: '#F6D98B' }} />
+                  {message('m20e6f9f3e49d')}
                 </span>
                 <span className="v10-legend-dot">
-                  <i style={{ background: '#CFE6D3' }} /> Prioridad baja
+                  <i style={{ background: '#CFE6D3' }} />
+                  {message('m7a7c06f556b9')}
                 </span>
               </>
             )}
             {layer === 'orillas' && (
               <>
                 <span className="v10-legend-dot">
-                  <i style={{ background: '#D9534F' }} /> Orilla sin bosque
+                  <i style={{ background: '#D9534F' }} />
+                  {message('mb6c303883c5f')}
                 </span>
                 <span className="v10-legend-dot">
-                  <i style={{ background: '#F2A65A' }} /> Bosque a medias
+                  <i style={{ background: '#F2A65A' }} />
+                  {message('m450f5b270570')}
                 </span>
                 <span className="v10-legend-dot">
-                  <i style={{ background: '#2E7A43' }} /> Orilla con bosque
+                  <i style={{ background: '#2E7A43' }} />
+                  {message('m6b144e47f09d')}
                 </span>
               </>
             )}
@@ -212,7 +269,7 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
             <button
               type="button"
               className="v10-pill-btn"
-              aria-label="Acercar subcuenca"
+              aria-label={message('mf2f70a94f1de')}
               onClick={() => setZoom((z) => Math.min(4, z * 2))}
             >
               <ZoomIn size={16} aria-hidden="true" />
@@ -220,7 +277,7 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
             <button
               type="button"
               className="v10-pill-btn"
-              aria-label="Alejar subcuenca"
+              aria-label={message('m6b280883f5c3')}
               onClick={() => setZoom((z) => Math.max(1, z / 2))}
             >
               <ZoomOut size={16} aria-hidden="true" />
@@ -228,7 +285,7 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
             <button
               type="button"
               className="v10-pill-btn"
-              aria-label="Restablecer vista de subcuenca"
+              aria-label={message('meed352b60569')}
               onClick={() => setZoom(1)}
             >
               <RotateCcw size={16} aria-hidden="true" />
@@ -237,11 +294,21 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
         </div>
 
         <svg
-          viewBox={`${zvx.toFixed(1)} ${zvy.toFixed(1)} ${zw.toFixed(1)} ${zh.toFixed(1)}`}
+          viewBox={message(
+            'm5cb3ceceab8b',
+            zvx.toFixed(1),
+            zvy.toFixed(1),
+            zw.toFixed(1),
+            zh.toFixed(1),
+          )}
           className="v10-svg-canvas"
           style={{ maxHeight: 360 }}
           role="img"
-          aria-label={`Mapa de la subcuenca ${ctx.sub.n} en capa ${LAYERS.find((l) => l.id === layer)?.label}.`}
+          aria-label={message(
+            'm3b810f5f01e1',
+            ctx.sub.n,
+            LAYERS.find((l) => l.id === layer)?.label,
+          )}
         >
           <g>
             <svg viewBox={ctx.geo.vb} width={BW} height={BH} preserveAspectRatio="none">
@@ -296,11 +363,7 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
             const pt = ctx.geo.toPx(s.q[0], s.q[1]);
             const style = RISK_STYLE[s.risk];
             return (
-              <g
-                key={s.i}
-                style={{ cursor: 'pointer' }}
-                onClick={() => setSelectedIdx(s.i)}
-              >
+              <g key={s.i} style={{ cursor: 'pointer' }} onClick={() => setSelectedIdx(s.i)}>
                 <circle
                   cx={pt.x}
                   cy={pt.y}
@@ -320,26 +383,37 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
         {activeSource ? (
           <div
             className="v10-alert-box"
-            style={{ background: RISK_STYLE[activeSource.risk][2], color: RISK_STYLE[activeSource.risk][3] }}
+            style={{
+              background: RISK_STYLE[activeSource.risk][2],
+              color: RISK_STYLE[activeSource.risk][3],
+            }}
           >
             <div className="v10-map-toolbar">
               <strong>
                 <Droplet size={15} aria-hidden="true" /> {activeSource.q[4]} ({activeSource.kind})
               </strong>
-              <span className="v10-tag" style={{ background: '#fff', color: RISK_STYLE[activeSource.risk][3] }}>
+              <span
+                className="v10-tag"
+                style={{ background: '#fff', color: RISK_STYLE[activeSource.risk][3] }}
+              >
                 {RISK_LABEL[activeSource.risk]}
               </span>
             </div>
             <span>
-              Operador: {activeSource.op[0]} · {fmtInt(activeSource.op[1])} conexiones · A {distText(activeSource.distKm)} de tu finca · {activeSource.why}
+              {message('m92aa31bd77ad')}
+              {activeSource.op[0]} · {fmtInt(activeSource.op[1])}
+              {message('m6cf88b22b8ef')}
+              {distText(activeSource.distKm)}
+              {message('mf926e18d7ab5')}
+              {activeSource.why}
             </span>
           </div>
         ) : (
-          <p className="v10-muted">No hay fuentes SAGA georreferenciadas dentro de los límites de esta subcuenca.</p>
+          <p className="v10-muted">{message('m42c51e8b7e0c')}</p>
         )}
 
         {plan.sources.length > 1 && (
-          <div className="v10-pill-row" aria-label="Seleccionar fuente de la subcuenca">
+          <div className="v10-pill-row" aria-label={message('m8282ff6744bc')}>
             {plan.sources.slice(0, 6).map((s) => (
               <button
                 key={s.i}
@@ -357,21 +431,31 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
 
       <section className="v10-grid-2">
         <article className="v10-card">
-          <h2>Lluvia esperada en tu zona (El Niño vs normal)</h2>
+          <h2>{message('m6b124942883e')}</h2>
           <p className="v10-muted">{plan.forecastTxt}</p>
-          <div className="v10-bar-chart" role="img" aria-label={`Comparación de lluvia de 6 meses: ${plan.forecastTxt}`}>
+          <div
+            className="v10-bar-chart"
+            role="img"
+            aria-label={message('mee649e1f8435', plan.forecastTxt)}
+          >
             {plan.forecast.map((m) => (
               <div key={m.m} className="v10-bar-col">
                 <div className="v10-bar-stack">
                   <div
                     className="v10-bar"
-                    style={{ height: Math.max(8, Math.round((m.n / maxRain) * 76)), background: '#9AB8C7' }}
-                    title={`Normal ${m.m}: ${m.n} mm`}
+                    style={{
+                      height: Math.max(8, Math.round((m.n / maxRain) * 76)),
+                      background: '#9AB8C7',
+                    }}
+                    title={message('m548b34bbfad7', m.m, m.n)}
                   />
                   <div
                     className="v10-bar"
-                    style={{ height: Math.max(8, Math.round((m.e / maxRain) * 76)), background: '#17617C' }}
-                    title={`Con El Niño ${m.m}: ${m.e} mm`}
+                    style={{
+                      height: Math.max(8, Math.round((m.e / maxRain) * 76)),
+                      background: '#17617C',
+                    }}
+                    title={message('m729b54563884', m.m, m.e)}
                   />
                 </div>
                 <strong style={{ fontSize: '0.8125rem' }}>{m.m}</strong>
@@ -381,17 +465,20 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
           </div>
           <div className="v10-legend-row">
             <span className="v10-legend-dot">
-              <i style={{ background: '#9AB8C7' }} /> Promedio 1991–2025
+              <i style={{ background: '#9AB8C7' }} />
+              {message('m5edfb3a53dad')}
             </span>
             <span className="v10-legend-dot">
-              <i style={{ background: '#17617C' }} /> Año El Niño (NASA POWER)
+              <i style={{ background: '#17617C' }} />
+              {message('mbc1193f252fb')}
             </span>
           </div>
         </article>
 
         <article className="v10-card">
           <h2>
-            <Trees size={18} aria-hidden="true" /> Plan de regeneración para esta subcuenca
+            <Trees size={18} aria-hidden="true" />
+            {message('macecfede2cc9')}
           </h2>
           <ul className="v10-list">
             {plan.actions.map((act) => (
@@ -404,20 +491,23 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
                 </div>
                 <span className="v10-muted">{act.d}</span>
                 <span className="v10-small">
-                  Impacto: {act.imp} · Responsable: {act.who}
+                  {message('m2d19b45930f5')}
+                  {act.imp}
+                  {message('mfed5b5baaff6')}
+                  {act.who}
                 </span>
               </li>
             ))}
           </ul>
           <PageLink to="/care" primary>
-            Ir a acciones en mi finca
+            {message('mc2405bff91e0')}
           </PageLink>
         </article>
       </section>
 
       <section aria-labelledby="terrain-title">
         <h2 id="terrain-title" style={{ marginBottom: 12 }}>
-          Condición del suelo y agua en tu punto
+          {message('mf828c5a29c98')}
         </h2>
         <div className="v10-grid-3">
           {terrain.map((card) => (
@@ -425,7 +515,10 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
               <div className="v10-map-toolbar">
                 <span className="v10-small">{card.k}</span>
                 <span className="v10-tag" style={{ background: '#EEF3EF', color: '#16231C' }}>
-                  <span aria-hidden="true" style={{ color: card.col }}>●</span> Estado
+                  <span aria-hidden="true" style={{ color: card.col }}>
+                    ●
+                  </span>
+                  {message('m98e5acddb6c4')}
                 </span>
               </div>
               <h3>{card.title}</h3>

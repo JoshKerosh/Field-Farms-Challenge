@@ -43,6 +43,6 @@ export const demoRepositories = {
     listOrganizations: async () => structuredClone(organizations),
   } satisfies OrganizationRepository,
   benefits: {
-    listOpportunities: async () => structuredClone(opportunities),
+    listOpportunities: async () => opportunities,
   } satisfies BenefitsRepository,
 };

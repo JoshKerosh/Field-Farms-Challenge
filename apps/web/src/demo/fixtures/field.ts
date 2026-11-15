@@ -1,27 +1,26 @@
 import type {
-  Farm,
-  Watershed,
-  WaterSource,
-  WaterReading,
-  RestorationAction,
   EnvironmentalIndicator,
+  Farm,
   FieldAlert,
   FieldIncident,
   Organization,
   Provenance,
+  RestorationAction,
+  WaterReading,
+  Watershed,
+  WaterSource,
 } from '@field-farms/domain';
-
+import { localizedResource, message } from '../../i18n/messages';
 const provenance: Provenance = {
   origin: 'demo',
   source: 'Ejemplo ficticio para explorar la aplicación',
   asOf: '2026-11-14',
 };
-
-export const farm: Farm = {
+export const farm: Farm = localizedResource(() => ({
   id: 'demo-farm',
   name: 'Finca El Guayacán',
-  district: 'Upala, Alajuela',
-  activity: 'Ganadería de leche',
+  district: message('meaf581a401ae'),
+  activity: message('mf776712dacee'),
   areaHa: 12,
   animals: 18,
   paddocks: 8,
@@ -29,36 +28,31 @@ export const farm: Farm = {
   organizationId: 'demo-asada',
   coordinates: [-85.023, 10.808],
   provenance,
-};
-
-export const watershed: Watershed = {
+}));
+export const watershed: Watershed = localizedResource(() => ({
   id: 'demo-watershed',
   name: 'Río Zapote',
-  basin: 'Cuenca del río Zapote',
-  region: 'Huetar Norte',
-  description:
-    'Un ejemplo para explorar cómo una finca, una fuente y una ASADA pueden compartir información.',
+  basin: message('mc381e004528d'),
+  region: message('m0ece0eaa335a'),
+  description: message('me2181e42c81e'),
   provenance,
-};
-
-export const organizations: Organization[] = [
+}));
+export const organizations: Organization[] = localizedResource(() => [
   {
     id: 'demo-asada',
     name: 'ASADA de ejemplo',
     kind: 'asada',
-    description:
-      'Vista de un acueducto comunal. Organización ficticia, sin conexión con servicios reales.',
+    description: message('m135f3a23e5ce'),
     provenance,
   },
   {
     id: 'demo-fluc',
     name: 'Red de ASADAS de ejemplo',
     kind: 'fluc',
-    description: 'Ejemplo de coordinación entre acueductos de una región.',
+    description: message('ma1eacecb54d3'),
     provenance,
   },
-];
-
+]);
 export const sources: WaterSource[] = [
   {
     id: 'demo-spring',
@@ -79,7 +73,6 @@ export const sources: WaterSource[] = [
     provenance,
   },
 ];
-
 export const readings: WaterReading[] = [
   ...[8.4, 7.9, 7.1, 6.6].map((value, index): WaterReading => ({
     id: `demo-flow-${index}`,
@@ -102,84 +95,79 @@ export const readings: WaterReading[] = [
     provenance,
   },
 ];
-
-export const actions: RestorationAction[] = [
+export const actions: RestorationAction[] = localizedResource(() => [
   {
     id: 'demo-action-water',
     farmId: farm.id,
-    title: 'Proteger la naciente',
-    description: 'Revisar con la ASADA dónde hacen falta cercas y protección del bosque.',
+    title: message('m60414a7c0d35'),
+    description: message('mc32ba744fb94'),
     status: 'planned',
-    benefit: 'Cuidar la fuente de agua',
+    benefit: message('md6846a0de323'),
     provenance,
   },
   {
     id: 'demo-action-trees',
     farmId: farm.id,
-    title: 'Sembrar cercas vivas',
-    description: 'Identificar los tramos de cerca donde se pueden establecer árboles.',
+    title: message('m9c59adbf44ef'),
+    description: message('mf12ba94bccb4'),
     status: 'planned',
-    benefit: 'Sombra y protección del suelo',
+    benefit: message('m20974e05add6'),
     provenance,
   },
   {
     id: 'demo-action-trough',
     farmId: farm.id,
-    title: 'Ubicar bebederos fuera de la quebrada',
-    description: 'Mantener un punto de agua para el ganado separado de la fuente.',
+    title: message('m769dfdac44b5'),
+    description: message('m7ef1191dac3d'),
     status: 'done',
-    benefit: 'Evitar el acceso directo del ganado al agua',
+    benefit: message('mc23d82fd0c5b'),
     provenance,
   },
-];
-
-export const indicators: EnvironmentalIndicator[] = [
+]);
+export const indicators: EnvironmentalIndicator[] = localizedResource(() => [
   {
     id: 'demo-indicator-rain',
-    title: 'Lluvia de la zona',
+    title: message('m879d349968e9'),
     value: 'Por conectar',
-    description: 'La lluvia ayuda a interpretar el registro de la naciente.',
-    provider: 'NASA POWER',
+    description: message('m6739d190925c'),
+    provider: message('mf54c4313c0e8'),
     provenance,
   },
   {
     id: 'demo-indicator-green',
-    title: 'Estado de la vegetación',
+    title: message('m45a30081b7a6'),
     value: 'Por conectar',
-    description: 'El verdor es una señal del paisaje; necesita interpretación local.',
-    provider: 'NASA MODIS',
+    description: message('m19876f9291b4'),
+    provider: message('m4e504bd5a9c5'),
     provenance,
   },
   {
     id: 'demo-indicator-climate',
-    title: 'Escenarios de clima',
+    title: message('m844dfce70e4d'),
     value: 'Por conectar',
-    description: 'Comparar distintos escenarios ayudará a planificar las acciones.',
+    description: message('md7581ad9bf9e'),
     provider: 'NOAA',
     provenance,
   },
-];
-
-export const alerts: FieldAlert[] = [
+]);
+export const alerts: FieldAlert[] = localizedResource(() => [
   {
     id: 'demo-alert-flow',
     watershedId: watershed.id,
-    title: 'Ejemplo: el caudal va bajando',
-    description:
-      'En la serie ficticia, las últimas mediciones son menores que las primeras. Esto no es una alerta vigente.',
-    nextStep: 'En una situación real, revisar las mediciones y coordinar con la ASADA.',
+    title: message('m2924152aeb94'),
+    description: message('mb161fff611ab'),
+    nextStep: message('m8dca09ed26e7'),
     provenance,
   },
-];
-
-export const incidents: FieldIncident[] = [
+]);
+export const incidents: FieldIncident[] = localizedResource(() => [
   {
     id: 'demo-incident',
     farmId: farm.id,
     sourceId: 'demo-spring',
     recordedAt: '2026-10-15',
-    title: 'Bajó el caudal',
-    note: 'Reporte ficticio para mostrar cómo se verá un evento de campo.',
+    title: message('ma22c98003c9b'),
+    note: message('m3b4232b6c50e'),
     provenance,
   },
-];
+]);

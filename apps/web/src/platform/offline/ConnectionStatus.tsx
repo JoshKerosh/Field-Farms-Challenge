@@ -1,7 +1,7 @@
-import { useSyncExternalStore } from 'react';
 import { WifiOff } from 'lucide-react';
-import { copy } from '../../i18n';
-
+import { useSyncExternalStore } from 'react';
+import { useMessageLanguage } from '../../i18n/messages';
+import { useI18n } from '../../i18n/use-i18n';
 function subscribe(callback: () => void) {
   window.addEventListener('online', callback);
   window.addEventListener('offline', callback);
@@ -10,8 +10,9 @@ function subscribe(callback: () => void) {
     window.removeEventListener('offline', callback);
   };
 }
-
 export function ConnectionStatus() {
+  useMessageLanguage();
+  const { copy: c } = useI18n();
   const online = useSyncExternalStore(
     subscribe,
     () => navigator.onLine,
@@ -20,7 +21,7 @@ export function ConnectionStatus() {
   return (
     <span className="connection-status" role="status">
       {!online && <WifiOff size={16} aria-hidden="true" />}
-      {online ? copy.common.online : copy.common.offline}
+      {online ? c.online : c.offline}
     </span>
   );
 }

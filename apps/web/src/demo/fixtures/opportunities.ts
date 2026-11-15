@@ -1,61 +1,54 @@
 import type { SupportOpportunity } from '@field-farms/domain';
-
-export const opportunities: SupportOpportunity[] = [
+import { localizedResource, message } from '../../i18n/messages';
+export const opportunities: SupportOpportunity[] = localizedResource(() => [
   {
     id: 'fonafifo-psa',
-    title: 'Pago por Servicios Ambientales',
+    title: message('m835a7dd43c2d'),
     organization: 'FONAFIFO',
     kind: 'payment',
-    region: 'Costa Rica',
+    region: message('me26742d7cdd9'),
     availability: 'verify',
     reviewedAt: '2026-11-14',
-    description:
-      'Reconocimiento económico por servicios ambientales. Incluye modalidades de conservación y recuperación de cobertura forestal.',
-    requirements:
-      'La modalidad, los requisitos de la propiedad y la convocatoria deben verificarse con FONAFIFO.',
+    description: message('me7c4a903d09f'),
+    requirements: message('m2f37b4c76ada'),
     sourceUrl: 'https://www.fonafifo.go.cr/es/servicios/actividades-y-sub-actividades/',
   },
   {
     id: 'fonafifo-credit',
-    title: 'Crédito Forestal',
+    title: message('m793feaa29ba8'),
     organization: 'FONAFIFO',
     kind: 'credit',
-    region: 'Costa Rica',
+    region: message('me26742d7cdd9'),
     availability: 'verify',
     reviewedAt: '2026-11-14',
-    description:
-      'Financiamiento para actividades forestales y agroforestales. Es un préstamo que debe devolverse.',
-    requirements: 'La entidad revisa la actividad, los requisitos y las condiciones del crédito.',
+    description: message('md6e8dc7a2e07'),
+    requirements: message('mc985908223ef'),
     sourceUrl: 'https://www.fonafifo.go.cr/es/servicios/credito-forestal/',
   },
   {
     id: 'mag-blue-flag',
-    title: 'Bandera Azul Ecológica Agropecuaria',
-    organization: 'Programa Bandera Azul Ecológica / MAG',
+    title: message('m0e704bda785d'),
+    organization: message('mc32900f2649f'),
     kind: 'recognition',
-    region: 'Costa Rica',
+    region: message('me26742d7cdd9'),
     availability: 'verify',
     reviewedAt: '2026-11-14',
-    description:
-      'Galardón externo que reconoce prácticas sostenibles en las fincas. No es un pago ni lo emite esta aplicación.',
-    requirements:
-      'Consultar inscripción, evaluación y requisitos vigentes con el programa o la Agencia de Extensión Agropecuaria.',
+    description: message('ma070f89ba4bd'),
+    requirements: message('m4779f80d50c0'),
     sourceUrl:
       'https://mag.go.cr/953-fincas-agropecuarias-seran-reconocidas-por-sus-practicas-sostenibles/',
   },
   {
     id: 'ganbos-2026',
-    title: 'GANBOS · convocatoria de pastoreo 2026',
+    title: message('m3c5fe33d2e2d'),
     organization: 'GANBOS',
     kind: 'grant',
-    region: 'Chorotega y Brunca',
+    region: message('mc11caee51eb1'),
     availability: 'closed',
     deadline: '2026-10-31',
     reviewedAt: '2026-11-14',
-    description:
-      'Referencia de una convocatoria de apoyo a mejoras para pastoreo y reforestación. El plazo publicado ya venció.',
-    requirements:
-      'Esta convocatoria indicaba fincas con más de 100 hectáreas de pasturas en las regiones señaladas. Revisar nuevas convocatorias con la entidad.',
+    description: message('md021a5abfc12'),
+    requirements: message('mbf12998ad05d'),
     sourceUrl: 'https://www.ganbos-costarica.com/incentivospastoreo',
   },
-];
+]);

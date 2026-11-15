@@ -1,0 +1,108 @@
+.preferences-dialog {
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 24px;
+  width: min(420px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+}
+.preferences-dialog::backdrop {
+  background: rgb(0 0 0 / 60%);
+}
+.preferences-dialog h2 {
+  margin: 0 0 24px;
+}
+.preferences-dialog fieldset {
+  margin: 0 0 24px;
+  padding: 12px;
+  border: 1px solid var(--color-line);
+}
+.preferences-dialog legend {
+  padding: 0 8px;
+  font-weight: 700;
+}
+.preferences-dialog label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.preferences-dialog input {
+  accent-color: var(--color-primary);
+}
+.topbar {
+  flex-wrap: wrap;
+}
+
+.settings-trigger {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  padding: 8px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  margin-left: auto;
+}
+.settings-trigger:hover {
+  background: var(--color-water-tint);
+}
+.topbar > div:first-child {
+  min-width: 0;
+  flex: 1;
+}
+.sidebar {
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  gap: 16px;
+}
+.sidebar > * {
+  flex-shrink: 0;
+  min-width: 0;
+}
+.sidebar .brand {
+  margin-bottom: 8px;
+}
+.sidebar-foot {
+  padding-top: 16px;
+}
+@media (min-width: 761px) {
+  .sidebar .secondary-nav {
+    margin-top: 8px;
+    padding-top: 12px;
+    gap: 2px;
+  }
+  .sidebar .sidebar-foot {
+    padding: 12px 10px 0;
+  }
+  .sidebar .nav-link {
+    min-height: 44px;
+    padding: 8px 12px;
+  }
+  body .app-shell {
+    grid-template-columns: 270px minmax(0, 1fr);
+  }
+  .app-shell .sidebar {
+    padding: 24px 16px;
+  }
+}
+@media (max-width: 760px) {
+  .topbar {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  .sidebar {
+    overflow: visible;
+    scrollbar-gutter: auto;
+  }
+  .topbar .source-button {
+    max-width: 90px;
+  }
+}

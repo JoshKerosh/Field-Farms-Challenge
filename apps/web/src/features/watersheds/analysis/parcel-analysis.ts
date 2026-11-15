@@ -11,6 +11,7 @@ import type {
 } from '@field-farms/domain';
 import { isPublicRoad } from '@field-farms/domain';
 import {
+  along,
   area,
   booleanIntersects,
   booleanPointInPolygon,
@@ -20,7 +21,6 @@ import {
   length,
   lineSplit,
   lineString,
-  along,
   pointToLineDistance,
   pointToPolygonDistance,
 } from '@turf/turf';
@@ -33,15 +33,14 @@ import type {
   Polygon,
   Position,
 } from 'geojson';
+import { message } from '../../../i18n/messages';
 import type { ParcelFeature } from '../../../platform/siri/parcel';
-
 /** Streams within this distance of the parcel are listed and drawn. */
 export const STREAMS_RADIUS_M = 200;
 /** Water sources and operator offices within this distance of the parcel. */
 export const WATER_RADIUS_M = 300;
 /** A basin counts only if it covers at least this share of the parcel (avoids slivers between sources). */
 export const MIN_SHARE = 0.01;
-
 export type Area = Feature<Polygon | MultiPolygon>;
 export interface BasinProperties {
   cuenca_no: number;
@@ -80,7 +79,6 @@ export interface StreamProperties {
   gmlid?: string;
 }
 export type StreamFeature = Feature<LineString | MultiLineString, StreamProperties>;
-
 const today = () => new Date().toISOString().slice(0, 10);
 export const provenance = {
   siri: (): Provenance => ({
@@ -91,7 +89,6 @@ export const provenance = {
   ign: (): Provenance => ({ origin: 'observed', source: 'IGN 1:25 000 · SNIT', asOf: today() }),
   saga: (): Provenance => ({ origin: 'observed', source: 'SAGA · AyA', asOf: '2026-11-11' }),
 };
-
 export function toParcel(feature: ParcelFeature): CadastralParcel {
   const p = feature.properties;
   return {
@@ -104,7 +101,6 @@ export function toParcel(feature: ParcelFeature): CadastralParcel {
     provenance: provenance.siri(),
   };
 }
-
 /** Area of the parcel in each polygon, largest first, ignoring shares below MIN_SHARE. */
 export function areaShares<P>(parcel: Area, polygons: Feature<Polygon | MultiPolygon, P>[]) {
   const total = area(parcel);
@@ -120,7 +116,6 @@ export function areaShares<P>(parcel: Area, polygons: Feature<Polygon | MultiPol
     .filter((s) => s.share >= MIN_SHARE)
     .sort((a, b) => b.areaM2 - a.areaM2);
 }
-
 export function basinShares(
   parcel: Area,
   basins: Feature<Polygon | MultiPolygon, BasinProperties>[],
@@ -132,7 +127,6 @@ export function basinShares(
     percent: round1(s.share * 100),
   }));
 }
-
 export function subbasinShares(
   parcel: Area,
   subbasins: Feature<Polygon | MultiPolygon, SubbasinProperties>[],
@@ -146,28 +140,31 @@ export function subbasinShares(
     percent: round1(s.share * 100),
   }));
 }
-
 /** Parcel grown by `radiusM`, used both to search and to draw the search outline. */
 export function searchZone(parcel: Area, radiusM: number): Area {
   return buffer(parcel, radiusM, { units: 'meters' }) as Area;
 }
-
 /** Same naming as the IGN layer, cleaned: "QUEBRADA ALUMBRE" → "Quebrada Alumbre", "RIO" → "Río". */
-export function streamLabel(p: StreamProperties): { name: string | null; kind: string } {
+export function streamLabel(p: StreamProperties): {
+  name: string | null;
+  kind: string;
+} {
   const title = (s: string) => s.toLowerCase().replace(/(^|\s)\S/g, (c) => c.toUpperCase());
   const kind = p.nom_objeto
     ? p.nom_objeto.charAt(0) + p.nom_objeto.slice(1).toLowerCase()
-    : 'Cauce';
+    : message('m9456d510515b');
   return {
     name: p.nombre ? title(p.nombre).replace(/^Rio\b/, 'Río') : null,
     kind: kind.replace(/^Rio\b/, 'Río'),
   };
 }
-
 /** Streams near the parcel with their distance and length inside it, plus the parts to draw. */
 export function nearbyStreams(parcel: Area, streams: StreamFeature[], radiusM = STREAMS_RADIUS_M) {
   const zone = searchZone(parcel, radiusM);
-  const result: { stream: NearbyStream; parts: Feature<LineString>[] }[] = [];
+  const result: {
+    stream: NearbyStream;
+    parts: Feature<LineString>[];
+  }[] = [];
   streams.forEach((feature, index) => {
     const lines = toLines(feature);
     const parts = lines.flatMap((line) => clipLine(line, zone));
@@ -194,7 +191,6 @@ export function nearbyStreams(parcel: Area, streams: StreamFeature[], radiusM = 
     (a, b) => a.stream.distanceM - b.stream.distanceM || b.stream.insideM - a.stream.insideM,
   );
 }
-
 /**
  * Water sources and operator offices within `radiusM` of the parcel. When none is within the radius,
  * the nearest source among `sources` is returned instead. Proximity does not prove recharge or supply.
@@ -214,7 +210,6 @@ export function nearbyWater(
   const nearestOutsideRadius = !within.length && measured.length > 0;
   if (nearestOutsideRadius)
     within = [measured.reduce((best, s) => (s.distanceM < best.distanceM ? s : best))];
-
   const nearbySources: NearbyWaterSource[] = within.map(({ feature, distanceM }) => {
     const p = feature.properties;
     return {
@@ -230,7 +225,6 @@ export function nearbyWater(
       provenance: provenance.saga(),
     };
   });
-
   const byOperator = new Map<string, NearbyOperator>();
   for (const source of nearbySources) {
     const entry = byOperator.get(source.operatorId) ?? {
@@ -263,7 +257,6 @@ export function nearbyWater(
     };
     byOperator.set(p.ideo, entry);
   }
-
   return {
     radiusM,
     sources: nearbySources,
@@ -271,7 +264,6 @@ export function nearbyWater(
     nearestOutsideRadius,
   };
 }
-
 /**
  * A stream belongs to the selected basins when most of its points fall inside them, so streams that
  * only start on the divide and run through the neighbor basin are left out.
@@ -283,13 +275,11 @@ export function mostlyInside(stream: StreamFeature, basins: Area[]): boolean {
   ).length;
   return inside >= points.length / 2;
 }
-
 function toLines(feature: StreamFeature): Feature<LineString>[] {
   const g = feature.geometry;
   const coords: Position[][] = g.type === 'LineString' ? [g.coordinates] : g.coordinates;
   return coords.filter((c) => c.length > 1).map((c) => lineString(c));
 }
-
 /** Parts of a line inside a polygon (split at the boundary, keep parts whose middle is inside). */
 function clipLine(line: Feature<LineString>, polygon: Area): Feature<LineString>[] {
   if (!booleanIntersects(line, polygon)) return [];
@@ -300,7 +290,6 @@ function clipLine(line: Feature<LineString>, polygon: Area): Feature<LineString>
     return booleanPointInPolygon(middle, polygon);
   });
 }
-
 /** 0 when the line touches the polygon; otherwise the shortest vertex-to-edge distance either way. */
 function lineDistance(line: Feature<LineString>, polygon: Area): number {
   if (booleanIntersects(line, polygon)) return 0;
@@ -316,5 +305,4 @@ function lineDistance(line: Feature<LineString>, polygon: Area): number {
     .map((p) => pointToLineDistance(p as Position, line, { units: 'meters' }));
   return Math.max(0, Math.min(...fromLine, ...fromPolygon));
 }
-
 const round1 = (value: number) => Math.round(value * 10) / 10;

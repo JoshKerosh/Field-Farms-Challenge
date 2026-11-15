@@ -1,20 +1,16 @@
 import { RotateCcw, Send, Volume2 } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
-import { QUICK_QUESTIONS, matchQuestion } from '../../../data/engine/assistant';
-import { PageHeader } from '../../../shared/ui';
 import { useField } from '../../../app/context/FieldContext';
-
+import { QUICK_QUESTIONS, matchQuestion } from '../../../data/engine/assistant';
+import { message, useMessageLanguage } from '../../../i18n/messages';
+import { PageHeader } from '../../../shared/ui';
 export function AssistantPage() {
+  useMessageLanguage();
   const { ctx, journey, chatTurns, askAssistant, clearAssistant } = useField();
   const [questionText, setQuestionText] = useState('');
-
   if (!ctx || !journey) return null;
-
   const lastAnswer =
-    chatTurns.length > 0
-      ? chatTurns[chatTurns.length - 1].answer
-      : 'Hola. Soy tu asistente del agua. Toca una pregunta rápida o escríbela con tus palabras.';
-
+    chatTurns.length > 0 ? chatTurns[chatTurns.length - 1].answer : message('m150ec3cede4d');
   const speakLast = () => {
     try {
       const ss = window.speechSynthesis;
@@ -28,7 +24,6 @@ export function AssistantPage() {
       // Síntesis de voz no soportada en este navegador
     }
   };
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const cleaned = questionText.trim();
@@ -37,26 +32,30 @@ export function AssistantPage() {
     askAssistant(matched, cleaned);
     setQuestionText('');
   };
-
   return (
     <div className="v10-stack">
       <PageHeader
-        title="Asistente del agua"
-        intro={`Respuestas armadas con los datos reales de tu ubicación (${ctx.sub.n}, ${ctx.canton.n} · ASADA ${journey.op}).`}
+        title={message('m1d569b0ffa7c')}
+        intro={message('mf2e5c90ece62', ctx.sub.n, ctx.canton.n, journey.op)}
       />
 
-      <section className="v10-card" aria-label="Conversación con el asistente">
+      <section className="v10-card" aria-label={message('m00811cc1893b')}>
         <div className="v10-map-toolbar">
           <span className="v10-small">
-            Contexto activo: {ctx.sub.n} · fuente {journey.src} ({journey.dist})
+            {message('mffc81e6b91f1')}
+            {ctx.sub.n}
+            {message('m893da92781ec')}
+            {journey.src} ({journey.dist})
           </span>
           <div className="v10-pill-row">
             <button type="button" className="v10-pill-btn" onClick={speakLast}>
-              <Volume2 size={16} aria-hidden="true" /> Escuchar última respuesta
+              <Volume2 size={16} aria-hidden="true" />
+              {message('m6860ca9527d4')}
             </button>
             {chatTurns.length > 0 && (
               <button type="button" className="v10-pill-btn" onClick={clearAssistant}>
-                <RotateCcw size={16} aria-hidden="true" /> Limpiar chat
+                <RotateCcw size={16} aria-hidden="true" />
+                {message('mb64ce189ccd3')}
               </button>
             )}
           </div>
@@ -67,9 +66,7 @@ export function AssistantPage() {
             className="v10-alert-box v10-alert-box--info"
             style={{ maxWidth: '85%', justifySelf: 'start' }}
           >
-            <span>
-              Hola 👋 Soy tu asistente del agua. Toca una pregunta rápida abajo o escríbela con tus palabras.
-            </span>
+            <span>{message('mb33e2fe5ed32')}</span>
           </div>
 
           {chatTurns.map((turn, idx) => (
@@ -80,8 +77,8 @@ export function AssistantPage() {
                   justifySelf: 'end',
                   background: '#17617C',
                   color: '#FFFFFF',
-                  padding: '12px 16px',
-                  borderRadius: '16px 16px 4px 16px',
+                  padding: message('m1319878ebef5'),
+                  borderRadius: message('m1a522394d761'),
                 }}
               >
                 {turn.question}
@@ -91,10 +88,10 @@ export function AssistantPage() {
                   maxWidth: '86%',
                   justifySelf: 'start',
                   background: '#FFFFFF',
-                  border: '1px solid var(--color-line)',
+                  border: message('m7db38a325a30'),
                   color: '#16231C',
-                  padding: '12px 16px',
-                  borderRadius: '16px 16px 16px 4px',
+                  padding: message('m1319878ebef5'),
+                  borderRadius: message('m003464387f9f'),
                 }}
               >
                 {turn.answer}
@@ -103,7 +100,7 @@ export function AssistantPage() {
           ))}
         </div>
 
-        <div className="v10-pill-row" role="group" aria-label="Preguntas frecuentes">
+        <div className="v10-pill-row" role="group" aria-label={message('ma3f351ce0580')}>
           {QUICK_QUESTIONS.map((q) => (
             <button
               key={q.id}
@@ -118,24 +115,25 @@ export function AssistantPage() {
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           <label htmlFor="assistant-input" className="small-label" style={{ width: '100%' }}>
-            Escribe tu pregunta
+            {message('mc44b0d19338b')}
           </label>
           <input
             id="assistant-input"
             type="text"
             value={questionText}
             onChange={(e) => setQuestionText(e.target.value)}
-            placeholder="Ej. ¿Dónde siembro árboles? o ¿Mi finca se inunda?"
+            placeholder={message('me1cf1b250f0d')}
             style={{
-              flex: '1 1 260px',
+              flex: message('m912c40a14b30'),
               minHeight: 44,
-              padding: '10px 14px',
+              padding: message('m8193b8b5eb6b'),
               borderRadius: 'var(--radius-sm)',
-              border: '1px solid #9AB0A2',
+              border: message('m030dde4fff3d'),
             }}
           />
           <button type="submit" className="v10-pill-btn v10-pill-btn--primary">
-            <Send size={16} aria-hidden="true" /> Preguntar
+            <Send size={16} aria-hidden="true" />
+            {message('m8eec3555dd18')}
           </button>
         </form>
       </section>

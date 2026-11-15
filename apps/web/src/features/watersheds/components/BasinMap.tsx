@@ -13,19 +13,17 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from 'react';
 import { copy } from '../../../i18n';
+import { message, useMessageLanguage } from '../../../i18n/messages';
 import type { BasinProperties } from '../analysis/parcel-analysis';
 import type { Bounds } from '../data/basin-explorer.repository';
 import { loadMapIcons, type MapIconId } from './map-icons';
-
 setWorkerUrl(workerUrl);
-
 const CR_BOUNDS: LngLatBoundsLike = [
   [-86.0, 8.0],
   [-82.5, 11.25],
 ];
 /** From this zoom on, basin fills almost disappear so the imagery and the parcel stay readable. */
 const FADE_ZOOM = 15;
-
 /** Everything drawn on top of the basins. Each collection replaces its source when it changes. */
 export interface MapScene {
   basemap: 'satellite' | 'streets';
@@ -57,17 +55,14 @@ const SCENE_SOURCES: SceneSource[] = [
   'accuracy',
 ];
 const EMPTY: FeatureCollection = { type: 'FeatureCollection', features: [] };
-
 export interface MapView {
   bounds: Bounds;
   zoom: number;
 }
-
 export interface BasinMapHandle {
   fitBounds(bounds: Bounds, maxZoom: number): void;
   panTo(lng: number, lat: number): void;
 }
-
 export default function BasinMap({
   basins,
   scene,
@@ -82,6 +77,7 @@ export default function BasinMap({
   onView: (view: MapView) => void;
   ref: Ref<BasinMapHandle>;
 }) {
+  useMessageLanguage();
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -89,7 +85,6 @@ export default function BasinMap({
   const pendingFit = useRef<((map: Map) => void) | null>(null);
   const callbacks = useRef({ onPick, onView });
   callbacks.current = { onPick, onView };
-
   useImperativeHandle(ref, () => ({
     fitBounds: ([w, s, e, n], maxZoom) => {
       const fit = (map: Map) =>
@@ -106,7 +101,6 @@ export default function BasinMap({
     },
     panTo: (lng, lat) => mapRef.current?.panTo([lng, lat]),
   }));
-
   useEffect(() => {
     if (!container.current) return;
     let map: Map;
@@ -148,7 +142,6 @@ export default function BasinMap({
         });
     });
     map.on('click', (event) => callbacks.current.onPick?.(event.lngLat.lng, event.lngLat.lat));
-
     let frame = 0;
     const emitView = () => {
       cancelAnimationFrame(frame);
@@ -162,7 +155,6 @@ export default function BasinMap({
     };
     map.on('move', emitView);
     map.on('load', emitView);
-
     const popup = new Popup({
       closeButton: false,
       closeOnClick: false,
@@ -184,7 +176,6 @@ export default function BasinMap({
       popup.setLngLat(event.lngLat).setDOMContent(tooltipContent(text)).addTo(map);
     });
     map.on('mouseout', () => popup.remove());
-
     return () => {
       removed = true;
       cancelAnimationFrame(frame);
@@ -192,13 +183,11 @@ export default function BasinMap({
       mapRef.current = null;
     };
   }, [basins]);
-
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !loaded) return;
     for (const id of SCENE_SOURCES) (map.getSource(id) as GeoJSONSource).setData(scene[id]);
   }, [loaded, ...SCENE_SOURCES.map((id) => scene[id])]);
-
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !loaded) return;
@@ -213,7 +202,6 @@ export default function BasinMap({
       scene.basemap === 'streets' ? 'visible' : 'none',
     );
   }, [loaded, scene.basemap]);
-
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !loaded) return;
@@ -241,7 +229,6 @@ export default function BasinMap({
       opacity * 0.15,
     ]);
   }, [loaded, scene.basinsShown, scene.selectedBasins]);
-
   if (unavailable) return <p role="status">{copy.watershed.mapUnavailable}</p>;
   return (
     <div
@@ -252,7 +239,6 @@ export default function BasinMap({
     />
   );
 }
-
 function baseStyle() {
   return {
     version: 8 as const,
@@ -264,14 +250,14 @@ function baseStyle() {
         ],
         tileSize: 256,
         maxzoom: 19,
-        attribution: 'Imágenes © Esri, Maxar, Earthstar Geographics',
+        attribution: message('mde365d585419'),
       },
       streets: {
         type: 'raster' as const,
         tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
         tileSize: 256,
         maxzoom: 19,
-        attribution: '© OpenStreetMap',
+        attribution: message('m130a00dae485'),
       },
     },
     layers: [
@@ -287,11 +273,9 @@ function baseStyle() {
     ],
   };
 }
-
 function addOverlayLayers(map: Map, basins: FeatureCollection) {
   map.addSource('basins', { type: 'geojson', data: basins });
   for (const id of SCENE_SOURCES) map.addSource(id, { type: 'geojson', data: EMPTY });
-
   map.addLayer({
     id: 'basins-fill',
     type: 'fill',
@@ -416,9 +400,7 @@ function addOverlayLayers(map: Map, basins: FeatureCollection) {
     },
   });
 }
-
 const iconName = (id: MapIconId) => `icon-${id}`;
-
 /** Tooltip text comes from external data, so it is set as text, never as HTML. */
 function tooltipContent(text: string): HTMLElement {
   const [title, ...lines] = text.split('\n');
