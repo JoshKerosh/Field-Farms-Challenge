@@ -26,46 +26,12 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/guide" replace /> },
       { path: 'guide', element: <GuidePage /> },
-      { path: 'farm', loader: () => repositories.farms.getFarm(), element: <FarmPage /> },
-      {
-        path: 'watershed',
-        loader: async () => {
-          const [watershed, farm, sources, mapData, organizations] = await Promise.all([
-            repositories.watersheds.getWatershed(),
-            repositories.farms.getFarm(),
-            repositories.water.listSources(),
-            repositories.watersheds.getMapData(),
-            repositories.organizations.listOrganizations(),
-          ]);
-          return { watershed, farm, sources, mapData, organizations };
-        },
-        element: <WatershedPage />,
-      },
-      {
-        path: 'care',
-        loader: () => repositories.restoration.listActions(),
-        element: <RestorationPage />,
-      },
-      { path: 'alerts', loader: () => repositories.alerts.listAlerts(), element: <AlertsPage /> },
-      {
-        path: 'records',
-        loader: async () => {
-          const [readings, sources, actions, incidents, organizations] = await Promise.all([
-            repositories.water.listReadings(),
-            repositories.water.listSources(),
-            repositories.restoration.listActions(),
-            repositories.alerts.listIncidents(),
-            repositories.organizations.listOrganizations(),
-          ]);
-          return { readings, sources, actions, incidents, organizations };
-        },
-        element: <RecordsPage />,
-      },
-      {
-        path: 'environment',
-        loader: () => repositories.environment.listIndicators(),
-        element: <EnvironmentPage />,
-      },
+      { path: 'farm', element: <FarmPage /> },
+      { path: 'watershed', element: <WatershedPage /> },
+      { path: 'care', element: <RestorationPage /> },
+      { path: 'alerts', element: <AlertsPage /> },
+      { path: 'records', element: <RecordsPage /> },
+      { path: 'environment', element: <EnvironmentPage /> },
       {
         path: 'benefits',
         loader: () => repositories.benefits.listOpportunities(),

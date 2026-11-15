@@ -2,13 +2,16 @@ import { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { Check, HandCoins } from 'lucide-react';
 import { opportunityAvailability, type SupportOpportunity } from '@field-farms/domain';
+import { CONSERVATION_ACTIONS } from '../../../data/engine/farm';
 import { copy, date } from '../../../i18n';
-import { Badge, ExternalSource, PageHeader, PendingAction } from '../../../shared/ui';
+import { Badge, ExternalSource, PageHeader, PageLink } from '../../../shared/ui';
+import { useField } from '../../../app/context/FieldContext';
 
 type Filter = 'all' | 'economic' | 'recognition';
 
 export function BenefitsPage() {
   const opportunities = useLoaderData<SupportOpportunity[]>();
+  const { ctx, journey, plan, acts, recs } = useField();
   const [filter, setFilter] = useState<Filter>('all');
   const c = copy.benefits;
   const visible = opportunities.filter(
@@ -19,15 +22,33 @@ export function BenefitsPage() {
         : opportunity.kind !== 'recognition'),
   );
   const today = new Date().toISOString().slice(0, 10);
+  const doneCount = CONSERVATION_ACTIONS.filter((a) => acts[a.id] === 'hecho').length;
+  const planCount = CONSERVATION_ACTIONS.filter((a) => acts[a.id] === 'plan').length;
+
   return (
-    <>
+    <div className="v10-stack">
       <PageHeader title={c.title} intro={c.intro} />
       <section className="savings-panel">
         <div>
-          <span className="section-kicker">{c.savings}</span>
-          <h2>{c.notCalculated}</h2>
-          <p>{c.savingsText}</p>
-          <PendingAction>{c.calculate}</PendingAction>
+          <span className="section-kicker">Tu avance hacia PSA y reconocimientos</span>
+          <h2>
+            {doneCount > 0
+              ? `${doneCount} acciones activas en ${ctx?.sub.n ?? 'tu subcuenca'}`
+              : 'Empieza a documentar acciones en finca'}
+          </h2>
+          <p>
+            Tienes <strong>{doneCount}</strong> prácticas aplicadas, <strong>{planCount}</strong> en plan y{' '}
+            <strong>{recs.length}</strong> registros en este dispositivo.{' '}
+            {plan?.rip.has
+              ? `En ${ctx?.sub.n} hay ${plan.rip.haUrg} ha prioritarias de ribera cerca de ${journey?.op ?? 'tu ASADA'}.`
+              : ''}
+          </p>
+          <div className="v10-pill-row" style={{ marginTop: 12 }}>
+            <PageLink to="/care" primary>
+              Marcar acciones en finca
+            </PageLink>
+            <PageLink to="/records">Ver mis registros</PageLink>
+          </div>
         </div>
         <ul className="check-list">
           {c.inputs.map((input) => (
@@ -110,6 +131,6 @@ export function BenefitsPage() {
         {visible.length === 0 && <p>{c.empty}</p>}
         <p className="muted">{c.noCertificates}</p>
       </section>
-    </>
+    </div>
   );
 }
