@@ -1,5 +1,4 @@
-import type { Watershed, WatershedMapData } from '@field-farms/domain';
+import type { Watershed } from '@field-farms/domain';
 export interface WatershedRepository {
   getWatershed(): Promise<Watershed>;
-  getMapData(): Promise<WatershedMapData>;
 }

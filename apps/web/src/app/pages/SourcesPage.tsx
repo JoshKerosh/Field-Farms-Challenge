@@ -12,6 +12,21 @@ export function SourcesPage() {
         <p>{c.demoText}</p>
       </section>
       <section className="page-section">
+        <h2>{c.connectedTitle}</h2>
+        <ul className="item-list">
+          {c.connectedRows.map((row) => (
+            <li key={row.title}>
+              <div>
+                <h3>{row.title}</h3>
+                <p>{row.description}</p>
+                <Badge tone="green">{copy.common.connected}</Badge>
+              </div>
+              <ExternalSource href={row.url}>{copy.common.source}</ExternalSource>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section className="page-section">
         <h2>{c.catalogTitle}</h2>
         <ul className="item-list">
           {c.rows.map((row) => (

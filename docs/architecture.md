@@ -40,6 +40,17 @@ El backend será la autoridad sobre identidad, membresías, consentimiento, rest
 
 Dexie almacenará datos autorizados localmente y una outbox. La interfaz distinguirá guardado local, envío pendiente y confirmación remota. La PWA actual solo precarga código y recursos demo; no implementa ese protocolo.
 
+## Mi cuenca con capas reales
+
+El mapa de Mi cuenca usa datos reales; el resto de la demo sigue con ejemplos. Al elegir un punto:
+
+1. La cuenca y la subcuenca salen de las capas publicadas por `jobs/data-pipeline` en `public/data/geo` (subcuencas y fuentes se descargan solo para las cuencas involucradas).
+2. La parcela catastral se consulta al SIRI (WMS GetFeatureInfo) mediante `/api/parcela`, porque el SIRI no envía cabeceras CORS. La lógica está en `platform/siri/parcel.ts` y la usan la Pages Function `functions/api/parcela.ts` y un middleware de Vite. Devuelve solo la parcela que contiene el punto y siete campos, con caché HTTP de un día.
+3. Los cruces se calculan en el navegador con Turf (`features/watersheds/analysis`): parte de la finca en cada cuenca y subcuenca (se ignoran partes menores al 1 %), ríos a ≤ 200 m pedidos directo al WFS del IGN (permite CORS) y fuentes y oficinas de ASADAS a ≤ 300 m, o la fuente más cercana si no hay ninguna.
+4. El modo «Todo en las cuencas de la finca» muestra ASADAS, fuentes y ríos de esas cuencas, cada capa desde cierto zoom.
+
+La cercanía no prueba recarga ni abastecimiento; la interfaz lo indica. La capa completa del catastro y las vías del SIRI no se muestran: MapLibre necesitaría un proxy de mosaicos.
+
 ## Evolución
 
 La prioridad por tiempo es React responsive + PWA. Capacitor es una opción posterior para empaquetar la interfaz web y agregar capacidades del dispositivo; requiere adaptar y probar la experiencia para Android/iOS. React Native + Expo sigue siendo una alternativa si se necesita una interfaz nativa: compartiría tipos, reglas y backend, pero sus pantallas y navegación se construirían para esa plataforma. No se implementa ninguna de esas dos opciones móviles en esta entrega.

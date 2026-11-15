@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { demoRepositories as repositories } from '../demo/repositories';
+import { basinExplorer } from '../platform/geo/basin-explorer.adapter';
 import { FarmPage } from '../features/farms';
 import { WatershedPage } from '../features/watersheds';
 import { RestorationPage } from '../features/restoration';
@@ -30,14 +31,14 @@ export const router = createBrowserRouter([
       {
         path: 'watershed',
         loader: async () => {
-          const [watershed, farm, sources, mapData, organizations] = await Promise.all([
+          const [watershed, farm, sources, organizations] = await Promise.all([
             repositories.watersheds.getWatershed(),
             repositories.farms.getFarm(),
             repositories.water.listSources(),
-            repositories.watersheds.getMapData(),
             repositories.organizations.listOrganizations(),
           ]);
-          return { watershed, farm, sources, mapData, organizations };
+          // Real layers (PNUD, SAGA, SIRI, IGN), loaded on demand by the explorer.
+          return { watershed, farm, sources, organizations, explorer: basinExplorer };
         },
         element: <WatershedPage />,
       },

@@ -9,7 +9,6 @@ import type { BenefitsRepository } from '../../features/benefits';
 import {
   farm,
   watershed,
-  watershedMapData,
   sources,
   readings,
   actions,
@@ -25,7 +24,6 @@ export const demoRepositories = {
   farms: { getFarm: async () => structuredClone(farm) } satisfies FarmRepository,
   watersheds: {
     getWatershed: async () => structuredClone(watershed),
-    getMapData: async () => structuredClone(watershedMapData),
   } satisfies WatershedRepository,
   water: {
     listSources: async () => structuredClone(sources),

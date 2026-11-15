@@ -1,7 +1,6 @@
 import type {
   Farm,
   Watershed,
-  WatershedMapData,
   WaterSource,
   WaterReading,
   RestorationAction,
@@ -40,27 +39,6 @@ export const watershed: Watershed = {
   description:
     'Un ejemplo para explorar cómo una finca, una fuente y una ASADA pueden compartir información.',
   provenance,
-};
-
-export const watershedMapData: WatershedMapData = {
-  outline: [
-    [-85.055, 10.841],
-    [-85.012, 10.84],
-    [-84.992, 10.813],
-    [-85.004, 10.775],
-    [-85.041, 10.781],
-    [-85.06, 10.811],
-    [-85.055, 10.841],
-  ],
-  river: [
-    [-85.043, 10.845],
-    [-85.033, 10.826],
-    [-85.027, 10.815],
-    [-85.018, 10.809],
-    [-85.015, 10.799],
-    [-85.004, 10.785],
-    [-85.001, 10.771],
-  ],
 };
 
 export const organizations: Organization[] = [
