@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { elNinoAlerts, type AlertsSummary } from '../../data/engine/alerts';
+import { environmentalAlerts, type AlertsSummary } from '../../data/engine/alerts';
 import { answerQuestion, type QuestionId } from '../../data/engine/assistant';
 import {
   climateSignals,
@@ -412,9 +412,9 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     return pastureRotation(ds, ctx, demo, farm, apartos, vNow);
   }, [ds, ctx, demo, farm, apartos, satView, messageLanguage()]);
   const alerts = useMemo(() => {
-    if (!ds || !ctx || !rotation) return null;
-    return elNinoAlerts(ds, ctx, demo, rotation, siteFloodsFlag);
-  }, [ds, ctx, demo, rotation, siteFloodsFlag, messageLanguage()]);
+    if (!ds || !ctx) return null;
+    return environmentalAlerts(ds, ctx, demo);
+  }, [ds, ctx, demo, messageLanguage()]);
   const fluc = useMemo(
     () => (ds && ctx ? flucForCanton(ds, ctx.canton.n) : null),
     [ds, ctx, messageLanguage()],

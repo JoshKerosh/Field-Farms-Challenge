@@ -11,7 +11,7 @@ test('recorre las seis secciones principales con datos reales y foco accesible',
   const destinations: [string, RegExp][] = [
     ['Mi finca', /^Mi finca$/],
     ['Mi cuenca', /Subcuenca/],
-    ['Alertas', /Alertas: las dos caras de El Niño/],
+    ['Alertas', /Alertas ambientales/],
     ['Cuidar', /Cuidar el agua y los potreros/],
     ['Registros', /Registros del agua y monitoreo/],
     ['Guía', /Guía de uso/],

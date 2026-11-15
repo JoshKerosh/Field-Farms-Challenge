@@ -2,6 +2,18 @@
 
 Proyecto Python independiente de los workspaces de npm.
 
+## Comprobar fuentes de alertas
+
+La [comprobación de fuentes](SOURCE_CHECK.md) descarga muestras pequeñas de POWER
+y RONI y consulta los catálogos NASA y el WFS de la CNE. Usa solo la biblioteca
+estándar de Python; guarda resultados locales en `data/source-check/`, sin publicar
+indicadores ni descargar rásteres. Incluye resultados verificados, límites y pruebas.
+
+El [conector IMERG](IMERG.md) prepara acumulados reales de 1 y 7 días por subcuenca
+mediante OPeNDAP, con pruebas NetCDF y conservación del último resumen válido.
+La descarga autenticada requiere `EARTHDATA_TOKEN` y autorización GES DISC;
+por defecto los resultados se guardan localmente para revisión.
+
 ## Capas de cuencas y agua
 
 `python -m field_farms_data.publish.basins --datasets <carpeta>` lee `cuencas_hidrograficas.shp`, `Subcuencas_CRTM05.zip` y `Operadores y Fuentes (Ubicaciones).xlsx` (SAGA, AyA) y escribe en `apps/web/public/data/geo/`:

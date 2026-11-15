@@ -1,0 +1,60 @@
+name: Verify and prepare IMERG summaries
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '40 14 * * *'
+  pull_request:
+    paths:
+      - 'jobs/data-pipeline/**'
+      - '.github/workflows/imerg.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: imerg-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: jobs/data-pipeline/pyproject.toml
+      - run: python -m pip install -e './jobs/data-pipeline[imerg,test]'
+      - run: python -m pytest jobs/data-pipeline/tests -q
+
+  prepare:
+    if: github.event_name != 'pull_request'
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: jobs/data-pipeline/pyproject.toml
+      - run: python -m pip install -e './jobs/data-pipeline[imerg]'
+      - name: Prepare real summaries, preserving any versioned latest on failure
+        env:
+          EARTHDATA_TOKEN: ${{ secrets.EARTHDATA_TOKEN }}
+        run: python -m field_farms_data.publish.imerg --out apps/web/public/data/nasa/imerg
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: imerg-summaries-${{ github.run_id }}
+          path: apps/web/public/data/nasa/imerg/*.json
+          if-no-files-found: warn
+          retention-days: 14
+
+# Deliberately no commit, push or deployment. Artifacts require review before publication.

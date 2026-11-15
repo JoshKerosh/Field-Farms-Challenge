@@ -1,0 +1,38 @@
+.alert-evidence-table {
+  min-width: 760px;
+  overflow-wrap: normal;
+}
+
+.alert-evidence-table caption {
+  text-align: left;
+  padding-bottom: 8px;
+  font-weight: 700;
+}
+
+.alert-table-hint {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .alert-table-hint {
+    display: block;
+  }
+}
+
+.alert-evidence-table th,
+.alert-evidence-table td {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.alert-evidence-table th:first-child {
+  min-width: 180px;
+}
+
+.alert-evidence-table td:nth-child(2) {
+  white-space: nowrap;
+}
+
+.alert-evidence-table td:nth-child(4) {
+  min-width: 160px;
+}

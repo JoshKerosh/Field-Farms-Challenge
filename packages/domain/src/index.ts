@@ -17,6 +17,14 @@ export type { WaterSource, WaterReading } from './water';
 export type { RestorationAction } from './restoration';
 export type { EnvironmentalIndicator } from './environment';
 export type { FieldAlert, FieldIncident } from './alerts';
+export type {
+  EnvironmentalRisk,
+  RiskSeverity,
+  AlertDataStatus,
+  AlertEvidence,
+  AlertBlocker,
+} from './alerts';
+export { pendingRiskAssessment, validObservationDate } from './alerts';
 export type { Organization } from './organizations';
 export type { SupportOpportunity, OpportunityKind, OpportunityAvailability } from './benefits';
 export { opportunityAvailability } from './benefits';

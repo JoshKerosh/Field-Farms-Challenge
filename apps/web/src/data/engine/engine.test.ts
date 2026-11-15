@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { loadDataset } from '../real/load';
-import { elNinoAlerts } from './alerts';
+import { environmentalAlerts } from './alerts';
 import { climateSignals } from './climate';
 import { EXAMPLE_FARMS, pastureRotation, validateFarmForm } from './farm';
 import { flucForCanton } from './fluc';
@@ -52,8 +52,9 @@ describe('Motor espacial y de cálculo con datos reales v10', () => {
     expect(rot.months).toHaveLength(6);
     expect(Number(rot.rest)).toBeGreaterThan(0);
 
-    const alerts = elNinoAlerts(ds, ctx, null, rot, ctx.flood);
-    expect(alerts.list).toHaveLength(3);
+    const alerts = environmentalAlerts(ds, ctx, null);
+    expect(alerts.list).toHaveLength(4);
+    expect(alerts.list.every((alert) => alert.severity === 'indeterminate')).toBe(true);
 
     const fluc = flucForCanton(ds, ctx.canton.n);
     expect(fluc.has).toBe(true);

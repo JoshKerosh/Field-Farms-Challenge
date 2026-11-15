@@ -1,4 +1,3 @@
-import { messageLanguage as displayLanguage } from '../../i18n/messages';
 import { localizedResource, message } from '../../i18n/messages';
 import type { Dataset } from '../real/types';
 import type { AlertsSummary } from './alerts';
@@ -80,23 +79,22 @@ export interface AssistantContext {
   zoneAbove: ReturnType<typeof zoneFromAbove>;
 }
 export function answerQuestion(id: QuestionId, info: AssistantContext): string {
-  const { ds, ctx, siteFloodsFlag, journey, alerts, fluc, plan, zoneAbove } = info;
-  const steep = /^(VI|VII|VIII|AP)/.test(ctx.clsRaw);
-  const oni = ds.climate.NASA.ONI.actual;
+  const { journey, alerts, fluc, plan, zoneAbove } = info;
   switch (id) {
     case 'inunda':
-      return siteFloodsFlag
-        ? message('mc145f3125db7', ctx.caribe ? message('mefb120735e53') : '')
-        : message(
-            'm3575a3a655f6',
-            ctx.caribe ? message('m73b74956fdaf') : message('mec333e52873e'),
-          );
+    case 'desliz': {
+      const card = alerts.list.find(
+        (alert) => alert.id === (id === 'inunda' ? 'inundacion' : 'deslizamiento'),
+      )!;
+      return message('alerts.assistantAnswer', card.title, card.levelLabel, alerts.face, card.why);
+    }
     case 'nino':
       return message(
-        'm1eab83789f19',
-        oni.toFixed(1).replace('.', displayLanguage() === 'en' ? '.' : ','),
+        'alerts.assistantAnswer',
+        alerts.top.title,
+        alerts.top.levelLabel,
         alerts.face,
-        alerts.top.recs[0],
+        alerts.top.why,
       );
     case 'agua':
       return message(
@@ -107,8 +105,6 @@ export function answerQuestion(id: QuestionId, info: AssistantContext): string {
         journey.conn,
         journey.pct,
       );
-    case 'desliz':
-      return steep ? message('m07b2d3d78144') : message('m58bd08667108');
     case 'caudal':
       return message('mf0b7a3aefddc');
     case 'aliados':
