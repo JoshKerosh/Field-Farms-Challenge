@@ -1,4 +1,4 @@
-"""Escritura de archivos en `apps/web/public/data/` y actualización del catálogo `fuentes.json`."""
+"""Writing of files in `apps/web/public/data/` and updating of the `fuentes.json` catalog."""
 
 import json
 from datetime import date, datetime, timezone
@@ -32,7 +32,7 @@ def escribir_json(path: Path, contenido: dict, compacto: bool = False) -> int:
 
 def actualizar_fuente(data_dir: Path, fuente_id: str, *, fecha_dato: date | None = None,
                       error: str | None = None) -> None:
-    """Marca la fuente como `ok` con su fecha, o como `falla` conservando el último dato bueno (D-03)."""
+    """Marks the source as `ok` with its date, or as `falla` (failure) keeping the last good data (D-03)."""
     path = data_dir / CATALOGO
     catalogo = json.loads(path.read_text(encoding='utf-8'))
     fuente = next((f for f in catalogo['fuentes'] if f['id'] == fuente_id), None)

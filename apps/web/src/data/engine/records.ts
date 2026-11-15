@@ -5,20 +5,20 @@ import { comma, MONTHS } from './format';
 import type { PlaceContext } from './geo';
 import type { WatershedPlan } from './watershed';
 export type RecordType = 'caudal' | 'accion' | 'evento' | 'lluvia';
-/** Registro de campo guardado en el dispositivo del usuario. */
+/** Field record stored on the user's device. */
 export interface FieldRecord {
   id: string;
   t: RecordType;
-  /** L/s (caudal), mm (lluvia) o texto (acción/evento). */
+  /** L/s (flow), mm (rainfall) or text (action/event). */
   v: number | string;
-  /** Índice de la fuente en `sources.fuentes`. */
+  /** Index of the source in `sources.fuentes`. */
   src?: number;
   note?: string;
-  /** Fecha AAAA-MM-DD. */
+  /** Date YYYY-MM-DD. */
   d: string;
-  /** El usuario decide si lo comparte con su ASADA. */
+  /** The user decides whether to share it with their ASADA. */
   share: boolean;
-  /** Registro de ejemplo (SIMULADO). */
+  /** Example record (SIMULATED). */
   demo?: boolean;
 }
 export const EVENT_TYPES = localizedResource(
@@ -52,7 +52,7 @@ export const VIEW_ROLES: {
   { id: 'asada', n: message('m2bc63ae305f2') },
   { id: 'inst', n: message('mdf9b84ddd8d1') },
 ]);
-/** Caudal con balde y cronómetro: litros ÷ segundos. */
+/** Flow with bucket and stopwatch: liters ÷ seconds. */
 export function flowFromBucket(liters: string, seconds: string) {
   const l = Number(String(liters || '20').replace(',', '.'));
   const s = Number(String(seconds || '').replace(',', '.'));
@@ -66,7 +66,7 @@ export function flowFromBucket(liters: string, seconds: string) {
       : '—',
   };
 }
-/** Registros de ejemplo (SIMULADOS) para ver cómo funciona la pantalla. */
+/** Example records (SIMULATED) to show how the screen works. */
 export function demoRecords(srcIndex: number): FieldRecord[] {
   const V = [14, 20, 11, 9, 8];
   const rows: FieldRecord[] = V.map((q, k) => ({
@@ -116,7 +116,7 @@ export function recordDateText(r: FieldRecord): string {
     r.demo ? message('m5c9454a9a87f') : '',
   );
 }
-/** Gráfico: barras de lluvia jun–nov 2026 (NASA POWER) y línea del caudal registrado. */
+/** Chart: Jun–Nov 2026 rainfall bars (NASA POWER) and a line of the recorded flow. */
 export function flowChart(ds: Dataset, ctx: PlaceContext, records: FieldRecord[]) {
   const TC = ds.climate.NASA[ctx.reg].clim;
   const y26 = ds.climate.NASA[ctx.reg].y2026.monthAnom;
@@ -162,7 +162,7 @@ export function flowChart(ds: Dataset, ctx: PlaceContext, records: FieldRecord[]
   }
   return { has: cRecs.length >= 2, bars, qLine, text };
 }
-/** Regresión lineal sobre los últimos 5 caudales: ¿qué caudal habría en 2 meses? */
+/** Linear regression over the last 5 flows: what would the flow be in 2 months? */
 export function flowProjection(ds: Dataset, records: FieldRecord[]) {
   const qs = records
     .filter((r) => r.t === 'caudal')
@@ -209,7 +209,7 @@ export function flowProjection(ds: Dataset, records: FieldRecord[]) {
         )
       : message('m619ba60f2970'),
     bg: down ? '#8E2A21' : '#2E7A43',
-    /** Texto para compartir; la app prepara el mensaje, no lo envía. */
+    /** Text to share; the app prepares the message, it does not send it. */
     whatsapp: `https://wa.me/?text=${encodeURIComponent(message('ma7228e7e3ec0', name, comma(last.v), drop, pm, pv.toFixed(1).replace('.', displayLanguage() === 'en' ? '.' : ',')))}`,
   };
 }
@@ -228,7 +228,7 @@ export function recordsCsv(ds: Dataset, records: FieldRecord[]): string {
     .map((row) => row.map((x) => `"${String(x).replace(/"/g, '""')}"`).join(','))
     .join('\n');
 }
-/** Tablero compartido de la ASADA (finqueros + ASADA). Fincas cercanas: SIMULADAS. */
+/** Shared ASADA dashboard (farmers + ASADA). Nearby farms: SIMULATED. */
 export function sharedBoard(
   ds: Dataset,
   ctx: PlaceContext,
@@ -258,7 +258,7 @@ export function sharedBoard(
     actions: records.filter((r) => r.t === 'accion' && r.share).length,
   };
 }
-/** Vista institucional (CNE, municipalidad, FLUC): caídas de caudal SIMULADAS hasta que las ASADAS registren las suyas. */
+/** Institutional view (CNE, municipality, FLUC): flow drops are SIMULATED until the ASADAS record their own. */
 export function institutionalView(
   ds: Dataset,
   ctx: PlaceContext,

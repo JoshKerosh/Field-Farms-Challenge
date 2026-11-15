@@ -1,4 +1,4 @@
-"""Descargas HTTP con reintentos, solo con la biblioteca estándar (sin dependencias nuevas)."""
+"""HTTP downloads with retries, using only the standard library (no new dependencies)."""
 
 import json
 import time
@@ -9,7 +9,7 @@ USER_AGENT = 'field-farms-data/0.1 (NASA Space Apps 2026)'
 
 
 def get_text(url: str, *, retries: int = 3, timeout: float = 60) -> str:
-    """Devuelve el cuerpo de `url`. Reintenta errores de red y 5xx; un 4xx falla de inmediato."""
+    """Returns the body of `url`. Retries network errors and 5xx; a 4xx fails right away."""
     last: Exception | None = None
     for attempt in range(retries):
         try:

@@ -1,6 +1,6 @@
 ---
 name: Field Farms Challenge
-description: Identidad heredada del prototipo v10 para una herramienta de campo accesible.
+description: Identity inherited from the v10 prototype for an accessible field tool.
 colors:
   primary: '#17617C'
   primary-deep: '#10485D'
@@ -51,40 +51,40 @@ components:
 
 ## Overview
 
-Se conserva la identidad del HTML v10: azul agua, verde bosque, fondos claros y controles legibles. Es una interfaz para operar en el campo: la tarea, el contexto y la procedencia de los datos preceden a la decoración.
+The identity of the v10 HTML is kept: water blue, forest green, light backgrounds and readable controls. It is an interface for working in the field: the task, the context and the data source come before decoration.
 
 ## Colors
 
-El azul identifica navegación y acciones principales. El verde indica cuidado y acciones completadas. El ámbar identifica la demostración y las funciones pendientes, siempre acompañado de texto. Los valores normativos están en el frontmatter y en `apps/web/src/styles/tokens.css`.
+Blue marks navigation and primary actions. Green marks care and completed actions. Amber marks the demo and pending features, always paired with text. The normative values are in the frontmatter and in `apps/web/src/styles/tokens.css`.
 
 ## Typography
 
-Bricolage Grotesque en títulos y marca; Nunito Sans en interfaz y texto. Se reutilizan las fuentes empaquetadas en el prototipo, con su licencia. La escala es fija en rem y respeta el aumento de texto. Las cantidades usan cifras tabulares.
+Bricolage Grotesque for headings and brand; Nunito Sans for interface and body text. The fonts bundled in the prototype are reused, with their license. The scale is fixed in rem and respects text zoom. Quantities use tabular figures.
 
 ## Layout
 
-En el teléfono: una columna, encabezado compacto, contenido y navegación inferior con las seis secciones del prototipo. En escritorio: navegación lateral y contenido con ancho de lectura limitado. El lienzo fijo de 390 × 844 del prototipo se reemplaza por un flujo adaptable, manteniendo su lenguaje visual.
+On the phone: one column, compact header, content and bottom navigation with the prototype's six sections. On desktop: side navigation and content with a limited reading width. The prototype's fixed 390 × 844 canvas is replaced by an adaptive flow that keeps its visual language.
 
 ## Elevation & Depth
 
-La jerarquía se expresa mediante superficies y espaciado. Las secciones normales utilizan divisores; los paneles destacados usan fondo tonal. No se necesitan sombras decorativas.
+Hierarchy is expressed through surfaces and spacing. Regular sections use dividers; highlighted panels use a tonal background. Decorative shadows are not needed.
 
 ## Shapes
 
-Controles de esquinas suaves y áreas táctiles amplias. Los paneles utilizan el radio grande; los estados pequeños pueden usar etiquetas compactas. No se anidan paneles para cada fragmento de información.
+Softly rounded controls and large touch areas. Panels use the large radius; small states can use compact tags. Panels are not nested for every piece of information.
 
 ## Components
 
-- Botones y enlaces de acción: altura mínima de 44 px, estados hover, foco, activo y deshabilitado.
-- Navegación: icono y texto, sección activa semántica, distribución adaptable.
-- Estados: demostración, pendiente, vacío y sin conexión con texto explícito.
-- Mapas y gráficos: resumen textual equivalente; los ejemplos geográficos no representan conexiones hidrológicas comprobadas.
-- Cambios de ruta: título actualizado y foco en el encabezado principal.
+- Buttons and action links: minimum height of 44 px, hover, focus, active and disabled states.
+- Navigation: icon and text, semantic active section, adaptive layout.
+- States: demo, pending, empty and offline, with explicit text.
+- Maps and charts: equivalent text summary; geographic examples do not represent proven hydrological connections.
+- Route changes: updated title and focus on the main heading.
 
 ## Do's and Don'ts
 
-- Do conservar el contexto de finca y cuenca entre secciones.
-- Do mostrar fuente y fecha junto a la información externa.
-- Do respetar movimiento reducido y ampliación de texto.
-- Don't presentar ejemplos, predicciones o ahorros como hechos observados.
-- Don't utilizar únicamente color, un mapa o un icono para transmitir información.
+- Do keep the farm and watershed context across sections.
+- Do show source and date next to external information.
+- Do respect reduced motion and text zoom.
+- Don't present examples, predictions or savings as observed facts.
+- Don't rely only on color, a map or an icon to convey information.

@@ -578,7 +578,7 @@ p + p {
   width: 44px;
   height: 44px;
 }
-/* Explorador de cuencas con datos reales (Mi cuenca). */
+/* Watershed explorer with real data (My watershed). */
 .basin-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -1561,7 +1561,7 @@ summary {
   }
 }
 
-/* ---- Extensiones reales v10 (mapas SVG, KPIs, gráficas y formularios) ---- */
+/* ---- Real v10 extensions (SVG maps, KPIs, charts and forms) ---- */
 .demo-banner--active {
   background: #f8e1de;
   color: #6b1d16;

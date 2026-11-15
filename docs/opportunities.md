@@ -1,24 +1,24 @@
-# Investigación inicial de beneficios y apoyos
+# Initial research on benefits and support programs
 
-Revisión de fuentes primarias: **14 de noviembre de 2026**, Costa Rica. No determina elegibilidad ni confirma fondos disponibles.
+Review of primary sources: **November 14, 2026**, Costa Rica. It does not determine eligibility or confirm available funds.
 
-| Referencia                                                                                                                               | Tipo                     | Alcance                                                                            | Estado                                                                       |
-| ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| [PSA / FONAFIFO](https://www.fonafifo.go.cr/es/servicios/actividades-y-sub-actividades/)                                                 | Reconocimiento económico | Protección, regeneración, reforestación y sistemas agroforestales según modalidad. | Consultar convocatoria y requisitos.                                         |
-| [Crédito Forestal / FONAFIFO](https://www.fonafifo.go.cr/es/servicios/credito-forestal/)                                                 | Préstamo                 | Actividades forestales y agroforestales evaluadas por la entidad.                  | Consultar condiciones; debe devolverse.                                      |
-| [Bandera Azul Ecológica Agropecuaria / MAG](https://mag.go.cr/953-fincas-agropecuarias-seran-reconocidas-por-sus-practicas-sostenibles/) | Galardón externo         | Reconocimiento de prácticas sostenibles.                                           | Consultar inscripción y evaluación.                                          |
-| [GANBOS: pastoreo 2026](https://www.ganbos-costarica.com/incentivospastoreo)                                                             | Apoyo económico          | Convocatoria consultada: Chorotega y Brunca, más de 100 ha de pasturas.            | Plazo vencido: 31 de octubre de 2026. No implica cierre de todo el proyecto. |
+| Reference                                                                                                                              | Type                 | Scope                                                                          | Status                                                                     |
+| -------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| [PSA / FONAFIFO](https://www.fonafifo.go.cr/es/servicios/actividades-y-sub-actividades/)                                               | Economic recognition | Protection, regeneration, reforestation and agroforestry systems, by modality. | Check the call and requirements.                                           |
+| [Forestry Credit / FONAFIFO](https://www.fonafifo.go.cr/es/servicios/credito-forestal/)                                                | Loan                 | Forestry and agroforestry activities assessed by the entity.                   | Check the conditions; it must be repaid.                                   |
+| [Agricultural Ecological Blue Flag / MAG](https://mag.go.cr/953-fincas-agropecuarias-seran-reconocidas-por-sus-practicas-sostenibles/) | External award       | Recognition of sustainable practices.                                          | Check registration and assessment.                                         |
+| [GANBOS: grazing 2026](https://www.ganbos-costarica.com/incentivospastoreo)                                                            | Economic support     | Call reviewed: Chorotega and Brunca, more than 100 ha of pasture.              | Deadline passed: October 31, 2026. Does not mean the whole project closed. |
 
-GANBOS no es GANAR. El [proyecto GANAR administrado por PNUD en Arenal–Huetar Norte](https://www.undp.org/es/costa-rica/comunicados-de-prensa/costa-rica-apuesta-por-transformar-la-ganaderia-en-una-solucion-climatica-global) es otra referencia para profundizar con el cliente; su publicación no demuestra una convocatoria individual abierta.
+GANBOS is not GANAR. The [GANAR project run by UNDP in Arenal–Huetar Norte](https://www.undp.org/es/costa-rica/comunicados-de-prensa/costa-rica-apuesta-por-transformar-la-ganaderia-en-una-solucion-climatica-global) is another reference to explore with the client; its announcement does not show an open individual call.
 
-## Mantenimiento
+## Maintenance
 
-Conservar entidad, tipo, región, requisitos resumidos, URL primaria, fecha de revisión, disponibilidad y cierre. Actualizar la ficha al verificar cambios. La existencia de un programa no prueba que acepte solicitudes. La app no emite un galardón externo.
+Keep entity, type, region, summarized requirements, primary URL, review date, availability and deadline. Update the entry when changes are verified. A program existing does not prove it accepts applications. The app does not issue an external award.
 
-El catálogo está en `apps/web/src/demo/fixtures/opportunities.ts`, separado de los datos de campo ficticios. No publica tasas ni montos promocionales fuera de contexto.
+The catalog is in `apps/web/src/demo/fixtures/opportunities.ts`, separate from the fictional field data. It does not publish rates or promotional amounts out of context.
 
-## Ahorro
+## Savings
 
-Definir con el equipo técnico costos e inversión, mantenimiento, producción, períodos comparables, unidades y metodología. Separar estimaciones y resultados observados y explicar los supuestos. Las puntuaciones del prototipo no se convierten a colones.
+Define with the technical team the costs and investment, maintenance, production, comparable periods, units and methodology. Keep estimates and observed results apart and explain the assumptions. The prototype's scores are not converted to colones.
 
-Las futuras evidencias pueden ayudar a preparar solicitudes o evaluaciones. No garantizan aprobación, pago ni certificación.
+Future evidence may help prepare applications or assessments. It does not guarantee approval, payment or certification.

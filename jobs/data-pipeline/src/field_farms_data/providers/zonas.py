@@ -1,4 +1,4 @@
-"""Seis zonas climáticas de referencia: un punto NASA por zona (los mismos del prototipo v10)."""
+"""Six reference climate zones: one NASA point per zone (the same as the v10 prototype)."""
 
 from dataclasses import dataclass
 

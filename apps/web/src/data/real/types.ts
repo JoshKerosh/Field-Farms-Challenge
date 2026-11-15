@@ -1,14 +1,14 @@
 /**
- * Tipos de los datasets reales extraídos del prototipo v10 (ver
- * scripts/extract-v10-datasets.mjs y context/FUENTES_DE_DATOS.md).
- * Las coordenadas "locales" (x, y) son unidades de 100 m en la proyección
- * del prototipo; se convierten desde lat/lon con `llToLocal`.
+ * Types of the real datasets extracted from the v10 prototype (see
+ * scripts/extract-v10-datasets.mjs and context/DATA_SOURCES.md).
+ * "Local" coordinates (x, y) are 100 m units in the prototype's
+ * projection; they are converted from lat/lon with `llToLocal`.
  */
 
-/** Polígono plano: [x0, y0, x1, y1, …]. */
+/** Flat polygon: [x0, y0, x1, y1, …]. */
 export type Ring = number[];
 
-/** Zona climática de referencia (un punto NASA POWER por zona). */
+/** Reference climate zone (one NASA POWER point per zone). */
 export type RegionCode = 'N' | 'C' | 'S' | 'M' | 'U' | 'V';
 
 export interface Cuenca {
@@ -18,28 +18,28 @@ export interface Cuenca {
 
 export interface Subcuenca {
   n: string;
-  /** Vertiente: Caribe o Pacífico. */
+  /** Slope: Caribbean or Pacific. */
   v: 'C' | 'P';
   ha: number;
   c: [number, number];
   r: Ring[];
-  /** Fuentes de ASADAS dentro de la subcuenca. */
+  /** ASADA sources inside the subwatershed. */
   nf: number;
-  /** Conexiones de agua servidas por esas fuentes. */
+  /** Water connections served by those sources. */
   serv: number;
   cu?: number;
 }
 
-/** [cuenca, subcuenca, capacidad de uso, inundable (0|1), cantón, zona]. */
+/** [watershed, subwatershed, land use capacity, flood-prone (0|1), canton, zone]. */
 export type GridCell = [number, number, string, 0 | 1, number, RegionCode];
 
 export interface Canton {
   n: string;
-  /** Anomalía de lluvia (%) [octubre 2026, enero–octubre 2026]. */
+  /** Rainfall anomaly (%) [October 2026, January–October 2026]. */
   a: [number | null, number | null] | null;
 }
 
-/** [distrito ('' = cantón completo), cantón, provincia, x, y]. */
+/** [district ('' = whole canton), canton, province, x, y]. */
 export type PlaceEntry = [string, string, string, number, number];
 
 export interface Territory {
@@ -56,9 +56,9 @@ export interface Territory {
   grid: Record<string, GridCell>;
 }
 
-/** [x, y, operador, esNaciente (0|1), nombre]. */
+/** [x, y, operator, isSpring (0|1), name]. */
 export type Fuente = [number, number, number, 0 | 1, string];
-/** [nombre del ente operador, conexiones]. */
+/** [operator name, connections]. */
 export type Operator = [string, number];
 
 export interface Sources {
@@ -100,9 +100,9 @@ export type NasaData = Record<RegionCode, RegionClimate> & {
 };
 
 export interface RegionModis {
-  /** Verdor (NDVI) 2026 por día del año (clave '001'…'289'). */
+  /** 2026 greenness (NDVI) by day of year (key '001'…'289'). */
   y26: Record<string, number>;
-  /** Promedio histórico 2012–2025 para las tres últimas fechas. */
+  /** 2012–2025 historical average for the last three dates. */
   clim: Record<string, { m: number; sd: number; n: number }>;
 }
 
@@ -112,10 +112,10 @@ export interface Climate {
 }
 
 export interface FlucEntry {
-  /** Tipo en texto: Federación, Liga, Unión, Confederación. */
+  /** Type as text: Federación, Liga, Unión, Confederación. */
   k: string;
   n: string;
-  /** Región AyA o 'Nacional'. */
+  /** AyA region or 'Nacional'. */
   r: string;
   a: number;
   u: string;
@@ -126,26 +126,26 @@ export interface FlucEntry {
 
 export interface FlucData {
   f: FlucEntry[];
-  /** Cantón normalizado → región AyA. */
+  /** Normalized canton → AyA region. */
   c: Record<string, string>;
 }
 
-/** [x, y, tipo ('c' comunidad | 'i' infraestructura), lugar, distrito, nota]. */
+/** [x, y, type ('c' community | 'i' infrastructure), place, district, note]. */
 export type HistoryEntry = [number, number, 'c' | 'i', string, string, string];
 
-/** Celda de 1,5 km decodificada de la capa IGN 1:5 000 + MODIS 1 km. */
+/** 1.5 km cell decoded from the IGN 1:5 000 layer + MODIS 1 km. */
 export interface RipCell {
   key: string;
-  /** Verdor NDVI mensual (nov 2025–oct 2026), null = sin dato (agua/nube). */
+  /** Monthly NDVI greenness (Nov 2025–Oct 2026), null = no data (water/cloud). */
   ndvi: number | null;
-  /** 0 sin río · 1 con bosque · 2 a medias · 3 sin bosque. */
+  /** 0 no river · 1 with forest · 2 partial · 3 without forest. */
   bank: 0 | 1 | 2 | 3;
-  /** Cambio de NDVI frente a 2016–2020. */
+  /** NDVI change against 2016–2020. */
   d: number;
-  /** Fracción de bosque / potrero en la orilla (0–1) o null. */
+  /** Forest / pasture fraction on the riverbank (0–1) or null. */
   rF: number | null;
   rP: number | null;
-  /** Kilómetros de río en la celda. */
+  /** Kilometers of river in the cell. */
   km: number;
 }
 
@@ -155,6 +155,6 @@ export interface Dataset {
   climate: Climate;
   fluc: FlucData;
   history: HistoryEntry[];
-  /** Cuadrícula riparia: clave "ci,cj" (celdas de 3 km) → 8 caracteres codificados. */
+  /** Riparian grid: key "ci,cj" (3 km cells) → 8 encoded characters. */
   rip: Record<string, string>;
 }

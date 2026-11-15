@@ -1,1 +1,1 @@
-"""Limpieza y cálculos reproducibles, independientes de los proveedores."""
+"""Reproducible cleaning and calculations, independent of the providers."""

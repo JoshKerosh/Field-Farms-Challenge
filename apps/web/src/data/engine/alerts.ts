@@ -45,7 +45,7 @@ const LEVELS: [string, string, string][] = localizedResource(() => [
   [message('md357175cfe89'), '#FDF1D6', '#6B4505'],
   [message('m42719229fd62'), '#F8E1DE', '#8E2A21'],
 ]);
-/** Conexiones de la cuenca completa y reportes reales de sequía 2014–2015 (HIST). */
+/** Connections of the whole watershed and real 2014–2015 drought reports (HIST). */
 export function droughtHistory(ds: Dataset, ctx: PlaceContext): DroughtHistorySummary {
   const geo = getGeo(ds);
   const { byCuenca, hist } = geo.cuencaConnections();
@@ -81,7 +81,7 @@ export function droughtHistory(ds: Dataset, ctx: PlaceContext): DroughtHistorySu
       : '',
   };
 }
-/** Las dos caras de El Niño: Sequía, Lluvias e inundación y Deslizamiento. */
+/** The two faces of El Niño: Drought, Rain and flooding, and Landslide. */
 export function elNinoAlerts(
   ds: Dataset,
   ctx: PlaceContext,

@@ -1,10 +1,10 @@
 import { message, useMessageLanguage } from '../../i18n/messages';
 /*
-THESIS: La guía y las tareas de campo comparten un contexto de cuenca visible.
-OWN-WORLD: Se heredan el azul agua, verde bosque y tipografías del prototipo v10.
-STORY: Explorar la finca, conocer su entorno y revisar acciones y registros demo.
-FIRST VIEWPORT: Marca, contexto, aviso demo y una tarea principal legible.
-FORM: Extensión del prototipo aprobado: seis secciones, flujo adaptable y navegación persistente.
+THESIS: The guide and the field tasks share a visible watershed context.
+OWN-WORLD: The water blue, forest green and typefaces of the v10 prototype are inherited.
+STORY: Explore the farm, learn about its surroundings and review demo actions and records.
+FIRST VIEWPORT: Brand, context, demo notice and one readable main task.
+FORM: Extension of the approved prototype: six sections, adaptive flow and persistent navigation.
 */
 import {
   BookOpen,

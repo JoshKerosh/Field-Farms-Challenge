@@ -8,46 +8,46 @@ web
 
 ## Users
 
-Finqueros y ganaderos de Costa Rica que utilizan el teléfono, en ocasiones sin señal y con distintos niveles de alfabetización digital. ASADAS, FLUC y equipos técnicos necesitan consultar información compartida sobre la misma cuenca.
+Farmers and cattle ranchers in Costa Rica who use their phone, sometimes without signal and with different levels of digital literacy. ASADAS, FLUC and technical teams need to look up shared information about the same watershed.
 
 ## Product Purpose
 
-Relacionar el cuidado de la finca con el agua de la comunidad: conocer la cuenca, registrar observaciones y acompañar acciones de regeneración. La primera entrega es una base navegable con ejemplos identificados.
+Connect farm care with the community's water: understand the watershed, record observations and support regeneration actions. The first delivery is a navigable base with labeled examples.
 
 ## Positioning
 
-Una visión de cuenca conecta finca, fuente de agua y ASADA, combinando observaciones de campo e indicadores ambientales. Una relación hidrológica requiere información validada; la cercanía por sí sola no demuestra una conexión.
+A watershed view connects farm, water source and ASADA, combining field observations with environmental indicators. A hydrological relationship requires validated information; proximity alone does not prove a connection.
 
 ## Operating Context
 
-Equipo con JavaScript y Python, presupuesto inicial de $0 y cliente PNUD Costa Rica, proyecto GANAR. Se conserva el prototipo v10 como referencia funcional. La implementación utiliza React, TypeScript y Vite; los datos son archivos planos que publican procesos Python, sin base de datos.
+Team working in JavaScript and Python, initial budget of $0, client UNDP (PNUD) Costa Rica, GANAR project. The v10 prototype is kept as the functional reference. The implementation uses React, TypeScript and Vite; data is flat files published by Python jobs, with no database.
 
 ## Capabilities and Constraints
 
-- Primera entrega: navegación, módulos, ejemplos tipados y catálogo informativo de apoyos.
-- Secciones principales: Mi finca, Mi cuenca, Alertas, Cuidar, Registros y Guía.
-- Accesos secundarios: ambiente, asistente, beneficios y fuentes.
-- La rotación de potreros se conserva. Planes de siembra y simulaciones de vecinos quedan documentados para después.
-- La base no implementa autenticación, sincronización, ingesta NASA, solicitudes de financiamiento ni cálculos monetarios.
-- Un selector de vista demo no concede permisos reales. Los datos del ejemplo no se envían a organizaciones.
-- Español de Costa Rica inicialmente; textos centralizados para futuras traducciones.
+- First delivery: navigation, modules, typed examples and an informational catalog of support programs.
+- Main sections: My farm, My watershed, Alerts, Care, Records and Guide.
+- Secondary shortcuts: environment, assistant, benefits and sources.
+- Pasture rotation is kept. Planting plans and neighbor simulations are documented for later.
+- The base does not implement authentication, sync, NASA ingestion, funding applications or monetary calculations.
+- A demo view selector does not grant real permissions. Example data is not sent to organizations.
+- Costa Rican Spanish first; text centralized for translations.
 
 ## Brand Commitments
 
-Nombre Field Farms Challenge. Frase del prototipo: «El agua se siembra». Se hereda su identidad visual y su guía ABC; esta etapa no es un rediseño integral.
+Name Field Farms Challenge. Prototype tagline: "El agua se siembra" (water is sown). Its visual identity and ABC guide are inherited; this stage is not a full redesign.
 
 ## Evidence on Hand
 
-`references/prototype-v10.html` preserva el HTML original, sus datos y sus avisos de licencia. `CONTEXTO_PROYECTO.md` conserva las decisiones históricas. Las fuentes primarias de apoyos se registran en `docs/opportunities.md`. Los ejemplos nuevos son ficticios y se identifican en la aplicación.
+`references/prototype-v10.html` preserves the original HTML, its data and its license notices. `PROJECT_CONTEXT.md` keeps the historical decisions. Primary sources for support programs are recorded in `docs/opportunities.md`. New examples are fictional and labeled in the app.
 
 ## Product Principles
 
-- Una tarea sencilla antes de una pantalla llena de indicadores.
-- Procedencia, fecha y carácter estimado visibles.
-- El finquero decide qué compartir cuando exista la integración real.
-- Los beneficios económicos requieren costos y comparaciones verificables.
-- La app orienta hacia apoyos; las entidades externas deciden y certifican.
+- One simple task before a screen full of indicators.
+- Source, date and estimated status visible.
+- The farmer decides what to share once the real integration exists.
+- Economic benefits require verifiable costs and comparisons.
+- The app points toward support programs; external entities decide and certify.
 
 ## Accessibility & Inclusion
 
-Interfaz adaptable al teléfono y al aumento de texto, controles de al menos 44 px, foco visible, formularios etiquetados y alternativas textuales a mapas y gráficos. La ayuda por voz complementa el texto y depende de la disponibilidad del dispositivo. Esta entrega debe funcionar sin cuentas externas y permitir consultar las pantallas precargadas sin conexión.
+Interface that adapts to the phone and to larger text, controls of at least 44 px, visible focus, labeled forms and text alternatives to maps and charts. Voice help complements the text and depends on device support. This delivery must work without external accounts and let users browse the preloaded screens offline.

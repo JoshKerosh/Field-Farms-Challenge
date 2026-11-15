@@ -1,12 +1,12 @@
 /**
- * Extrae los datasets reales embebidos en el prototipo v10 (context/) hacia
- * apps/web/src/data/real/*.json. Solo lectura del HTML; no modifica el artefacto.
+ * Extracts the real datasets embedded in the v10 prototype (context/) into
+ * apps/web/src/data/real/*.json. It only reads the HTML; it does not modify the artifact.
  *
  *   node scripts/extract-v10-datasets.mjs
  *
- * Los JSON resultantes son copias versionadas de datos oficiales (SAGA/AyA,
- * SNIT/IGN, CNE, NASA POWER/MODIS, NOAA RONI). Ver context/FUENTES_DE_DATOS.md
- * para el origen y el conector futuro de cada uno.
+ * The resulting JSON files are versioned copies of official data (SAGA/AyA,
+ * SNIT/IGN, CNE, NASA POWER/MODIS, NOAA RONI). See context/DATA_SOURCES.md
+ * for the origin and future connector of each one.
  */
 import fs from 'node:fs';
 import path from 'node:path';

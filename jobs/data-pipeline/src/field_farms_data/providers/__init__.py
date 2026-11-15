@@ -1,1 +1,1 @@
-"""Adaptadores futuros de NASA, NOAA y fuentes locales de Costa Rica."""
+"""Adapters for NASA, NOAA and local Costa Rica sources."""
