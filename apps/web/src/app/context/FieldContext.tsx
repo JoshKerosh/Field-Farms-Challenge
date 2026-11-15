@@ -130,7 +130,7 @@ export interface FieldContextValue {
   apartos: number;
   setApartos: (n: number) => void;
   recs: FieldRecord[];
-  addRecord: (rec: Omit<FieldRecord, 'id'>) => void;
+  addRecord: (rec: Omit<FieldRecord, 'id'>) => boolean;
   loadDemoRecords: (srcIndex: number) => void;
   clearDemoRecords: () => void;
   role: ViewRole;
@@ -356,17 +356,16 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
   );
   const addRecord = useCallback(
     (rec: Omit<FieldRecord, 'id'>) => {
-      setRecs((prev) => {
-        const created: FieldRecord = {
-          ...rec,
-          id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-        };
-        const next = [created, ...prev];
-        writeJson(LS_KEYS.recs, next);
-        return next;
-      });
+      const next = [{ ...rec, id: crypto.randomUUID() }, ...recs];
+      try {
+        window.localStorage.setItem(LS_KEYS.recs, JSON.stringify(next));
+      } catch {
+        return false;
+      }
+      setRecs(next);
+      return true;
     },
-    [messageLanguage()],
+    [recs],
   );
   const loadDemoRecords = useCallback(
     (srcIndex: number) => {

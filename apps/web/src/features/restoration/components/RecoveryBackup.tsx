@@ -32,7 +32,7 @@ export function RecoveryBackup({
               url = URL.createObjectURL(blob),
               a = document.createElement('a');
             a.href = url;
-            a.download = 'field-farms-recovery.json';
+            a.download = 'sow-water-recovery.json';
             a.click();
             setTimeout(() => URL.revokeObjectURL(url), 1000);
           }}

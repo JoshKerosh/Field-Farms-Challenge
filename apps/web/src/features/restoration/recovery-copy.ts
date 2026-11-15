@@ -1,5 +1,14 @@
 import { useMessageLanguage } from '../../i18n/messages';
 const es = {
+  recordProgress: 'Registrar avance en Registros',
+  lastEntry: 'Último avance',
+  recordsHelp:
+    'Elige una meta para anotar lo que hiciste. La cantidad es el total alcanzado: si ayer llevabas 3 árboles y hoy revisaste 2 más, anota 5. El gasto corresponde solo a este registro.',
+  backToPlan: 'Definir o editar metas en el plan',
+  chooseGoal: 'Meta del plan',
+  allGoals: 'Todas las metas',
+  costs: 'Gastos y presupuesto de mis metas',
+
   editGoal: 'Editar meta',
   unitLocked: 'La unidad se conserva porque esta meta ya tiene mediciones.',
   editEntry: 'Corregir registro',
@@ -154,6 +163,14 @@ const es = {
   remove: 'Eliminar meta vacía',
 };
 const en: typeof es = {
+  recordProgress: 'Record progress in Records',
+  lastEntry: 'Latest entry',
+  recordsHelp:
+    'Choose a goal and record what you did. Quantity is the total reached: if you had inspected 3 trees and inspect 2 more today, enter 5. Expense applies only to this entry.',
+  backToPlan: 'Define or edit goals in the plan',
+  chooseGoal: 'Plan goal',
+  allGoals: 'All goals',
+  costs: 'Goal expenses and budget',
   editGoal: 'Edit goal',
   unitLocked: 'The unit is fixed because this goal already has measurements.',
   editEntry: 'Correct entry',

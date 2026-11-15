@@ -8,6 +8,7 @@ export type RecordType = 'caudal' | 'accion' | 'evento' | 'lluvia';
 /** Registro de campo guardado en el dispositivo del usuario. */
 export interface FieldRecord {
   id: string;
+  location?: { lat: number; lng: number };
   t: RecordType;
   /** L/s (caudal), mm (lluvia) o texto (acción/evento). */
   v: number | string;

@@ -10,7 +10,6 @@ import {
   opportunityAvailability,
   type RecoveryPlan,
   type RecoveryGoal,
-  type RecoveryEntry,
   type RecoveryNeed,
   type RecoveryStatus,
 } from '@field-farms/domain';
@@ -18,7 +17,8 @@ import { useField, type FarmSite } from '../../../app/context/FieldContext';
 import { FARM_ACTIVITIES, FARM_WATER, type MyFarm } from '../../../data/engine/farm';
 import { opportunities } from '../../../demo/fixtures/opportunities';
 import { PageHeader, PageLink } from '../../../shared/ui';
-import { loadRecoveryPlan, saveRecoveryPlan, recoveryPhoto } from '../data/recovery-store';
+import { loadRecoveryPlan } from '../data/recovery-store';
+import { useRecoveryPlan } from '../data/use-recovery-plan';
 import {
   recoveryEnvironment,
   type RecoveryEnvironment,
@@ -26,8 +26,6 @@ import {
 } from '../data/recovery-environment';
 import { useRecoveryCopy, type RecoveryCopy } from '../recovery-copy';
 import './recovery.css';
-import { RecoveryBackup } from '../components/RecoveryBackup';
-import { EntryCorrection } from '../components/EntryCorrection';
 const today = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -63,12 +61,7 @@ export function RecoveryPage() {
 function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
   const c = useRecoveryCopy(),
     id = recoveryFarmId(site);
-  const [plan, setPlan] = useState<RecoveryPlan | null>(null),
-    [ready, setReady] = useState(false),
-    [busy, setBusy] = useState(false),
-    [error, setError] = useState(''),
-    [saved, setSaved] = useState(false);
-  const [readingFailed, setReadingFailed] = useState(false);
+  const { plan, ready, busy, saved, error, readingFailed, commit } = useRecoveryPlan(id);
   const [provisional, setProvisional] = useState<RecoveryPlan | null>(null),
     [environment, setEnvironment] = useState<RecoveryEnvironment | null>(null),
     [selected, setSelected] = useState('');
@@ -82,21 +75,6 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
   });
   useEffect(() => {
     let active = true;
-    loadRecoveryPlan(id)
-      .then((p) => {
-        if (active) {
-          setPlan(p);
-          if (p) setNeeds(p.needs);
-          setReady(true);
-        }
-      })
-      .catch(() => {
-        if (active) {
-          setError(c.error);
-          setReadingFailed(true);
-          setReady(true);
-        }
-      });
     if (site.parcel)
       loadRecoveryPlan(recoveryFarmId({ ...site, parcel: null }))
         .then((p) => {
@@ -123,22 +101,9 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
       active = false;
     };
   }, [site.lat, site.lng, site.parcel]);
-  async function commit(next: RecoveryPlan) {
-    setBusy(true);
-    setError('');
-    setSaved(false);
-    try {
-      await saveRecoveryPlan(next);
-      setPlan(next);
-      setSaved(true);
-      return true;
-    } catch {
-      setError(c.error);
-      return false;
-    } finally {
-      setBusy(false);
-    }
-  }
+  useEffect(() => {
+    if (plan) setNeeds(plan.needs);
+  }, [plan]);
   function confirm(e: FormEvent) {
     e.preventDefault();
     void commit(
@@ -229,7 +194,6 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
                   key={g.id}
                   goal={g}
                   busy={busy}
-                  onPreparing={setBusy}
                   c={c}
                   onChange={(next) =>
                     commit({
@@ -271,18 +235,6 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
           </section>
         </>
       )}
-      <RecoveryBackup
-        plan={plan}
-        id={id}
-        name={profile.name || c.farm}
-        busy={busy}
-        c={c}
-        onRestore={async (next) => {
-          const ok = await commit(next);
-          if (ok) setNeeds(next.needs);
-          return ok;
-        }}
-      />
       <section className="v10-card">
         <h2>{c.environment}</h2>
         <p>{c.measured}</p>
@@ -399,26 +351,6 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
           </details>
         ))}
       </section>
-      {plan && (
-        <button
-          className="recovery-no-print"
-          onClick={() => {
-            const details = Array.from(
-              document.querySelectorAll<HTMLDetailsElement>('.recovery details'),
-            );
-            const previous = details.map((d) => d.open);
-            details.forEach((d) => (d.open = true));
-            window.addEventListener(
-              'afterprint',
-              () => details.forEach((d, i) => (d.open = previous[i])),
-              { once: true },
-            );
-            window.print();
-          }}
-        >
-          {c.print}
-        </button>
-      )}
     </>
   );
 }
@@ -530,58 +462,13 @@ function Goal({
   busy,
   onChange,
   onRemove,
-  onPreparing,
 }: {
-  onPreparing: (value: boolean) => void;
   goal: RecoveryGoal;
   c: RecoveryCopy;
   busy: boolean;
   onChange: (g: RecoveryGoal) => Promise<boolean>;
   onRemove: () => void;
 }) {
-  const [error, setError] = useState(''),
-    [preparing, setPreparing] = useState(false);
-  async function submit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = e.currentTarget,
-      d = new FormData(form),
-      files = d.getAll('photos').filter((f): f is File => f instanceof File && f.size > 0);
-    setPreparing(true);
-    onPreparing(true);
-    setError('');
-    try {
-      if (files.length > 3) throw new Error('photos');
-      const entry: RecoveryEntry = {
-        id: crypto.randomUUID(),
-        date: String(d.get('date')),
-        quantity: Number(d.get('quantity')),
-        note: String(d.get('note')),
-        expense: Number(d.get('expense') || 0),
-        photos: await Promise.all(files.map(recoveryPhoto)),
-      };
-      if (
-        !Number.isFinite(entry.quantity) ||
-        entry.quantity < 0 ||
-        !Number.isFinite(entry.expense) ||
-        entry.expense < 0 ||
-        entry.date > today()
-      )
-        throw new Error('values');
-      if (
-        await onChange({
-          ...goal,
-          entries: [...goal.entries, entry],
-          status: goal.status === 'pending' ? 'active' : goal.status,
-        })
-      )
-        form.reset();
-    } catch {
-      setError(c.photoError);
-    } finally {
-      setPreparing(false);
-      onPreparing(false);
-    }
-  }
   return (
     <article className="recovery-goal">
       <h3>{c.templates[goal.template][0]}</h3>
@@ -618,83 +505,22 @@ function Goal({
         {c.progress}: {number(recoveryProgress(goal))} %
       </p>
       <progress value={recoveryProgress(goal)} max={100} aria-label={c.progress} />
-      <p>
-        {c.spent}: {money(recoveryExpenses(goal))}
-      </p>
       <p>{c.maintenance}</p>
-      {goal.entries.map((e) => (
-        <section className="recovery-entry" key={e.id}>
-          <p>
-            {e.date} · {number(e.quantity)} {c.units[goal.unit]} · {money(e.expense)}
-          </p>
-          <p>{e.note}</p>
-          <EntryCorrection
-            entry={e}
-            c={c}
-            busy={busy}
-            onSave={(next) =>
-              onChange({
-                ...goal,
-                entries: goal.entries.map((old) => (old.id === next.id ? next : old)),
-              })
-            }
-          />
-          <div className="recovery-photos">
-            {e.photos.map((p) => (
-              <Photo key={p.id} data={p.data} alt={`${c.entry} ${e.date}`} />
-            ))}
-          </div>
-        </section>
-      ))}
-      <details className="recovery-no-print">
-        <summary>{c.entry}</summary>
-        <form onSubmit={submit}>
-          <fieldset disabled={busy || preparing} className="recovery-fields">
-            <label>
-              {c.date}
-              <input name="date" type="date" required defaultValue={today()} max={today()} />
-            </label>
-            <label>
-              {c.quantity}
-              <input name="quantity" type="number" min="0" step="any" required />
-            </label>
-            <label>
-              {c.expense}
-              <input name="expense" type="number" min="0" step="any" />
-            </label>
-            <label>
-              {c.note}
-              <textarea name="note" maxLength={2000} />
-            </label>
-            <label>
-              {c.photos}
-              <input name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple />
-            </label>
-            <button type="submit">{preparing ? c.saving : c.save}</button>
-          </fieldset>
-        </form>
-        {error && <p role="alert">{error}</p>}
-      </details>
+      <PageLink to={`/records?section=plan&goal=${encodeURIComponent(goal.id)}`}>
+        {c.recordProgress}
+      </PageLink>
+      {goal.entries.length > 0 && (
+        <p>
+          {c.lastEntry}: {[...goal.entries].sort((a, b) => b.date.localeCompare(a.date))[0].date}
+        </p>
+      )}
       {!goal.entries.length && (
-        <button className="recovery-no-print" disabled={busy} onClick={onRemove}>
+        <button type="button" disabled={busy} onClick={onRemove}>
           {c.remove}
         </button>
       )}
     </article>
   );
-}
-function Photo({ data, alt }: { data: ArrayBuffer; alt: string }) {
-  const [url, setUrl] = useState('');
-  useEffect(() => {
-    const u = URL.createObjectURL(new Blob([data], { type: 'image/jpeg' }));
-    setUrl(u);
-    return () => URL.revokeObjectURL(u);
-  }, [data]);
-  return url ? (
-    <a href={url} target="_blank" rel="noreferrer">
-      <img src={url} alt={alt} loading="lazy" />
-    </a>
-  ) : null;
 }
 function History({
   rows,

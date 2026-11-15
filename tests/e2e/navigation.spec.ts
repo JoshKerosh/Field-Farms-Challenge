@@ -38,7 +38,7 @@ test('recorre las seis secciones principales con datos reales y foco accesible',
     ['Mi cuenca', /Mi cuenca/],
     ['Alertas', /Alertas/],
     ['Plan de recuperación', /Plan de recuperación/],
-    ['Registros', /Registros del agua y monitoreo/],
+    ['Registros', /^Registros$/],
     ['Guía', /Guía de uso/],
   ];
   for (const [link, heading] of destinations) {
@@ -49,16 +49,19 @@ test('recorre las seis secciones principales con datos reales y foco accesible',
   }
 });
 
-test('integra los registros de caudal, cambia roles y carga ejemplos de 5 meses', async ({
-  page,
-}) => {
-  await page.goto('/records', { waitUntil: 'domcontentloaded' });
-  await page.getByRole('button', { name: /ASADA/ }).click();
-  await expect(page.getByRole('heading', { name: /Tablero de la ASADA/ })).toBeVisible();
-  await page.getByRole('button', { name: 'Cargar 5 meses de ejemplo' }).click();
-  await expect(page.getByRole('heading', { name: /Historial guardado/ })).toContainText('(7)');
-  await page.getByRole('button', { name: /Institución/ }).click();
-  await expect(page.getByRole('heading', { name: /Vista institucional/ })).toBeVisible();
+test('keeps the plan log and water monitoring together without sample data', async ({ page }) => {
+  await registerTestFarm(page);
+  await page.goto('/records');
+  await expect(page.getByRole('button', { name: 'Avances del plan', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await page.getByRole('button', { name: 'Mediciones del agua', exact: true }).click();
+  await page.getByRole('button', { name: 'ASADA', exact: true }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Resumen local de monitoreo', exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Cargar 5 meses de ejemplo' })).toHaveCount(0);
 });
 
 test('muestra avance en finca y catálogo de beneficios con vigencia y fuente', async ({ page }) => {
