@@ -4,7 +4,7 @@ export function canReadAloud(): boolean {
 
 export function readAloud(text: string, onEnd: () => void, onError: () => void): () => void {
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'es-CR';
+  utterance.lang = document.documentElement.lang || 'es-CR';
   utterance.rate = 0.92;
   utterance.onend = onEnd;
   utterance.onerror = onError;

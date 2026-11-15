@@ -1,14 +1,16 @@
 import type { AreaShare } from '@field-farms/domain';
 import type { ReactNode } from 'react';
 import { copy, number } from '../../../i18n';
+import { message, useMessageLanguage } from '../../../i18n/messages';
 import type { BasinResult } from './explorer-result';
-
-export const formatDistance = (m: number) => `${number(m, 0)} m`;
+export const formatDistance = (m: number) => message('mc444f0831828', number(m, 0));
 export const formatArea = (m2: number) =>
-  m2 >= 10000 ? `${number(m2 / 10000, 2)} ha` : `${number(m2, 0)} m²`;
-
+  m2 >= 10000
+    ? message('m2f673b5b9164', number(m2 / 10000, 2))
+    : message('m86cbece7d780', number(m2, 0));
 /** Text equivalent of the basins the map shows for the farm. */
 export function BasinResults({ result }: { result: BasinResult }) {
+  useMessageLanguage();
   const c = copy.watershed.explorer;
   return (
     <section className="basin-results" aria-live="polite">
@@ -17,7 +19,9 @@ export function BasinResults({ result }: { result: BasinResult }) {
           <Shares
             title={c.inMany(result.basinShares.length, c.basinsNoun)}
             items={result.basinShares}
-            detail={(s) => `${c.basinNumber(s.basinNumber)} · ${formatArea(s.areaM2)}`}
+            detail={(s) =>
+              message('ma417ac239419', c.basinNumber(s.basinNumber), formatArea(s.areaM2))
+            }
           />
         ) : result.pointBasin ? (
           <>
@@ -40,7 +44,9 @@ export function BasinResults({ result }: { result: BasinResult }) {
           <Shares
             title={c.inMany(result.subbasinShares.length, c.subbasinsNoun)}
             items={result.subbasinShares}
-            detail={(s) => `${s.mainBasin} · ${c.slope(s.slope)} · ${formatArea(s.areaM2)}`}
+            detail={(s) =>
+              message('m3d9ed674538a', s.mainBasin, c.slope(s.slope), formatArea(s.areaM2))
+            }
           />
         ) : result.pointSubbasin ? (
           <>
@@ -70,7 +76,6 @@ export function BasinResults({ result }: { result: BasinResult }) {
     </section>
   );
 }
-
 function Shares<T extends AreaShare>({
   title,
   items,
@@ -80,6 +85,7 @@ function Shares<T extends AreaShare>({
   items: T[];
   detail: (item: T) => string;
 }) {
+  useMessageLanguage();
   const c = copy.watershed.explorer;
   return (
     <>
@@ -99,8 +105,8 @@ function Shares<T extends AreaShare>({
     </>
   );
 }
-
 export function Block({ label, children }: { label: string; children: ReactNode }) {
+  useMessageLanguage();
   return (
     <div className="basin-block">
       <p className="basin-label">{label}</p>

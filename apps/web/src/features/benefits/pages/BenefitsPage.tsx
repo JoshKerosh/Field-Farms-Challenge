@@ -1,15 +1,15 @@
+import { opportunityAvailability, type SupportOpportunity } from '@field-farms/domain';
+import { Check, HandCoins } from 'lucide-react';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
-import { Check, HandCoins } from 'lucide-react';
-import { opportunityAvailability, type SupportOpportunity } from '@field-farms/domain';
+import { useField } from '../../../app/context/FieldContext';
 import { CONSERVATION_ACTIONS } from '../../../data/engine/farm';
 import { copy, date } from '../../../i18n';
+import { message, useMessageLanguage } from '../../../i18n/messages';
 import { Badge, ExternalSource, PageHeader, PageLink } from '../../../shared/ui';
-import { useField } from '../../../app/context/FieldContext';
-
 type Filter = 'all' | 'economic' | 'recognition';
-
 export function BenefitsPage() {
+  useMessageLanguage();
   const opportunities = useLoaderData<SupportOpportunity[]>();
   const { ctx, journey, plan, acts, recs } = useField();
   const [filter, setFilter] = useState<Filter>('all');
@@ -24,30 +24,38 @@ export function BenefitsPage() {
   const today = new Date().toISOString().slice(0, 10);
   const doneCount = CONSERVATION_ACTIONS.filter((a) => acts[a.id] === 'hecho').length;
   const planCount = CONSERVATION_ACTIONS.filter((a) => acts[a.id] === 'plan').length;
-
   return (
     <div className="v10-stack">
       <PageHeader title={c.title} intro={c.intro} />
       <section className="savings-panel">
         <div>
-          <span className="section-kicker">Tu avance hacia PSA y reconocimientos</span>
+          <span className="section-kicker">{message('mf805f1033456')}</span>
           <h2>
             {doneCount > 0
-              ? `${doneCount} acciones activas en ${ctx?.sub.n ?? 'tu subcuenca'}`
-              : 'Empieza a documentar acciones en finca'}
+              ? message('mc7cb13013899', doneCount, ctx?.sub.n ?? message('md3c06f1736a8'))
+              : message('md08dcf24c896')}
           </h2>
           <p>
-            Tienes <strong>{doneCount}</strong> prácticas aplicadas, <strong>{planCount}</strong> en plan y{' '}
-            <strong>{recs.length}</strong> registros en este dispositivo.{' '}
+            {message('mde269f5f73b7')}
+            <strong>{doneCount}</strong>
+            {message('mf5405d295f86')}
+            <strong>{planCount}</strong>
+            {message('mde7b8d54e33e')} <strong>{recs.length}</strong>
+            {message('mb3d725d14436')}{' '}
             {plan?.rip.has
-              ? `En ${ctx?.sub.n} hay ${plan.rip.haUrg} ha prioritarias de ribera cerca de ${journey?.op ?? 'tu ASADA'}.`
+              ? message(
+                  'm886c87e83aac',
+                  ctx?.sub.n,
+                  plan.rip.haUrg,
+                  journey?.op ?? message('m727aee862d5e'),
+                )
               : ''}
           </p>
           <div className="v10-pill-row" style={{ marginTop: 12 }}>
             <PageLink to="/care" primary>
-              Marcar acciones en finca
+              {message('m768d9cc61d26')}
             </PageLink>
-            <PageLink to="/records">Ver mis registros</PageLink>
+            <PageLink to="/records">{message('m0e47dd6dbeb2')}</PageLink>
           </div>
         </div>
         <ul className="check-list">

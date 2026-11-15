@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { copy } from '../../i18n';
-
+import { useMessageLanguage } from '../../i18n/messages';
 export function ErrorPage() {
+  useMessageLanguage();
   return (
     <main className="error-page">
       <h1>{copy.common.errorTitle}</h1>

@@ -1,9 +1,10 @@
 import { Check, Droplet, ShieldAlert, Sprout, Trees } from 'lucide-react';
-import { CONSERVATION_ACTIONS } from '../../../data/engine/farm';
-import { PageHeader, PageLink } from '../../../shared/ui';
 import { useField } from '../../../app/context/FieldContext';
-
+import { CONSERVATION_ACTIONS } from '../../../data/engine/farm';
+import { message, useMessageLanguage } from '../../../i18n/messages';
+import { PageHeader, PageLink } from '../../../shared/ui';
 export function RestorationPage() {
+  useMessageLanguage();
   const {
     ctx,
     legal,
@@ -17,35 +18,36 @@ export function RestorationPage() {
     farm,
     plan,
   } = useField();
-
   if (!ctx || !legal || !journey || !zoneAbove || !rotation || !farm || !plan) return null;
-
   const doneCount = CONSERVATION_ACTIONS.filter((a) => acts[a.id] === 'hecho').length;
   const planCount = CONSERVATION_ACTIONS.filter((a) => acts[a.id] === 'plan').length;
   const maxMonthCap = Math.max(rotation.animals, ...rotation.months.map((m) => m.cap), 1);
-
   return (
     <div className="v10-stack">
-      <PageHeader
-        title="Cuidar el agua y los potreros"
-        intro="Acciones prácticas en tu finca respaldadas por la Ley Forestal 7575, el estado satelital de tus orillas y la calculadora de rotación."
-      />
+      <PageHeader title={message('m418a431c1aa0')} intro={message('introRestorationPage')} />
 
       {/* Marco legal y zona vista desde arriba */}
-      <section className="v10-grid-2" aria-label="Estado legal y satelital de tu finca">
+      <section className="v10-grid-2" aria-label={message('mefedd8c7b696')}>
         <article className="v10-alert-box" style={{ background: legal.bg, color: legal.col }}>
-          <strong style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: '1.05rem' }}>
+          <strong
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: '1.05rem' }}
+          >
             <ShieldAlert size={18} aria-hidden="true" /> {legal.t}
           </strong>
           <p>{legal.d}</p>
           <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>
-            Fuente más cercana: {journey.src} ({journey.dist}) · {journey.op} ({journey.conn} conexiones).
+            {message('md6ff2e410571')}
+            {journey.src} ({journey.dist}) · {journey.op} ({journey.conn}
+            {message('m89e774630639')}
           </span>
         </article>
 
-        <article className="v10-alert-box" style={{ background: zoneAbove.bg, color: zoneAbove.col }}>
+        <article
+          className="v10-alert-box"
+          style={{ background: zoneAbove.bg, color: zoneAbove.col }}
+        >
           <div className="v10-map-toolbar">
-            <strong>Tu zona vista desde arriba (IGN + MODIS)</strong>
+            <strong>{message('md0db31d2d5d6')}</strong>
             <span className="v10-tag" style={{ background: '#ffffff', color: zoneAbove.col }}>
               {zoneAbove.tag}
             </span>
@@ -61,22 +63,26 @@ export function RestorationPage() {
       <section className="v10-grid-2">
         <article className="v10-card">
           <h3>
-            <Droplet size={18} aria-hidden="true" /> El viaje de tu agua
+            <Droplet size={18} aria-hidden="true" />
+            {message('mbbcf1ee97545')}
           </h3>
           <p className="v10-muted">
-            El <strong>{journey.pct} %</strong> de las fuentes de tu subcuenca son agua subterránea ({journey.nNac} nacientes y {journey.nPozo} pozos; promedio nacional: {journey.pctPais} %).
+            {message('m5a61a575498e')}
+            <strong>{journey.pct} %</strong>
+            {message('m0e70accd1cf1')}
+            {journey.nNac}
+            {message('mce1db81e5725')}
+            {journey.nPozo}
+            {message('mbfc78e49109e')}
+            {journey.pctPais} %).
           </p>
-          <span className="v10-small">
-            Cuidar los 15 m a cada lado de quebradas y los 100 m de nacientes asegura la infiltración limpia hacia la comunidad.
-          </span>
+          <span className="v10-small">{message('m4316cb6b91e3')}</span>
         </article>
 
         <article className="v10-card" style={{ background: '#EEF5F0' }}>
-          <h3>Caso real en Costa Rica: Nicoya y ASEPALECO</h3>
-          <p className="v10-muted">
-            En la península de Nicoya, finqueros y ASADAS junto a organizaciones locales lograron proteger y recuperar bosques ribereños alrededor de fuentes comunitarias, sosteniendo caudales durante veranos de El Niño.
-          </p>
-          <PageLink to="/benefits">Ver incentivos y PSA de Fonafifo</PageLink>
+          <h3>{message('m752cc95125e9')}</h3>
+          <p className="v10-muted">{message('mc401d4d7d1da')}</p>
+          <PageLink to="/benefits">{message('m290502625718')}</PageLink>
         </article>
       </section>
 
@@ -85,14 +91,16 @@ export function RestorationPage() {
         <div className="v10-map-toolbar" style={{ marginBottom: 12 }}>
           <div>
             <h2 id="actions-title">
-              <Sprout size={18} aria-hidden="true" /> Acciones prácticas en tu finca
+              <Sprout size={18} aria-hidden="true" />
+              {message('m7858a3d011ce')}
             </h2>
-            <p className="v10-muted">
-              Marca lo que ya aplicas y lo que planeas iniciar. Se guarda automáticamente en este dispositivo.
-            </p>
+            <p className="v10-muted">{message('mb79906900eda')}</p>
           </div>
           <span className="v10-tag" style={{ background: '#E2F1E5', color: '#1F5A32' }}>
-            {doneCount} hechas · {planCount} en plan
+            {doneCount}
+            {message('m11ad4d516f26')}
+            {planCount}
+            {message('md895964c7014')}
           </span>
         </div>
 
@@ -113,7 +121,10 @@ export function RestorationPage() {
                   )}
                 </div>
                 <p className="v10-muted">{a.d}</p>
-                <span className="v10-small">Participa: {a.who}</span>
+                <span className="v10-small">
+                  {message('m24dd08c319c0')}
+                  {a.who}
+                </span>
                 <div className="v10-pill-row">
                   <button
                     type="button"
@@ -121,7 +132,8 @@ export function RestorationPage() {
                     aria-pressed={st === 'hecho'}
                     onClick={() => setActionStatus(a.id, 'hecho')}
                   >
-                    <Check size={14} aria-hidden="true" /> Ya lo hago
+                    <Check size={14} aria-hidden="true" />
+                    {message('m9e4b6d6cd7e5')}
                   </button>
                   <button
                     type="button"
@@ -129,7 +141,7 @@ export function RestorationPage() {
                     aria-pressed={st === 'plan'}
                     onClick={() => setActionStatus(a.id, 'plan')}
                   >
-                    Lo voy a hacer
+                    {message('m1a4eb3acd9d5')}
                   </button>
                 </div>
               </article>
@@ -140,40 +152,50 @@ export function RestorationPage() {
 
       {/* Calculadora de rotación de potreros */}
       {/* Plan de la subcuenca (antes en Mi cuenca) */}
-      <section>
-        <article className="v10-card">
-          <h2>
-            <Trees size={18} aria-hidden="true" /> Plan de regeneración para esta subcuenca
-          </h2>
-          <ul className="v10-list">
-            {plan.actions.map((act) => (
-              <li key={act.num} className="v10-list-item">
-                <div className="v10-map-toolbar">
-                  <strong>{act.t}</strong>
-                  <span className="v10-tag" style={{ background: '#E2F1E5', color: '#1F5A32' }}>
-                    {act.when}
-                  </span>
-                </div>
-                <span className="v10-muted">{act.d}</span>
-                <span className="v10-small">
-                  Impacto: {act.imp} · Responsable: {act.who}
+      <section className="v10-card" aria-labelledby="regeneration-title">
+        <h2 id="regeneration-title">
+          <Trees size={18} aria-hidden="true" />
+          {message('macecfede2cc9')}
+        </h2>
+        <ul className="v10-list">
+          {plan.actions.map((act) => (
+            <li key={act.num} className="v10-list-item">
+              <div className="v10-map-toolbar">
+                <strong>{act.t}</strong>
+                <span className="v10-tag" style={{ background: '#E2F1E5', color: '#1F5A32' }}>
+                  {act.when}
                 </span>
-              </li>
-            ))}
-          </ul>
-        </article>
+              </div>
+              <span className="v10-muted">{act.d}</span>
+              <span className="v10-small">
+                {message('m2d19b45930f5')}
+                {act.imp}
+                {message('mfed5b5baaff6')}
+                {act.who}
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="v10-card" aria-labelledby="rotation-title">
         <div className="v10-map-toolbar">
           <div>
-            <h2 id="rotation-title">Calculadora de rotación de potreros (6 meses)</h2>
+            <h2 id="rotation-title">{message('m36e4596a7e54')}</h2>
             <p className="v10-muted">
-              Ajustada para <strong>{farm.name}</strong> ({rotation.ha} ha en uso, {rotation.animals} animales) con humedad actual del suelo (NASA POWER) y verdor MODIS ({rotation.now}).
+              {message('mc3e75126f362')}
+              <strong>{farm.name}</strong> ({rotation.ha}
+              {message('m29faf8078e00')}
+              {rotation.animals}
+              {message('m97e16ae44b02')}
+              {rotation.now}).
             </p>
           </div>
           <div className="v10-field" style={{ minWidth: 210 }}>
-            <label htmlFor="apartos-input">Número de apartos: {apartos}</label>
+            <label htmlFor="apartos-input">
+              {message('mca1d6ae53304')}
+              {apartos}
+            </label>
             <input
               id="apartos-input"
               type="range"
@@ -187,25 +209,41 @@ export function RestorationPage() {
 
         <div className="v10-grid-3">
           <div className="v10-kpi">
-            <span className="v10-small">Descanso estimado hoy</span>
-            <span className="v10-kpi-num">{rotation.rest} días</span>
-            <span className="v10-small">Según humedad y verdor actual</span>
+            <span className="v10-small">{message('m2cd25ee972b4')}</span>
+            <span className="v10-kpi-num">
+              {rotation.rest}
+              {message('m8ac39ca2f489')}
+            </span>
+            <span className="v10-small">{message('m7f4f36dc266d')}</span>
           </div>
           <div className="v10-kpi">
-            <span className="v10-small">Ocupación por aparto</span>
-            <span className="v10-kpi-num">{rotation.occ} días</span>
-            <span className="v10-small">Con {apartos} apartos rotativos</span>
+            <span className="v10-small">{message('mdfd5062f6b95')}</span>
+            <span className="v10-kpi-num">
+              {rotation.occ}
+              {message('m8ac39ca2f489')}
+            </span>
+            <span className="v10-small">
+              {message('m3b6f52aa7955')}
+              {apartos}
+              {message('m3c948b8677cb')}
+            </span>
           </div>
           <div className="v10-kpi">
-            <span className="v10-small">Capacidad mínima proyectada</span>
-            <span className="v10-kpi-num">{rotation.minCap} cab.</span>
-            <span className="v10-small">Mes más seco: {rotation.capMonth}</span>
+            <span className="v10-small">{message('mad0dc62f88b9')}</span>
+            <span className="v10-kpi-num">
+              {rotation.minCap}
+              {message('m0ff7c4439676')}
+            </span>
+            <span className="v10-small">
+              {message('m68da5348c289')}
+              {rotation.capMonth}
+            </span>
           </div>
         </div>
 
         {rotation.warn && (
           <div className="v10-alert-box v10-alert-box--warn" role="status">
-            <strong>Recomendación de manejo para El Niño</strong>
+            <strong>{message('m51519fd3c5c9')}</strong>
             <p>{rotation.warn}</p>
           </div>
         )}
@@ -213,7 +251,7 @@ export function RestorationPage() {
         <div
           className="v10-bar-chart"
           role="img"
-          aria-label={`Capacidad de carga estimada para los próximos 6 meses frente a tus ${rotation.animals} animales actuales.`}
+          aria-label={message('me028b9a0e3b7', rotation.animals)}
         >
           {rotation.months.map((m) => (
             <div key={m.m} className="v10-bar-col">
@@ -224,18 +262,24 @@ export function RestorationPage() {
                   height: Math.max(12, Math.round((m.cap / maxMonthCap) * 76)),
                   background: m.col,
                 }}
-                title={`${m.m}: ${m.cap} animales · ${m.rest} días de descanso`}
+                title={message('ma06cbe68a335', m.m, m.cap, m.rest)}
               />
               <strong style={{ fontSize: '0.8125rem' }}>{m.m}</strong>
-              <span className="v10-small">{m.cap} cab.</span>
-              <span className="v10-small">{m.rest} d</span>
+              <span className="v10-small">
+                {m.cap}
+                {message('m0ff7c4439676')}
+              </span>
+              <span className="v10-small">
+                {m.rest}
+                {message('m18ac3e7343f0')}
+              </span>
             </div>
           ))}
         </div>
 
         <div className="v10-pill-row">
           <PageLink to="/records" primary>
-            Ir a registros de caudal y lluvia
+            {message('m590eb74304d1')}
           </PageLink>
         </div>
       </section>

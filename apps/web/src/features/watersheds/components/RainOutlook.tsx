@@ -5,6 +5,7 @@ import type { DemoScenario } from '../../../data/engine/climate';
 import { MONTHS } from '../../../data/engine/format';
 import type { Dataset, RegionCode } from '../../../data/real/types';
 import { copy, number } from '../../../i18n';
+import { messageLanguage } from '../../../i18n/messages';
 
 /** November to April: the dry season, when El Niño changes the most. */
 const SEASON = [10, 11, 0, 1, 2, 3];
@@ -52,7 +53,7 @@ export function RainOutlook({
       </p>
       <p className="rain-enso">
         <strong>{ensoLabel(nasa.ONI.actual)}</strong>{' '}
-        {c.ensoIndex(nasa.ONI.actual.toFixed(1).replace('.', ','), nasa.ONI.temporada)}
+        {c.ensoIndex(oneDecimal(nasa.ONI.actual), nasa.ONI.temporada)}
       </p>
 
       <dl className="rain-stats">
@@ -188,6 +189,14 @@ function RainChart({
       </div>
     </div>
   );
+}
+
+/** Always one decimal, as the ONI index is published: 2,0 (es) or 2.0 (en). */
+function oneDecimal(value: number): string {
+  return new Intl.NumberFormat(messageLanguage() === 'en' ? 'en-US' : 'es-CR', {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(value);
 }
 
 function ensoLabel(oni: number): string {

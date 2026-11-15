@@ -91,6 +91,7 @@ export function WaterJourney({
         where: real.source.distanceM === 0 ? c.inside : c.distance(distance(real.source.distanceM)),
         operator: real.source.operatorName,
         services: real.operator?.servicios ?? null,
+        masculine: real.source.kind === 'pozo',
       }
     : {
         icon: 'naciente' as MapIconId,
@@ -99,6 +100,7 @@ export function WaterJourney({
         where: c.approxDistance(approx.dist),
         operator: approx.op,
         services: null,
+        masculine: false,
       };
 
   return (
@@ -123,7 +125,7 @@ export function WaterJourney({
       {(real || !site) && (
         <JourneyDiagram
           label={c.diagramLabel(step.name, step.where, step.operator)}
-          source={capitalize(step.kind ?? c.diagramSpring)}
+          source={capitalize(c.diagramNearest(step.kind ?? c.diagramSpring, step.masculine))}
           where={step.where}
           services={step.services}
         />
@@ -210,7 +212,7 @@ function JourneyDiagram({
 
       <circle cx="345" cy="108" r="11" fill="#17617C" />
       <text x="345" y="76" textAnchor="middle" fontSize="13" fontWeight="700" fill="#0D3A4B">
-        {c.diagramNearest(source)}
+        {source}
       </text>
       <text x="345" y="90" textAnchor="middle" fontSize="11" fill="#46574C">
         {where}

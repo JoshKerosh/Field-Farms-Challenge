@@ -1,7 +1,7 @@
 import type { WaterReading, WaterSource } from '@field-farms/domain';
 import { copy, date, number } from '../../../i18n';
+import { useMessageLanguage } from '../../../i18n/messages';
 import { FlowChart } from '../../../shared/charts/FlowChart';
-
 export function WaterHistory({
   readings,
   sources,
@@ -9,6 +9,7 @@ export function WaterHistory({
   readings: WaterReading[];
   sources: WaterSource[];
 }) {
+  useMessageLanguage();
   return (
     <section className="page-section">
       <h2>{copy.water.readingsTitle}</h2>

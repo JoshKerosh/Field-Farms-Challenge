@@ -1,6 +1,16 @@
+import { localizedResource, messageLanguage } from '../../i18n/messages';
 /** Utilidades de formato y normalización de texto para los datos de Costa Rica. */
 
-export const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+export const MONTHS = localizedResource(() =>
+  Array.from({ length: 12 }, (_, month) =>
+    new Intl.DateTimeFormat(messageLanguage() === 'en' ? 'en-US' : 'es-CR', {
+      month: 'short',
+      timeZone: 'UTC',
+    })
+      .format(new Date(Date.UTC(2026, month, 1)))
+      .replace(/\.$/, ''),
+  ),
+);
 
 /** Restituye tildes que los archivos oficiales traen sin acentuar. */
 export function fixName(t: string): string {
@@ -37,22 +47,31 @@ export function normUpper(t: string): string {
     .trim();
 }
 
-export const f2 = (v: number): string => v.toFixed(2).replace('.', ',');
-export const comma = (v: number | string): string => String(v).replace('.', ',');
-export const fmtInt = (v: number): string => Math.round(v).toLocaleString('es-CR');
+export const f2 = (v: number): string =>
+  v.toFixed(2).replace('.', messageLanguage() === 'en' ? '.' : ',');
+export const comma = (v: number | string): string =>
+  String(v).replace('.', messageLanguage() === 'en' ? '.' : ',');
+export const fmtInt = (v: number): string =>
+  Math.round(v).toLocaleString(messageLanguage() === 'en' ? 'en-US' : 'es-CR');
 export const fmtKm = (v: number): string =>
-  v >= 10 ? fmtInt(v) : v.toFixed(1).replace('.', ',');
+  v >= 10 ? fmtInt(v) : v.toFixed(1).replace('.', messageLanguage() === 'en' ? '.' : ',');
 
 /** Distancia legible: 'm' bajo 1 km, 'km' en adelante. */
 export function distText(km: number): string {
-  return km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(1).replace('.', ',')} km`;
+  return km < 1
+    ? `${Math.round(km * 1000)} m`
+    : `${km.toFixed(1).replace('.', messageLanguage() === 'en' ? '.' : ',')} km`;
 }
 
 export function signedPct(v: number): string {
-  return `${v > 0 ? '+' : '−'}${Math.abs(v).toLocaleString('es-CR', {
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  })} %`;
+  return `${v > 0 ? '+' : '−'}${Math.abs(v).toLocaleString(
+    messageLanguage() === 'en' ? 'en-US' : 'es-CR',
+    {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    },
+  )} %`;
 }
 
-export const monthsText = (n: number): string => `${n} ${n === 1 ? 'mes' : 'meses'}`;
+export const monthsText = (n: number): string =>
+  `${n} ${messageLanguage() === 'en' ? (n === 1 ? 'month' : 'months') : n === 1 ? 'mes' : 'meses'}`;

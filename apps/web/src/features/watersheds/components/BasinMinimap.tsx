@@ -1,16 +1,15 @@
 import type { FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
 import { useMemo } from 'react';
 import { copy } from '../../../i18n';
+import { message, messageLanguage, useMessageLanguage } from '../../../i18n/messages';
 import type { BasinProperties } from '../analysis/parcel-analysis';
 import type { MapView } from './BasinMap';
-
 /** Costa Rica frame in degrees; x = longitude, y = -latitude. */
 const FRAME = { west: -86.0, east: -82.5, north: 11.3, south: 8.0 };
 /** The minimap only needs the silhouette: keep one vertex in this many. */
 const STEP = 6;
 /** Below this many degrees the view box would be a speck; draw a dot instead. */
 const MIN_BOX = 0.03;
-
 /**
  * Inline SVG minimap: Costa Rica with muted basins and the area the main map shows.
  * An SVG instead of a second WebGL map keeps phones light.
@@ -27,6 +26,7 @@ export function BasinMinimap({
   /** One neutral tone instead of a color per basin. */
   plain?: boolean;
 }) {
+  useMessageLanguage();
   const paths = useMemo(
     () =>
       basins.features.map((f) => ({
@@ -36,7 +36,7 @@ export function BasinMinimap({
           .map((polygon) => ring(polygon[0]))
           .join(''),
       })),
-    [basins],
+    [basins, messageLanguage()],
   );
   const width = FRAME.east - FRAME.west;
   const height = FRAME.north - FRAME.south;
@@ -47,11 +47,10 @@ export function BasinMinimap({
     h: view.bounds[3] - view.bounds[1],
   };
   const tiny = box && (box.w < MIN_BOX || box.h < MIN_BOX);
-
   return (
     <svg
-      className={plain ? 'basin-minimap basin-minimap--plain' : 'basin-minimap'}
-      viewBox={`${FRAME.west} ${-FRAME.north} ${width} ${height}`}
+      className={plain ? message('mafe2fa70ef8c') : 'basin-minimap'}
+      viewBox={message('m5cb3ceceab8b', FRAME.west, -FRAME.north, width, height)}
       role="img"
       aria-label={copy.watershed.explorer.minimap}
       onClick={(event) => {
@@ -75,7 +74,6 @@ export function BasinMinimap({
     </svg>
   );
 }
-
 function ring(coords: Position[]): string {
   const points = coords.filter((_, i) => i % STEP === 0 || i === coords.length - 1);
   return `M${points.map(([x, y]) => `${x.toFixed(3)},${(-y).toFixed(3)}`).join('L')}Z`;
