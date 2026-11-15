@@ -1,0 +1,55 @@
+name: Datos NASA y NOAA
+
+# Descarga POWER, RONI y MODIS, valida los archivos y hace commit en apps/web/public/data/.
+# Los horarios de GitHub corren en la rama por defecto; con "Run workflow" se corre en cualquier rama.
+on:
+  schedule:
+    - cron: '0 11 * * *' # 5:00 en Costa Rica
+  workflow_dispatch:
+    inputs:
+      solo:
+        description: 'Conectores separados por coma (power, roni, modis)'
+        default: 'power,roni,modis'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: datos-nasa-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install ./jobs/data-pipeline
+      - name: Descargar y publicar
+        id: conectores
+        working-directory: jobs/data-pipeline
+        # Una fuente caída no frena a las demás: se registra en fuentes.json y la Action falla al final.
+        run: python -m field_farms_data.publish.nasa --solo "${{ inputs.solo || 'power,roni,modis' }}" || echo "falla=1" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validar el contrato de los archivos
+        run: npx vitest run packages/domain/src/data apps/web/src/platform/data
+      - name: Commit de los datos nuevos
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add apps/web/public/data
+          git diff --cached --quiet && { echo 'Sin cambios'; exit 0; }
+          git commit -m "Datos NASA y NOAA del $(date -u +%F)"
+          git push
+      - name: Avisar si alguna fuente falló
+        if: steps.conectores.outputs.falla == '1'
+        run: |
+          echo '::error::Al menos un conector falló; se conservó su último dato bueno. Ver fuentes.json.'
+          exit 1

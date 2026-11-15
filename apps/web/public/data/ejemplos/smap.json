@@ -1,0 +1,129 @@
+{
+ "meta": {
+  "fuente": "nasa-smap",
+  "url": "https://nsidc.org/data/spl4smgp",
+  "capa": "nasa",
+  "simulado": true,
+  "fecha_dato": "2026-11-11",
+  "fecha_carga": "2026-11-15T04:00:54Z",
+  "version": 1,
+  "nota": "SIMULADO: valores inventados con el formato final. No usar como dato real."
+ },
+ "datos": {
+  "unidad": "subcuenca",
+  "items": [
+   {
+    "id": "14-123",
+    "nombre": "Río San Carlos",
+    "indicadores": [
+     {
+      "id": "humedad_superficie",
+      "nombre": "Humedad del suelo superficial",
+      "valor": 0.41,
+      "unidad": "m3/m3",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-smap",
+      "fecha": "2026-11-11",
+      "simulado": true,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz",
+      "nombre": "Humedad del suelo en raíces",
+      "valor": 0.38,
+      "unidad": "m3/m3",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-smap",
+      "fecha": "2026-11-11",
+      "simulado": true,
+      "capa": "nasa"
+     }
+    ]
+   },
+   {
+    "id": "14-103",
+    "nombre": "Río Arenal",
+    "indicadores": [
+     {
+      "id": "humedad_superficie",
+      "nombre": "Humedad del suelo superficial",
+      "valor": 0.33,
+      "unidad": "m3/m3",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-smap",
+      "fecha": "2026-11-11",
+      "simulado": true,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz",
+      "nombre": "Humedad del suelo en raíces",
+      "valor": 0.35,
+      "unidad": "m3/m3",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-smap",
+      "fecha": "2026-11-11",
+      "simulado": true,
+      "capa": "nasa"
+     }
+    ]
+   },
+   {
+    "id": "14-86",
+    "nombre": "Río Peñas Blancas",
+    "indicadores": [
+     {
+      "id": "humedad_superficie",
+      "nombre": "Humedad del suelo superficial",
+      "valor": 0.47,
+      "unidad": "m3/m3",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-smap",
+      "fecha": "2026-11-11",
+      "simulado": true,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz",
+      "nombre": "Humedad del suelo en raíces",
+      "valor": 0.44,
+      "unidad": "m3/m3",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-smap",
+      "fecha": "2026-11-11",
+      "simulado": true,
+      "capa": "nasa"
+     }
+    ]
+   },
+   {
+    "id": "14-130",
+    "nombre": "Río Tres Amigos",
+    "indicadores": [
+     {
+      "id": "humedad_superficie",
+      "nombre": "Humedad del suelo superficial",
+      "valor": 0.22,
+      "unidad": "m3/m3",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-smap",
+      "fecha": "2026-11-11",
+      "simulado": true,
+      "capa": "nasa"
+     },
+     {
+      "id": "humedad_raiz",
+      "nombre": "Humedad del suelo en raíces",
+      "valor": 0.27,
+      "unidad": "m3/m3",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-smap",
+      "fecha": "2026-11-11",
+      "simulado": true,
+      "capa": "nasa"
+     }
+    ]
+   }
+  ]
+ }
+}

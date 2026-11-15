@@ -1,0 +1,129 @@
+{
+ "meta": {
+  "fuente": "nasa-imerg",
+  "url": "https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDL_07/summary",
+  "capa": "nasa",
+  "simulado": true,
+  "fecha_dato": "2026-11-13",
+  "fecha_carga": "2026-11-15T04:00:54Z",
+  "version": 1,
+  "nota": "SIMULADO: valores inventados con el formato final. No usar como dato real."
+ },
+ "datos": {
+  "unidad": "subcuenca",
+  "items": [
+   {
+    "id": "14-123",
+    "nombre": "Río San Carlos",
+    "indicadores": [
+     {
+      "id": "lluvia_1d",
+      "nombre": "Lluvia del último día",
+      "valor": 38.2,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-imerg",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_7d",
+      "nombre": "Lluvia de 7 días",
+      "valor": 121.5,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-imerg",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "nasa"
+     }
+    ]
+   },
+   {
+    "id": "14-103",
+    "nombre": "Río Arenal",
+    "indicadores": [
+     {
+      "id": "lluvia_1d",
+      "nombre": "Lluvia del último día",
+      "valor": 12.0,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-imerg",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_7d",
+      "nombre": "Lluvia de 7 días",
+      "valor": 64.3,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-imerg",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "nasa"
+     }
+    ]
+   },
+   {
+    "id": "14-86",
+    "nombre": "Río Peñas Blancas",
+    "indicadores": [
+     {
+      "id": "lluvia_1d",
+      "nombre": "Lluvia del último día",
+      "valor": 55.7,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-imerg",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_7d",
+      "nombre": "Lluvia de 7 días",
+      "valor": 160.1,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-imerg",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "nasa"
+     }
+    ]
+   },
+   {
+    "id": "14-130",
+    "nombre": "Río Tres Amigos",
+    "indicadores": [
+     {
+      "id": "lluvia_1d",
+      "nombre": "Lluvia del último día",
+      "valor": 4.1,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-imerg",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "nasa"
+     },
+     {
+      "id": "lluvia_7d",
+      "nombre": "Lluvia de 7 días",
+      "valor": 30.8,
+      "unidad": "mm",
+      "estado": "sin_evaluar",
+      "fuente": "nasa-imerg",
+      "fecha": "2026-11-13",
+      "simulado": true,
+      "capa": "nasa"
+     }
+    ]
+   }
+  ]
+ }
+}

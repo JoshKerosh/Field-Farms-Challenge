@@ -20,3 +20,24 @@ export type { FieldAlert, FieldIncident } from './alerts';
 export type { Organization } from './organizations';
 export type { SupportOpportunity, OpportunityKind, OpportunityAvailability } from './benefits';
 export { opportunityAvailability } from './benefits';
+export type {
+  CapaDato,
+  EstadoIndicador,
+  MetaArchivo,
+  ArchivoDatos,
+  Indicador,
+  PuntoSerie,
+  TipoUnidad,
+  UnidadIndicadores,
+  DatosIndicadores,
+  ArchivoIndicadores,
+  EstadoFuente,
+  Fuente,
+  CatalogoFuentes,
+} from './data';
+export {
+  ESTADOS_INDICADOR,
+  validarMeta,
+  validarIndicador,
+  validarArchivoIndicadores,
+} from './data';

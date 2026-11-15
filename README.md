@@ -4,7 +4,7 @@ Base navegable de una PWA que relaciona fincas, fuentes de agua y ASADAS. Conser
 
 ## Arranque
 
-Requisitos: Node.js 22.12+ (22 LTS o 24+) y npm. No se necesitan cuentas externas, variables de entorno, Python ni Supabase para abrir la demo.
+Requisitos: Node.js 22.12+ (22 LTS o 24+) y npm. No se necesitan cuentas externas, variables de entorno ni Python para abrir la demo.
 
 ```sh
 npm install
@@ -44,13 +44,12 @@ Estado de dependencias al 14 de noviembre de 2026: `npm audit --omit=dev` no rep
 | Directorio                      | Responsabilidad                                                       |
 | ------------------------------- | --------------------------------------------------------------------- |
 | `apps/web`                      | React, rutas, pantallas, componentes e integraciones del dispositivo. |
-| `packages/domain`               | Tipos y reglas independientes de React, Supabase y Dexie.             |
-| `jobs/data-pipeline`            | Procesos Python de datos; publica las capas de cuencas y del SAGA.    |
+| `packages/domain`               | Tipos, reglas y contrato de datos, independientes de React y Dexie.   |
+| `jobs/data-pipeline`            | Conectores Python: NASA, NOAA y capas locales en `public/data/`.      |
 | `functions`                     | Cloudflare Pages Functions (`/api/parcela`, consulta al SIRI).        |
-| `supabase`                      | Configuración y ubicación de futuras migraciones y pruebas.           |
 | `tests/e2e`                     | Navegación, accesibilidad, vigencia y uso sin conexión.               |
 | `references/prototype-v10.html` | Copia intacta del prototipo proporcionado.                            |
-| `docs`                          | Arquitectura, inventario funcional y fuentes de oportunidades.        |
+| `docs`                          | Arquitectura, datos (`datos.md`), inventario y oportunidades.         |
 
 Los módulos están en `apps/web/src/features`. Registros integra mediciones de agua, acciones y eventos sin crear un almacenamiento paralelo. Los adaptadores demo implementan interfaces asíncronas por módulo; las futuras integraciones los reemplazarán desde la composición de rutas.
 
@@ -69,10 +68,9 @@ El ahorro se muestra como **Aún no calculado**. Los enlaces a programas no equi
 
 ## Próximas integraciones
 
-1. Finca, membresías y registros persistentes con Supabase/PostgreSQL/PostGIS, permisos e integridad en backend.
-2. Dexie, cola de sincronización e identificadores estables.
-3. Procesos Python de NASA/NOAA y capas locales, con método y procedencia.
-4. Costos, inversiones y períodos comparables para evaluar beneficios económicos.
+1. Finca y registros en el dispositivo (Dexie), con cola de sincronización a archivos del repositorio mediante una Pages Function.
+2. IMERG y SMAP reales con la cuenta NASA Earthdata; POWER, RONI y MODIS ya se publican a diario (ver [datos](docs/datos.md)).
+3. Costos, inversiones y períodos comparables para evaluar beneficios económicos.
 
 La prioridad es React responsive + PWA. Después se puede evaluar Capacitor para reutilizar la interfaz web en Android/iOS; con React Native + Expo se compartirían tipos, reglas y backend, construyendo las pantallas para móvil.
 

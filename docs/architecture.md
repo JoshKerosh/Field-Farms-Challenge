@@ -2,9 +2,9 @@
 
 ## Decisión
 
-Aplicación modular por funcionalidades, capas internas ligeras y backend administrado en Supabase. Un monorepo conserva web, reglas compartidas, definición de backend y procesos de datos. No se crean microservicios por funcionalidad.
+Aplicación modular por funcionalidades y capas internas ligeras, sin base de datos: los datos son archivos planos en `apps/web/public/data/` que publican los procesos Python (ver [datos](datos.md)). Un monorepo conserva web, reglas compartidas, Pages Functions y procesos de datos. No se crean microservicios por funcionalidad.
 
-La primera entrega es una base navegable: los repositorios consultan ejemplos locales, no una API de negocio. Web, Supabase y Python tendrán despliegues independientes cuando existan sus integraciones.
+La primera entrega es una base navegable: los repositorios consultan ejemplos locales, no una API de negocio. La web se despliega en Cloudflare Pages; los procesos Python corren en GitHub Actions y hacen commit de sus archivos.
 
 ## Límites
 
@@ -24,7 +24,7 @@ Cada módulo exporta su interfaz pública desde `index.ts`. Los demás módulos 
 
 El router compone loaders con interfaces asíncronas de repositorio. Los adaptadores de `demo/repositories` implementan esas interfaces usando fixtures tipadas y devuelven copias para evitar modificaciones accidentales. Las páginas consumen los resultados de sus loaders.
 
-`packages/domain` no conoce la interfaz, el navegador ni proveedores. Las interfaces de acceso pertenecen a cada módulo. `shared` contiene presentación reutilizable; `platform` contiene integración con navegador o servicios. Los tipos de una futura base generados por Supabase pertenecen al adaptador, no al dominio.
+`packages/domain` no conoce la interfaz, el navegador ni proveedores. Las interfaces de acceso pertenecen a cada módulo. `shared` contiene presentación reutilizable; `platform` contiene integración con navegador o servicios. El contrato de los archivos de datos (`packages/domain/src/data`) sí pertenece al dominio, porque lo comparten la web y los procesos Python.
 
 Registros compone agua, restauración, eventos y organizaciones, sin duplicar información. Guía y Fuentes también son páginas de composición. El selector de vista tiene estado efímero de presentación; no sustituye una sesión o un permiso.
 

@@ -55,6 +55,7 @@ La decisión central fue pasar de "plan de cultivos por finca" (v1–v6) a "visi
 | PWA modular: React + TypeScript + Vite; backend Supabase/PostgreSQL/PostGIS; Python para datos; monorepo por funcionalidades. Sustituye la sugerencia inicial Firebase → Supabase | Equipo, arquitectura acordada | base 0.1 |
 | Marcar en la app qué dato es real, simulado o ilustrativo | Equipo | todas |
 | El finquero elige qué comparte (ubicación, cultivos, nombre, teléfono) | Equipo | diseño |
+| Sin Supabase: datos en archivos planos (`public/data/`) que publican conectores Python; registros a `registros/` del repo con una Pages Function | Equipo, 14 nov | hackathon |
 
 Las variantes de diseño v7 (tanque, números, gota, máquina del tiempo, voz, vecinos) quedaron guardadas para decidir el estilo.
 
