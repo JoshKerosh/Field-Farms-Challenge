@@ -19,10 +19,13 @@ export function BasinMinimap({
   basins,
   view,
   onPick,
+  plain = false,
 }: {
   basins: FeatureCollection<Polygon | MultiPolygon, BasinProperties>;
   view: MapView | null;
   onPick: (lng: number, lat: number) => void;
+  /** One neutral tone instead of a color per basin. */
+  plain?: boolean;
 }) {
   const paths = useMemo(
     () =>
@@ -47,7 +50,7 @@ export function BasinMinimap({
 
   return (
     <svg
-      className="basin-minimap"
+      className={plain ? 'basin-minimap basin-minimap--plain' : 'basin-minimap'}
       viewBox={`${FRAME.west} ${-FRAME.north} ${width} ${height}`}
       role="img"
       aria-label={copy.watershed.explorer.minimap}

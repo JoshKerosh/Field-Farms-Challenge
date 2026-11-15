@@ -617,6 +617,10 @@ p + p {
   stroke-width: 0.01;
   filter: saturate(0.6);
 }
+.basin-minimap--plain path {
+  fill: #8fa396;
+  stroke: #8fa396;
+}
 .basin-minimap .minimap-box {
   fill: rgba(194, 24, 91, 0.1);
   stroke: #c2185b;
@@ -667,16 +671,13 @@ p + p {
   box-shadow: 0 0 0 1px #90a4ae;
   vertical-align: -2px;
 }
-.legend-operators {
-  background: #ffffff;
-  border: 3px solid #0d47a1;
-  box-shadow: none;
+.legend-icons {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
 }
-.legend-springs {
-  background: #29b6f6;
-}
-.legend-otherSources {
-  background: #00897b;
+.legend-icons img {
+  display: block;
 }
 .legend-streams {
   height: 4px;

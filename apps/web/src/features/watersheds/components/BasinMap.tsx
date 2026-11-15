@@ -15,6 +15,7 @@ import { useEffect, useImperativeHandle, useRef, useState, type Ref } from 'reac
 import { copy } from '../../../i18n';
 import type { BasinProperties } from '../analysis/parcel-analysis';
 import type { Bounds } from '../data/basin-explorer.repository';
+import { loadMapIcons, type MapIconId } from './map-icons';
 
 setWorkerUrl(workerUrl);
 
@@ -24,21 +25,12 @@ const CR_BOUNDS: LngLatBoundsLike = [
 ];
 /** From this zoom on, basin fills almost disappear so the imagery and the parcel stay readable. */
 const FADE_ZOOM = 15;
-const WATER_COLORS: ExpressionSpecification = [
-  'match',
-  ['get', 'tipo'],
-  'naciente',
-  '#29b6f6',
-  'pozo',
-  '#00897b',
-  'superficial',
-  '#1565c0',
-  '#90a4ae',
-];
 
 /** Everything drawn on top of the basins. Each collection replaces its source when it changes. */
 export interface MapScene {
   basemap: 'satellite' | 'streets';
+  /** Which basins are drawn: none, every one, or only `selectedBasins`, outlined. */
+  basinsShown: 'none' | 'all' | 'selected';
   selectedBasins: number[];
   /** Property `destacada` marks the point's sub-basin and those the parcel crosses. */
   subbasins: FeatureCollection;
@@ -53,7 +45,7 @@ export interface MapScene {
   user: FeatureCollection;
   accuracy: FeatureCollection;
 }
-type SceneSource = Exclude<keyof MapScene, 'basemap' | 'selectedBasins'>;
+type SceneSource = Exclude<keyof MapScene, 'basemap' | 'basinsShown' | 'selectedBasins'>;
 const SCENE_SOURCES: SceneSource[] = [
   'subbasins',
   'parcel',
@@ -85,7 +77,8 @@ export default function BasinMap({
 }: {
   basins: FeatureCollection<Polygon | MultiPolygon, BasinProperties>;
   scene: MapScene;
-  onPick: (lng: number, lat: number) => void;
+  /** Without it, tapping the map only shows tooltips. */
+  onPick?: (lng: number, lat: number) => void;
   onView: (view: MapView) => void;
   ref: Ref<BasinMapHandle>;
 }) {
@@ -93,18 +86,24 @@ export default function BasinMap({
   const mapRef = useRef<Map | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
+  const pendingFit = useRef<((map: Map) => void) | null>(null);
   const callbacks = useRef({ onPick, onView });
   callbacks.current = { onPick, onView };
 
   useImperativeHandle(ref, () => ({
-    fitBounds: ([w, s, e, n], maxZoom) =>
-      mapRef.current?.fitBounds(
-        [
-          [w, s],
-          [e, n],
-        ],
-        { maxZoom, padding: 40 },
-      ),
+    fitBounds: ([w, s, e, n], maxZoom) => {
+      const fit = (map: Map) =>
+        map.fitBounds(
+          [
+            [w, s],
+            [e, n],
+          ],
+          { maxZoom, padding: 40 },
+        );
+      // Before the first load the fit waits for whichever map instance finishes loading.
+      if (mapRef.current?.isStyleLoaded()) fit(mapRef.current);
+      else pendingFit.current = fit;
+    },
     panTo: (lng, lat) => mapRef.current?.panTo([lng, lat]),
   }));
 
@@ -134,11 +133,21 @@ export default function BasinMap({
       // Tile errors (offline, a slow provider) should not hide the map.
       if (!('tile' in event)) console.warn(event.error);
     });
+    let removed = false;
     map.on('load', () => {
-      addOverlayLayers(map, basins);
-      setLoaded(true);
+      // Icons decode asynchronously; layers wait for them so no point is drawn without its icon.
+      void loadMapIcons()
+        .catch(() => [] as [MapIconId, HTMLImageElement][])
+        .then((icons) => {
+          if (removed) return;
+          for (const [id, image] of icons) map.addImage(iconName(id), image, { pixelRatio: 2 });
+          addOverlayLayers(map, basins);
+          setLoaded(true);
+          pendingFit.current?.(map);
+          pendingFit.current = null;
+        });
     });
-    map.on('click', (event) => callbacks.current.onPick(event.lngLat.lng, event.lngLat.lat));
+    map.on('click', (event) => callbacks.current.onPick?.(event.lngLat.lng, event.lngLat.lat));
 
     let frame = 0;
     const emitView = () => {
@@ -177,6 +186,7 @@ export default function BasinMap({
     map.on('mouseout', () => popup.remove());
 
     return () => {
+      removed = true;
       cancelAnimationFrame(frame);
       map.remove();
       mapRef.current = null;
@@ -207,27 +217,30 @@ export default function BasinMap({
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !loaded) return;
+    const shown = scene.basinsShown;
+    for (const id of ['basins-fill', 'basins-line', 'basins-selected']) {
+      map.setLayoutProperty(id, 'visibility', shown === 'none' ? 'none' : 'visible');
+    }
     const selected: ExpressionSpecification = [
       'in',
       ['get', 'cuenca_no'],
       ['literal', scene.selectedBasins],
     ];
-    // Without a selection, a constant expression keeps the same shape as the selected case.
-    const opacity = (factor: number): ExpressionSpecification =>
-      scene.selectedBasins.length
-        ? ['case', selected, 0.45 * factor, 0.12 * factor]
-        : ['literal', 0.35 * factor];
+    const filter = shown === 'selected' ? selected : null;
+    map.setFilter('basins-fill', filter);
+    map.setFilter('basins-line', filter);
+    map.setFilter('basins-selected', filter ?? ['==', ['get', 'cuenca_no'], -1]);
+    const opacity = shown === 'selected' ? 0.45 : 0.35;
     map.setPaintProperty('basins-fill', 'fill-opacity', [
       'interpolate',
       ['linear'],
       ['zoom'],
       FADE_ZOOM - 1,
-      opacity(1),
+      opacity,
       FADE_ZOOM,
-      opacity(0.15),
+      opacity * 0.15,
     ]);
-    map.setFilter('basins-selected', selected);
-  }, [loaded, scene.selectedBasins]);
+  }, [loaded, scene.basinsShown, scene.selectedBasins]);
 
   if (unavailable) return <p role="status">{copy.watershed.mapUnavailable}</p>;
   return (
@@ -360,24 +373,29 @@ function addOverlayLayers(map: Map, basins: FeatureCollection) {
   });
   map.addLayer({
     id: 'sources',
-    type: 'circle',
+    type: 'symbol',
     source: 'sources',
-    paint: {
-      'circle-radius': ['case', ['==', ['get', 'tipo'], 'naciente'], 6, 5],
-      'circle-color': WATER_COLORS,
-      'circle-stroke-color': '#FFFFFF',
-      'circle-stroke-width': 1.5,
+    layout: {
+      // Icons are named after the SAGA `tipo`; anything else gets the unclassified one.
+      'icon-image': [
+        'coalesce',
+        ['image', ['concat', 'icon-', ['get', 'tipo']]],
+        ['image', iconName('sin clasificar')],
+      ],
+      'icon-size': ['case', ['==', ['get', 'tipo'], 'naciente'], 1, 0.9],
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
     },
   });
   map.addLayer({
     id: 'operators',
-    type: 'circle',
+    type: 'symbol',
     source: 'operators',
-    paint: {
-      'circle-radius': 7,
-      'circle-color': '#FFFFFF',
-      'circle-stroke-color': '#0D47A1',
-      'circle-stroke-width': 3,
+    layout: {
+      'icon-image': iconName('operator'),
+      'icon-size': 1.1,
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
     },
   });
   map.addLayer({
@@ -398,6 +416,8 @@ function addOverlayLayers(map: Map, basins: FeatureCollection) {
     },
   });
 }
+
+const iconName = (id: MapIconId) => `icon-${id}`;
 
 /** Tooltip text comes from external data, so it is set as text, never as HTML. */
 function tooltipContent(text: string): HTMLElement {
