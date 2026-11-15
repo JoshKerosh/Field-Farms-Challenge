@@ -23,6 +23,17 @@ test('muestra el explorador de cuencas con controles accesibles', async ({ page 
   expect(result.violations).toEqual([]);
 });
 
+test('usa la ubicación del usuario al abrir si da permiso', async ({ page, context }) => {
+  await context.grantPermissions(['geolocation']);
+  await context.setGeolocation({ latitude: 9.8556, longitude: -83.9126, accuracy: 15 });
+  await page.goto('/watershed');
+  const results = page.locator('.basin-results');
+  await expect(results.getByRole('heading', { name: 'Reventazón' })).toBeVisible();
+  await expect(
+    results.getByText(/Tu ubicación: 9\.85560, -83\.91260 \(precisión ±15 m\)/),
+  ).toBeVisible();
+});
+
 test('el explorador no desborda a 320 px', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 760 });
   await page.goto('/watershed');

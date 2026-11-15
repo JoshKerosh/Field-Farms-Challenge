@@ -258,16 +258,38 @@ export default function BasinExplorer({
     [basins, basinBoxes, overlapping, repository, c],
   );
 
-  const useMyLocation = () => {
-    if (!navigator.geolocation) return setStatus(c.noGeolocation);
-    setStatus(c.locating);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => void locate(pos.coords.longitude, pos.coords.latitude, pos.coords.accuracy, true),
-      (error) =>
-        setStatus(error.code === error.PERMISSION_DENIED ? c.permissionDenied : c.locationFailed),
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 },
-    );
-  };
+  /**
+   * Asks the device for its position. When `auto` (on page open), a point picked on the map
+   * meanwhile wins, and a refusal stays quiet: the user did not press the button.
+   */
+  const requestPosition = useCallback(
+    (auto: boolean) => {
+      if (!navigator.geolocation) return void (auto || setStatus(c.noGeolocation));
+      const startedAt = requestId.current;
+      if (!auto) setStatus(c.locating);
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          if (auto && requestId.current !== startedAt) return;
+          void locate(pos.coords.longitude, pos.coords.latitude, pos.coords.accuracy, true);
+        },
+        (error) => {
+          if (auto) return;
+          setStatus(error.code === error.PERMISSION_DENIED ? c.permissionDenied : c.locationFailed);
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 },
+      );
+    },
+    [locate, c],
+  );
+  const useMyLocation = () => requestPosition(false);
+
+  // Use the user's location as soon as the basins are ready; tapping the map still picks any point.
+  const autoLocated = useRef(false);
+  useEffect(() => {
+    if (!basins || autoLocated.current) return;
+    autoLocated.current = true;
+    requestPosition(true);
+  }, [basins, requestPosition]);
 
   // "Everything in the farm's basins": operators and sources of those basins, and streams in view.
   const zoom = view?.zoom ?? 0;

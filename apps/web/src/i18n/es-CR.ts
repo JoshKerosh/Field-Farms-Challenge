@@ -136,7 +136,7 @@ export const esCR = {
     explorer: {
       title: 'Ubicá tu finca en su cuenca',
       intro:
-        'Usá tu ubicación o tocá el mapa. Vas a ver la cuenca, la subcuenca, el lindero de la finca según el catastro, los ríos y las fuentes de ASADAS cercanas.',
+        'Si das permiso, el mapa usa tu ubicación al abrir. También podés tocar el mapa para elegir otro lugar. Vas a ver la cuenca, la subcuenca, el lindero de la finca según el catastro, los ríos y las fuentes de ASADAS cercanas.',
       mapLabel: 'Mapa de cuencas de Costa Rica',
       locate: 'Usar mi ubicación',
       locating: 'Buscando tu ubicación…',
