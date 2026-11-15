@@ -10,7 +10,7 @@ import { fixName } from '../engine/format';
 
 const A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
-/** Descomprime la cuadrícula riparia: '.' celda vacía, '*n' salto, 8 caracteres por celda de 3 km. */
+/** Decompresses the riparian grid: '.' empty cell, '*n' skip, 8 characters per 3 km cell. */
 export function decodeRip(grid: string): Record<string, string> {
   const out: Record<string, string> = {};
   grid.split('\n').forEach((row, cj) => {
@@ -43,7 +43,7 @@ export function buildDataset(parts: {
   riparian: { grid: string };
 }): Dataset {
   const territory = parts.territory;
-  // Los archivos de origen vienen sin tildes en algunos nombres (Rio, Canton…).
+  // The source files lack accents in some names (Rio, Canton…).
   territory.subs.forEach((s) => {
     s.n = fixName(s.n);
   });
@@ -71,8 +71,8 @@ export function buildDataset(parts: {
 let pending: Promise<Dataset> | undefined;
 
 /**
- * Carga los datasets reales (≈700 KB sin comprimir) una sola vez. Los JSON
- * quedan en chunks separados y el service worker los precarga para uso sin conexión.
+ * Loads the real datasets (≈700 KB uncompressed) only once. The JSON files
+ * stay in separate chunks and the service worker precaches them for offline use.
  */
 export function loadDataset(): Promise<Dataset> {
   pending ??= (async () => {
@@ -85,7 +85,7 @@ export function loadDataset(): Promise<Dataset> {
       import('./riparian.json'),
     ]);
     return buildDataset({
-      // structuredClone: el módulo JSON es compartido y buildDataset normaliza nombres.
+      // structuredClone: the JSON module is shared and buildDataset normalizes names.
       territory: structuredClone(territory.default) as unknown as Territory,
       sources: structuredClone(sources.default) as unknown as Sources,
       climate: climate.default as unknown as Climate,

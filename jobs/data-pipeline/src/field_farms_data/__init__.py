@@ -1,1 +1,1 @@
-"""Proceso de datos separado de la web; sin ingesta habilitada en esta etapa."""
+"""Data jobs kept apart from the web app; no ingestion enabled at this stage."""

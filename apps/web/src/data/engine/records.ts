@@ -1,51 +1,59 @@
+import { messageLanguage as displayLanguage } from '../../i18n/messages';
+import { localizedResource, message } from '../../i18n/messages';
 import type { Dataset } from '../real/types';
 import { comma, MONTHS } from './format';
 import type { PlaceContext } from './geo';
 import type { WatershedPlan } from './watershed';
-
 export type RecordType = 'caudal' | 'accion' | 'evento' | 'lluvia';
-
-/** Registro de campo guardado en el dispositivo del usuario. */
+/** Field record stored on the user's device. */
 export interface FieldRecord {
   id: string;
+  location?: { lat: number; lng: number };
   t: RecordType;
-  /** L/s (caudal), mm (lluvia) o texto (acción/evento). */
+  /** L/s (flow), mm (rainfall) or text (action/event). */
   v: number | string;
-  /** Índice de la fuente en `sources.fuentes`. */
+  /** Index of the source in `sources.fuentes`. */
   src?: number;
   note?: string;
-  /** Fecha AAAA-MM-DD. */
+  /** Date YYYY-MM-DD. */
   d: string;
-  /** El usuario decide si lo comparte con su ASADA. */
+  /** The user decides whether to share it with their ASADA. */
   share: boolean;
-  /** Registro de ejemplo (SIMULADO). */
+  /** Example record (SIMULATED). */
   demo?: boolean;
 }
-
-export const EVENT_TYPES = [
-  'Naciente seca',
-  'Bajó el caudal',
-  'Agua turbia o contaminada',
-  'Deslizamiento',
-  'Inundación',
-  'Incendio',
-] as const;
-
-export const RECORD_TYPES: { id: RecordType; ic: string; n: string; d: string }[] = [
-  { id: 'caudal', ic: '💧', n: 'Caudal', d: 'Cuánta agua da la naciente' },
-  { id: 'accion', ic: '🌳', n: 'Acción', d: 'Lo que hiciste en la finca' },
-  { id: 'evento', ic: '⚠️', n: 'Evento', d: 'Sequía, contaminación…' },
-  { id: 'lluvia', ic: '🌧', n: 'Lluvia', d: 'Lo que marcó tu pluviómetro' },
-];
-
+export const EVENT_TYPES = localizedResource(
+  () =>
+    [
+      message('mfeb29d8418f9'),
+      message('ma22c98003c9b'),
+      message('medf71ab58975'),
+      message('m6e6f4d6c09bb'),
+      message('m846a081f4e65'),
+      message('m1a9ecf78c1b1'),
+    ] as const,
+);
+export const RECORD_TYPES: {
+  id: RecordType;
+  ic: string;
+  n: string;
+  d: string;
+}[] = localizedResource(() => [
+  { id: 'caudal', ic: '', n: message('m1f4dc3b3db5e'), d: message('ma4c7ed873722') },
+  { id: 'accion', ic: '', n: message('m212e06c386ff'), d: message('m4f3feefeda40') },
+  { id: 'evento', ic: '', n: message('m43f6698cdd81'), d: message('m3479bd1a00ba') },
+  { id: 'lluvia', ic: '', n: message('m24af7c4cec82'), d: message('m40897cf0d637') },
+]);
 export type ViewRole = 'finquero' | 'asada' | 'inst';
-export const VIEW_ROLES: { id: ViewRole; n: string }[] = [
-  { id: 'finquero', n: '👩‍🌾 Finquero' },
-  { id: 'asada', n: '🏠 ASADA' },
-  { id: 'inst', n: '🏛 Institución' },
-];
-
-/** Caudal con balde y cronómetro: litros ÷ segundos. */
+export const VIEW_ROLES: {
+  id: ViewRole;
+  n: string;
+}[] = localizedResource(() => [
+  { id: 'finquero', n: message('m2db681c4e15b') },
+  { id: 'asada', n: message('m2bc63ae305f2') },
+  { id: 'inst', n: message('mdf9b84ddd8d1') },
+]);
+/** Flow with bucket and stopwatch: liters ÷ seconds. */
 export function flowFromBucket(liters: string, seconds: string) {
   const l = Number(String(liters || '20').replace(',', '.'));
   const s = Number(String(seconds || '').replace(',', '.'));
@@ -53,12 +61,13 @@ export function flowFromBucket(liters: string, seconds: string) {
   return {
     lps,
     valid: lps > 0,
-    lpsText: lps ? lps.toFixed(2).replace('.', ',') : '—',
-    lpdText: lps ? Math.round(lps * 86400).toLocaleString('es-CR') : '—',
+    lpsText: lps ? lps.toFixed(2).replace('.', displayLanguage() === 'en' ? '.' : ',') : '—',
+    lpdText: lps
+      ? Math.round(lps * 86400).toLocaleString(displayLanguage() === 'en' ? 'en-US' : 'es-CR')
+      : '—',
   };
 }
-
-/** Registros de ejemplo (SIMULADOS) para ver cómo funciona la pantalla. */
+/** Example records (SIMULATED) to show how the screen works. */
 export function demoRecords(srcIndex: number): FieldRecord[] {
   const V = [14, 20, 11, 9, 8];
   const rows: FieldRecord[] = V.map((q, k) => ({
@@ -70,26 +79,45 @@ export function demoRecords(srcIndex: number): FieldRecord[] {
     share: true,
     demo: true,
   }));
-  rows.push({ id: 'demo-a', t: 'accion', v: 'Corredor ribereño', d: '2026-09-02', share: true, demo: true });
-  rows.push({ id: 'demo-e', t: 'evento', v: 'Bajó el caudal', src: srcIndex, d: '2026-10-20', share: true, demo: true });
+  rows.push({
+    id: 'demo-a',
+    t: 'accion',
+    v: message('m4ec28cf8bf1e'),
+    d: '2026-09-02',
+    share: true,
+    demo: true,
+  });
+  rows.push({
+    id: 'demo-e',
+    t: 'evento',
+    v: message('ma22c98003c9b'),
+    src: srcIndex,
+    d: '2026-10-20',
+    share: true,
+    demo: true,
+  });
   return rows.reverse();
 }
-
 const monthOf = (d: string) => Number(d.slice(5, 7)) - 1;
-
 export function recordTitle(ds: Dataset, r: FieldRecord): string {
-  const nm = (i: number | undefined) => (i === undefined ? '—' : (ds.sources.fuentes[i] || [0, 0, 0, 0, '—'])[4]);
-  if (r.t === 'caudal') return `${comma(r.v)} L/s · ${nm(r.src)}`;
-  if (r.t === 'lluvia') return `${comma(r.v)} mm de lluvia`;
-  if (r.t === 'evento') return `${r.v} · ${nm(r.src)}`;
+  const nm = (i: number | undefined) =>
+    i === undefined ? '—' : (ds.sources.fuentes[i] || [0, 0, 0, 0, '—'])[4];
+  if (r.t === 'caudal') return message('m8871e538bb78', comma(r.v), nm(r.src));
+  if (r.t === 'lluvia') return message('m4d5702ed33ff', comma(r.v));
+  if (r.t === 'evento') return message('ma417ac239419', r.v, nm(r.src));
   return String(r.v);
 }
-
 export function recordDateText(r: FieldRecord): string {
-  return `${r.d.slice(8, 10)} ${MONTHS[monthOf(r.d)]} ${r.d.slice(0, 4)}${r.share ? ' · compartido' : ' · solo en tu celular'}${r.demo ? ' · ejemplo' : ''}`;
+  return message(
+    'md456e3d51121',
+    r.d.slice(8, 10),
+    MONTHS[monthOf(r.d)],
+    r.d.slice(0, 4),
+    r.share ? message('m1a7bc4549e6b') : message('m4b2c171c3b0a'),
+    r.demo ? message('m5c9454a9a87f') : '',
+  );
 }
-
-/** Gráfico: barras de lluvia jun–nov 2026 (NASA POWER) y línea del caudal registrado. */
+/** Chart: Jun–Nov 2026 rainfall bars (NASA POWER) and a line of the recorded flow. */
 export function flowChart(ds: Dataset, ctx: PlaceContext, records: FieldRecord[]) {
   const TC = ds.climate.NASA[ctx.reg].clim;
   const y26 = ds.climate.NASA[ctx.reg].y2026.monthAnom;
@@ -114,21 +142,28 @@ export function flowChart(ds: Dataset, ctx: PlaceContext, records: FieldRecord[]
   const pts = bars
     .map((b, k) => (b.hasQ ? [Math.round(k * 50 + 25), b.qy] : null))
     .filter((p): p is number[] => !!p);
-  const qLine = pts.length >= 2 ? pts.map((p, k) => `${k ? 'L' : 'M'}${p[0]},${p[1]}`).join('') : '';
+  const qLine =
+    pts.length >= 2 ? pts.map((p, k) => `${k ? 'L' : 'M'}${p[0]},${p[1]}`).join('') : '';
   let text = '';
   if (cRecs.length >= 2) {
     const qMin = cRecs.reduce((a, r) => ((r.v as number) < (a.v as number) ? r : a), cRecs[0]);
     const qHi = cRecs.reduce((x, r) => ((r.v as number) > (x.v as number) ? r : x), cRecs[0]);
-    text = `${
+    text = message(
+      'md916642cc0f1',
       (qMin.v as number) < (qHi.v as number) * 0.9
-        ? `Bajó a ${comma(qMin.v)} L/s en ${MONTHS[monthOf(qMin.d)]} y llegó a ${comma(qHi.v)} L/s en ${MONTHS[monthOf(qHi.d)]}.`
-        : 'El caudal se mantiene estable.'
-    } Cuando llueve menos, la naciente baja unas semanas después.`;
+        ? message(
+            'mfe13b0123b76',
+            comma(qMin.v),
+            MONTHS[monthOf(qMin.d)],
+            comma(qHi.v),
+            MONTHS[monthOf(qHi.d)],
+          )
+        : message('m8a391f93e04e'),
+    );
   }
   return { has: cRecs.length >= 2, bars, qLine, text };
 }
-
-/** Regresión lineal sobre los últimos 5 caudales: ¿qué caudal habría en 2 meses? */
+/** Linear regression over the last 5 flows: what would the flow be in 2 months? */
 export function flowProjection(ds: Dataset, records: FieldRecord[]) {
   const qs = records
     .filter((r) => r.t === 'caudal')
@@ -142,7 +177,10 @@ export function flowProjection(ds: Dataset, records: FieldRecord[]) {
   const my = Y.reduce((a, v) => a + v, 0) / Y.length;
   const sl =
     X.reduce((a, v, i) => a + (v - mx) * (Y[i] - my), 0) /
-    Math.max(1e-6, X.reduce((a, v) => a + (v - mx) * (v - mx), 0));
+    Math.max(
+      1e-6,
+      X.reduce((a, v) => a + (v - mx) * (v - mx), 0),
+    );
   const last = qs[qs.length - 1];
   const lm = monthOf(last.d);
   const pv = Math.max(0, (last.v as number) + sl * 2);
@@ -154,21 +192,28 @@ export function flowProjection(ds: Dataset, records: FieldRecord[]) {
   return {
     has: true as const,
     down,
-    slope: `${sl >= 0 ? '+' : '−'}${Math.abs(sl).toFixed(1).replace('.', ',')} L/s por mes`,
-    pv: pv.toFixed(1).replace('.', ','),
+    slope: message(
+      'mf793a0ad5963',
+      sl >= 0 ? '+' : '−',
+      Math.abs(sl)
+        .toFixed(1)
+        .replace('.', displayLanguage() === 'en' ? '.' : ','),
+    ),
+    pv: pv.toFixed(1).replace('.', displayLanguage() === 'en' ? '.' : ','),
     pm,
     drop,
     msg: down
-      ? `El caudal va a la baja. Si sigue así, en ${pm} daría unos ${pv.toFixed(1).replace('.', ',')} L/s. Es momento de prevenir, no de reaccionar.`
-      : 'El caudal no muestra tendencia a la baja.',
+      ? message(
+          'm00db408a3c07',
+          pm,
+          pv.toFixed(1).replace('.', displayLanguage() === 'en' ? '.' : ','),
+        )
+      : message('m619ba60f2970'),
     bg: down ? '#8E2A21' : '#2E7A43',
-    /** Texto para compartir; la app prepara el mensaje, no lo envía. */
-    whatsapp: `https://wa.me/?text=${encodeURIComponent(
-      `Aviso de caudal (Sow Water): la fuente ${name} bajó a ${comma(last.v)} L/s (${drop} % menos). Si sigue así, en ${pm} daría unos ${pv.toFixed(1).replace('.', ',')} L/s.`,
-    )}`,
+    /** Text to share; the app prepares the message, it does not send it. */
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(message('ma7228e7e3ec0', name, comma(last.v), drop, pm, pv.toFixed(1).replace('.', displayLanguage() === 'en' ? '.' : ',')))}`,
   };
 }
-
 export function recordsCsv(ds: Dataset, records: FieldRecord[]): string {
   const rows = [['fecha', 'tipo', 'valor', 'fuente', 'nota', 'compartido']].concat(
     records.map((r) => [
@@ -180,15 +225,20 @@ export function recordsCsv(ds: Dataset, records: FieldRecord[]): string {
       r.share ? 'si' : 'no',
     ]),
   );
-  return rows.map((row) => row.map((x) => `"${String(x).replace(/"/g, '""')}"`).join(',')).join('\n');
+  return rows
+    .map((row) => row.map((x) => `"${String(x).replace(/"/g, '""')}"`).join(','))
+    .join('\n');
 }
-
-/** Tablero compartido de la ASADA (finqueros + ASADA). Fincas cercanas: SIMULADAS. */
+/** Shared ASADA dashboard (farmers + ASADA). Nearby farms: SIMULATED. */
 export function sharedBoard(
   ds: Dataset,
   ctx: PlaceContext,
   records: FieldRecord[],
-  source: { i: number; op: string; conn: string },
+  source: {
+    i: number;
+    op: string;
+    conn: string;
+  },
   nDone: number,
 ) {
   const q = ds.sources.fuentes[source.i] || [0, 0, 0, 0, '—'];
@@ -203,15 +253,19 @@ export function sharedBoard(
     conn: source.conn,
     farms: upFarms.length,
     care: nDone ? 1 : 0,
-    lastQ: last ? `${comma(last.v)} L/s` : 'Sin datos',
-    trend: chart.text ? `${chart.text.split('. ')[0]}.` : 'Registra el caudal cada mes para ver la tendencia.',
+    lastQ: last ? message('m5d031782b006', comma(last.v)) : message('m03dc8297d3d6'),
+    trend: chart.text ? `${chart.text.split('. ')[0]}.` : message('mfe4c5f849749'),
     events: records.filter((r) => r.t === 'evento' && r.share).length,
     actions: records.filter((r) => r.t === 'accion' && r.share).length,
   };
 }
-
-/** Vista institucional (CNE, municipalidad, FLUC): caídas de caudal SIMULADAS hasta que las ASADAS registren las suyas. */
-export function institutionalView(ds: Dataset, ctx: PlaceContext, plan: WatershedPlan, flucRegions: number) {
+/** Institutional view (CNE, municipality, FLUC): flow drops are SIMULATED until the ASADAS record their own. */
+export function institutionalView(
+  ds: Dataset,
+  ctx: PlaceContext,
+  plan: WatershedPlan,
+  flucRegions: number,
+) {
   const { fuentes, ops } = ds.sources;
   const nacs = ctx.geo.srcs.filter((i) => fuentes[i][3]);
   const simDown = nacs
@@ -224,8 +278,8 @@ export function institutionalView(ds: Dataset, ctx: PlaceContext, plan: Watershe
     .filter((o) => o.drop > 0);
   return {
     list: simDown.map((o) => ({
-      t: `${o.n} · ${o.op}`,
-      d: `−${o.drop} % de caudal en 4 meses`,
+      t: message('ma417ac239419', o.n, o.op),
+      d: message('ma858fb48e56f', o.drop),
       col: o.drop >= 30 ? '#B3362B' : o.drop >= 15 ? '#E0A030' : '#2E7A43',
     })),
     nDown: simDown.filter((o) => o.drop >= 15).length,

@@ -1,0 +1,67 @@
+name: Verify and prepare real alert climate data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '10 14 * * *'
+  pull_request:
+    paths:
+      - 'jobs/data-pipeline/**'
+      - '.github/workflows/alert-climate.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: alert-climate-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: jobs/data-pipeline/pyproject.toml
+      - run: python -m pip install -e './jobs/data-pipeline[imerg,recovery,test]'
+      - run: python -m pytest jobs/data-pipeline/tests -q
+
+  prepare:
+    if: github.event_name != 'pull_request'
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -e './jobs/data-pipeline'
+      - name: Update POWER and RONI independently, keeping valid previous observations
+        run: python -m field_farms_data.publish.climate
+      - name: Query CNE without inventing an observation date
+        if: always()
+        run: python -m field_farms_data.publish.cne
+      - name: Prepare regional NASA POWER and sampled SRTM estimates without Earthdata
+        if: always()
+        run: python -m field_farms_data.publish.regional
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: alert-climate-${{ github.run_id }}
+          path: |
+            apps/web/public/data/alerts/climate/power/*.json
+            apps/web/public/data/alerts/climate/roni/*.json
+            apps/web/public/data/alerts/cne/*.json
+            apps/web/public/data/alerts/nasa-regions*.geojson
+            apps/web/public/data/alerts/nasa-regions-status.json
+          retention-days: 14
+          if-no-files-found: warn
+
+# Files are review artifacts only: this workflow cannot commit, push or deploy.

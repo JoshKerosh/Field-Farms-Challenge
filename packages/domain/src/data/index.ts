@@ -1,17 +1,17 @@
 /**
- * Contrato de los archivos de datos publicados en `apps/web/public/data/`.
+ * Contract of the data files published in `apps/web/public/data/`.
  *
- * Todo dato que la app muestra sale de un archivo con este formato. Lo escriben los
- * procesos de `jobs/data-pipeline` (Python) y lo leen las pantallas. Formato completo en
- * `docs/datos.md`; esquema JSON en `apps/web/public/data/esquemas/archivo-indicadores.schema.json`.
+ * Every piece of data the app shows comes from a file in this format. The jobs in
+ * `jobs/data-pipeline` (Python) write it and the screens read it. Full format in
+ * `docs/data.md`; JSON schema in `apps/web/public/data/esquemas/archivo-indicadores.schema.json`.
  */
 
-/** Capa NASA (global, se replica en otro país sin cambios) o capa local (Costa Rica). N-10. */
+/** NASA layer (global, replicable in another country unchanged) or local layer (Costa Rica). N-10. */
 export type CapaDato = 'nasa' | 'local';
 
 /**
- * Estado de un indicador para el semáforo. Los conectores publican `sin_evaluar`: los umbrales
- * (con fuente citada) los aplican las alertas y Estado finca, no el conector.
+ * Traffic-light status of an indicator. Connectors publish `sin_evaluar` (not evaluated): the
+ * thresholds (with a cited source) are applied by alerts and Farm status, not by the connector.
  */
 export type EstadoIndicador = 'bien' | 'atencion' | 'urgente' | 'sin_evaluar' | 'sin_dato';
 
@@ -23,22 +23,22 @@ export const ESTADOS_INDICADOR: readonly EstadoIndicador[] = [
   'sin_dato',
 ];
 
-/** Encabezado obligatorio de todo archivo JSON de datos (N-06, X-03, X-04). */
+/** Required header of every JSON data file (N-06, X-03, X-04). */
 export interface MetaArchivo {
-  /** Identificador de la fuente en `fuentes.json`. */
+  /** Source identifier in `fuentes.json`. */
   fuente: string;
-  /** Dirección exacta de la que se obtuvo el dato (API, archivo o servicio). */
+  /** Exact address the data came from (API, file or service). */
   url: string;
   capa: CapaDato;
-  /** `true` solo en archivos de ejemplo o capas de demostración. */
+  /** `true` only in example files or demo layers. */
   simulado: boolean;
-  /** Fecha del dato más reciente (AAAA-MM-DD), no la de la descarga. */
+  /** Date of the most recent data (YYYY-MM-DD), not of the download. */
   fecha_dato: string;
-  /** Momento de la descarga o del cálculo (ISO 8601, UTC). */
+  /** Time of the download or calculation (ISO 8601, UTC). */
   fecha_carga: string;
-  /** Versión del formato del archivo. Sube cuando cambia la forma de `datos`. */
+  /** File format version. Bumped when the shape of `datos` changes. */
   version: number;
-  /** Nota opcional: método, limitaciones o por qué es simulado. */
+  /** Optional note: method, limitations or why it is simulated. */
   nota?: string;
 }
 
@@ -47,30 +47,30 @@ export interface ArchivoDatos<T> {
   datos: T;
 }
 
-/** Un número que se muestra en la app, siempre con su fuente y su fecha. */
+/** A number shown in the app, always with its source and date. */
 export interface Indicador {
-  /** Identificador estable, p. ej. `lluvia_30d`. */
+  /** Stable identifier, e.g. `lluvia_30d`. */
   id: string;
   nombre: string;
-  /** `null` cuando la fuente no tiene dato para esa fecha. */
+  /** `null` when the source has no data for that date. */
   valor: number | null;
   unidad: string;
   estado: EstadoIndicador;
-  /** Identificador en `fuentes.json`. */
+  /** Identifier in `fuentes.json`. */
   fuente: string;
-  /** Fecha del dato (AAAA-MM-DD). */
+  /** Date of the data (YYYY-MM-DD). */
   fecha: string;
   simulado: boolean;
   capa: CapaDato;
 }
 
-/** Punto de una serie de tiempo: fecha y valores por parámetro. */
+/** Point of a time series: date and values per parameter. */
 export interface PuntoSerie {
   fecha: string;
   valores: Record<string, number | null>;
 }
 
-/** Zona de referencia, subcuenca, cuadro o el país completo. */
+/** Reference zone, subwatershed, grid cell or the whole country. */
 export type TipoUnidad = 'zona' | 'subcuenca' | 'cuadro' | 'pais';
 
 export interface UnidadIndicadores {
@@ -82,7 +82,7 @@ export interface UnidadIndicadores {
   serie?: PuntoSerie[];
 }
 
-/** Forma de `datos` en todos los archivos de indicadores (NASA, NOAA, subcuencas). */
+/** Shape of `datos` in every indicator file (NASA, NOAA, subwatersheds). */
 export interface DatosIndicadores {
   unidad: TipoUnidad;
   items: UnidadIndicadores[];
@@ -90,10 +90,10 @@ export interface DatosIndicadores {
 
 export type ArchivoIndicadores = ArchivoDatos<DatosIndicadores>;
 
-/** Estado de una fuente en el catálogo. `estatico`: archivo entregado una vez, sin conector. */
+/** Status of a source in the catalog. `estatico`: file delivered once, with no connector. */
 export type EstadoFuente = 'ok' | 'falla' | 'estatico' | 'simulado';
 
-/** Entrada de `fuentes.json` (reemplaza la tabla `fuentes_datos`). */
+/** Entry of `fuentes.json` (replaces the `fuentes_datos` table). */
 export interface Fuente {
   id: string;
   titulo: string;
@@ -105,11 +105,11 @@ export interface Fuente {
   capa: CapaDato;
   simulado: boolean;
   estado: EstadoFuente;
-  /** Fecha del último dato bueno (AAAA-MM-DD) o `null` si nunca hubo uno. */
+  /** Date of the last good data (YYYY-MM-DD), or `null` if there never was one. */
   ultima_carga_buena: string | null;
-  /** Último error del conector; se borra cuando vuelve a funcionar. */
+  /** Last connector error; cleared when it works again. */
   ultimo_error?: string | null;
-  /** Archivos de `public/data/` que publica esta fuente (rutas relativas, admite `*`). */
+  /** Files in `public/data/` published by this source (relative paths, `*` allowed). */
   archivos: string[];
   nota?: string;
 }
@@ -123,7 +123,7 @@ const FECHA = /^\d{4}-\d{2}-\d{2}$/;
 const esObjeto = (v: unknown): v is Record<string, unknown> =>
   typeof v === 'object' && v !== null && !Array.isArray(v);
 
-/** Devuelve los errores del encabezado; lista vacía si es válido. */
+/** Returns the header errors; an empty list if it is valid. */
 export function validarMeta(meta: unknown): string[] {
   if (!esObjeto(meta)) return ['falta "meta"'];
   const errores: string[] = [];
@@ -163,7 +163,7 @@ export function validarIndicador(ind: unknown, donde = 'indicador'): string[] {
   return errores;
 }
 
-/** Valida un archivo de indicadores completo, incluida la coherencia con su encabezado. */
+/** Validates a whole indicator file, including consistency with its header. */
 export function validarArchivoIndicadores(archivo: unknown): string[] {
   if (!esObjeto(archivo)) return ['el archivo no es un objeto'];
   const errores = validarMeta(archivo.meta);
@@ -180,7 +180,7 @@ export function validarArchivoIndicadores(archivo: unknown): string[] {
     item.indicadores.forEach((ind: unknown, j) => {
       const donde = `items[${i}].indicadores[${j}]`;
       errores.push(...validarIndicador(ind, donde));
-      // Un indicador no puede decir que es real si el archivo es simulado, ni al revés.
+      // An indicator can't claim to be real if the file is simulated, or the other way around.
       if (esObjeto(ind) && ind.simulado !== meta.simulado)
         errores.push(`${donde}.simulado no coincide con meta.simulado`);
     });

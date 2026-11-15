@@ -1,11 +1,11 @@
-"""Conectores NASA y NOAA: descargan el dato real y lo publican en `apps/web/public/data/`.
+"""NASA and NOAA connectors: they download the real data and publish it in `apps/web/public/data/`.
 
-Ejecutar desde jobs/data-pipeline (lo corre la Action `datos-nasa.yml` todos los días):
-    python -m field_farms_data.publish.nasa [--solo power,roni,modis] [--out <carpeta>]
+Run from jobs/data-pipeline (the `datos-nasa.yml` Action runs it every day):
+    python -m field_farms_data.publish.nasa [--solo power,roni,modis] [--out <folder>]
 
-Si una fuente falla, su archivo anterior no se toca (queda el último dato bueno con su fecha) y
-`fuentes.json` la marca como `falla` con el error (D-03, D-06). El proceso sale con código 1 para
-que la Action avise, después de publicar las fuentes que sí funcionaron.
+If a source fails, its previous file is left untouched (the last good data stays with its date) and
+`fuentes.json` marks it as `falla` (failure) with the error (D-03, D-06). The job exits with code 1 so
+the Action reports it, after publishing the sources that did work.
 """
 
 import argparse
@@ -20,7 +20,7 @@ from field_farms_data.providers.zonas import ZONAS
 from field_farms_data.publish.archivos import DATA_DIR, actualizar_fuente, escribir_json, meta
 from field_farms_data.transforms import indicadores as ind
 
-# Primer año completo de MODIS Terra en la serie de referencia del prototipo (2012–2025).
+# First full year of MODIS Terra in the prototype's baseline series (2012–2025).
 MODIS_DESDE = 2012
 
 
@@ -54,7 +54,7 @@ def publicar_roni(out: Path) -> date:
 
 
 def _referencia_previa(out: Path) -> dict[str, dict]:
-    """Promedios históricos ya descargados, por zona: no cambian para una misma fecha del año."""
+    """Historical averages already downloaded, per zone: they don't change for the same date of the year."""
     path = out / 'nasa' / 'modis' / 'latest.json'
     if not path.exists():
         return {}
@@ -63,7 +63,7 @@ def _referencia_previa(out: Path) -> dict[str, dict]:
 
 
 def _anio_historico(zona, anio: int, doy: str) -> float | None:
-    """Un año que ORNL no entrega (503) queda sin dato; la normal exige al menos 5 años válidos."""
+    """A year ORNL doesn't deliver (503) is left without data; the normal requires at least 5 valid years."""
     try:
         fila = modis.fetch_range(zona.lat, zona.lon, f'A{anio}{doy}', f'A{anio}{doy}')
     except Exception:  # noqa: BLE001
@@ -82,7 +82,7 @@ def _modis_zona(zona, previa: dict[str, dict]):
     if ref and ref['dia_del_anio'] == doy and ref['hasta'] == anio - 1:
         historicos = ref['valores']
     else:
-        # Cada consulta al servicio de ORNL tarda ~40 s: los años van en paralelo.
+        # Each request to the ORNL service takes ~40 s: the years run in parallel.
         with ThreadPoolExecutor(max_workers=5) as pool:
             filas = pool.map(lambda y: _anio_historico(zona, y, doy), range(MODIS_DESDE, anio))
             historicos = list(filas)
@@ -123,7 +123,7 @@ def main(argv: list[str] | None = None) -> int:
             fecha = publicar(args.out)
             actualizar_fuente(args.out, fuente, fecha_dato=fecha)
             print(f'{fuente}: ok, dato al {fecha}')
-        except Exception as error:  # noqa: BLE001 — cualquier falla de la fuente se registra igual.
+        except Exception as error:  # noqa: BLE001 — any source failure is recorded the same way.
             fallas += 1
             actualizar_fuente(args.out, fuente, error=f'{type(error).__name__}: {error}')
             print(f'{fuente}: FALLA, se conserva el último dato bueno. {error}', file=sys.stderr)

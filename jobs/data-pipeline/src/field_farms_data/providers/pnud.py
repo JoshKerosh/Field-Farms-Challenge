@@ -1,4 +1,4 @@
-"""Lectura de las capas locales entregadas por PNUD: cuencas, subcuencas y el registro SAGA (AyA)."""
+"""Reading of the local layers delivered by UNDP (PNUD): watersheds, subwatersheds and the SAGA registry (AyA)."""
 
 import tempfile
 import zipfile
@@ -14,13 +14,13 @@ from shapely.geometry import shape
 CUENCAS_SHP = 'cuencas_hidrograficas.shp'
 SUBCUENCAS_ZIP = 'Subcuencas_CRTM05.zip'
 SAGA_XLSX = 'Operadores y Fuentes (Ubicaciones).xlsx'
-# En las hojas del SAGA, las filas anteriores son título y notas.
+# In the SAGA sheets, the rows before this are title and notes.
 SAGA_HEADER_ROW = 5
 
 
 @dataclass
 class Layer:
-    """Polígonos en su sistema de origen (CRTM05, metros) y el transformador a WGS84."""
+    """Polygons in their source system (CRTM05, meters) and the transformer to WGS84."""
 
     features: list[tuple[dict, shapely.Geometry]]
     to_wgs84: Transformer
@@ -46,7 +46,7 @@ def read_subcuencas(datasets: Path) -> Layer:
 
 
 def read_saga(datasets: Path) -> tuple[list[dict], list[dict]]:
-    """Filas de operadores y de fuentes, como diccionarios por encabezado."""
+    """Operator and source rows, as dictionaries keyed by header."""
     workbook = openpyxl.load_workbook(datasets / SAGA_XLSX, read_only=True, data_only=True)
 
     def sheet(name: str) -> list[dict]:

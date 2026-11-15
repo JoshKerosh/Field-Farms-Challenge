@@ -1,58 +1,58 @@
-# Arquitectura inicial
+# Initial architecture
 
-## Decisión
+## Decision
 
-Aplicación modular por funcionalidades y capas internas ligeras, sin base de datos: los datos son archivos planos en `apps/web/public/data/` que publican los procesos Python (ver [datos](datos.md)). Un monorepo conserva web, reglas compartidas, Pages Functions y procesos de datos. No se crean microservicios por funcionalidad.
+Modular application organized by feature, with light internal layers and no database: data is flat files in `apps/web/public/data/` published by the Python jobs (see [data](data.md)). One monorepo holds the web app, shared rules, Pages Functions and data jobs. No microservices are created per feature.
 
-La primera entrega es una base navegable: los repositorios consultan ejemplos locales, no una API de negocio. La web se despliega en Cloudflare Pages; los procesos Python corren en GitHub Actions y hacen commit de sus archivos.
+The first delivery is a navigable base: the repositories read local examples, not a business API. The web app is deployed on Cloudflare Pages; the Python jobs run on GitHub Actions and commit their files.
 
-## Límites
+## Boundaries
 
-- `features/farms`: ficha y manejo de la finca; rotación de potreros permanece aquí inicialmente.
-- `features/watersheds`: contexto territorial y relaciones documentadas.
-- `features/water`: fuentes y observaciones de caudal y lluvia.
-- `features/restoration`: acciones y futuras prioridades de restauración.
-- `features/environment`: presentación de indicadores preparados por Python.
-- `features/alerts`: alertas y eventos reportados.
-- `features/organizations`: ASADAS, FLUC y colaboración.
-- `features/assistant`: ayuda predefinida, separada de la capacidad de voz.
-- `features/benefits`: información económica y catálogo externo; no determina elegibilidad.
+- `features/farms`: farm profile and management; pasture rotation stays here for now.
+- `features/watersheds`: territorial context and documented relationships.
+- `features/water`: sources and flow and rainfall observations.
+- `features/restoration`: actions and future restoration priorities.
+- `features/environment`: presentation of indicators prepared by Python.
+- `features/alerts`: alerts and reported events.
+- `features/organizations`: ASADAS, FLUC and collaboration.
+- `features/assistant`: predefined help, separate from the voice capability.
+- `features/benefits`: economic information and external catalog; it does not determine eligibility.
 
-Cada módulo exporta su interfaz pública desde `index.ts`. Los demás módulos y la composición importan esa entrada. Agregar `use-cases` cuando haya una operación que coordinar o reglas reales; no generar capas vacías por convención.
+Each module exports its public interface from `index.ts`. Other modules and the composition import that entry point. Add `use-cases` when there is an operation to coordinate or real rules; don't create empty layers by convention.
 
-## Dependencias y flujo
+## Dependencies and flow
 
-El router compone loaders con interfaces asíncronas de repositorio. Los adaptadores de `demo/repositories` implementan esas interfaces usando fixtures tipadas y devuelven copias para evitar modificaciones accidentales. Las páginas consumen los resultados de sus loaders.
+The router composes loaders with asynchronous repository interfaces. The adapters in `demo/repositories` implement those interfaces using typed fixtures and return copies to avoid accidental mutation. Pages consume their loaders' results.
 
-`packages/domain` no conoce la interfaz, el navegador ni proveedores. Las interfaces de acceso pertenecen a cada módulo. `shared` contiene presentación reutilizable; `platform` contiene integración con navegador o servicios. El contrato de los archivos de datos (`packages/domain/src/data`) sí pertenece al dominio, porque lo comparten la web y los procesos Python.
+`packages/domain` knows nothing about the interface, the browser or providers. Access interfaces belong to each module. `shared` holds reusable presentation; `platform` holds browser and service integrations. The data file contract (`packages/domain/src/data`) does belong to the domain, because the web app and the Python jobs share it.
 
-Registros compone agua, restauración, eventos y organizaciones, sin duplicar información. Guía y Fuentes también son páginas de composición. El selector de vista tiene estado efímero de presentación; no sustituye una sesión o un permiso.
+Records composes water, restoration, events and organizations without duplicating information. Guide and Sources are also composition pages. The view selector holds ephemeral presentation state; it does not replace a session or a permission.
 
-## Verdad del dato
+## Data truth
 
-Entidades de campo con ID estable, procedencia y fecha. Los ejemplos tienen origen `demo`; los datos observados y los resultados estimados deberán conservar sus diferencias y el método usado. La relación finca–ASADA de esta demo es ficticia; un radio o la cercanía no prueba recarga ni abastecimiento.
+Field entities have a stable ID, source and date. Examples have origin `demo`; observed data and estimated results must keep their differences and the method used. The farm–ASADA relationship in this demo is fictional; a radius or proximity does not prove recharge or supply.
 
-El catálogo es información documental separada de los ejemplos. Cada oportunidad distingue pago, préstamo, reconocimiento o subvención, conserva URL y fecha de revisión, y no se publica como abierta sin confirmación. Un cierre vencido prevalece sobre el estado almacenado. Las fechas sin hora se consideran inclusivas; las próximas convocatorias conservarán las horas y zonas oficiales cuando se publiquen.
+The catalog is documentary information kept apart from the examples. Each opportunity distinguishes payment, loan, recognition or grant, keeps its URL and review date, and is not published as open without confirmation. A past deadline overrides the stored status. Dates without a time are treated as inclusive; upcoming calls will keep the official times and time zones when published.
 
-## Próxima persistencia
+## Upcoming persistence
 
-El backend será la autoridad sobre identidad, membresías, consentimiento, restricciones y transacciones. Migraciones y pruebas se revisarán con el código. Las mediciones incluirán identificadores estables para impedir duplicados durante reintentos.
+The backend will be the authority on identity, memberships, consent, restrictions and transactions. Migrations and tests will be reviewed with the code. Measurements will include stable identifiers to prevent duplicates during retries.
 
-Dexie almacenará datos autorizados localmente y una outbox. La interfaz distinguirá guardado local, envío pendiente y confirmación remota. La PWA actual solo precarga código y recursos demo; no implementa ese protocolo.
+Dexie will store authorized data locally plus an outbox. The interface will distinguish local save, pending send and remote confirmation. The current PWA only precaches code and demo resources; it does not implement that protocol.
 
-## Mi cuenca con capas reales
+## My watershed with real layers
 
-El mapa de Mi cuenca usa datos reales; el resto de la demo sigue con ejemplos. Al elegir un punto:
+The My watershed map uses real data; the rest of the demo still uses examples. When a point is chosen:
 
-1. La cuenca y la subcuenca salen de las capas publicadas por `jobs/data-pipeline` en `public/data/geo` (subcuencas y fuentes se descargan solo para las cuencas involucradas).
-2. La parcela catastral se consulta al SIRI (WMS GetFeatureInfo) mediante `/api/parcela`, porque el SIRI no envía cabeceras CORS. La lógica está en `platform/siri/parcel.ts` y la usan la Pages Function `functions/api/parcela.ts` y un middleware de Vite. Devuelve solo la parcela que contiene el punto y siete campos, con caché HTTP de un día.
-3. Los cruces se calculan en el navegador con Turf (`features/watersheds/analysis`): parte de la finca en cada cuenca y subcuenca (se ignoran partes menores al 1 %), ríos a ≤ 200 m pedidos directo al WFS del IGN (permite CORS) y fuentes y oficinas de ASADAS a ≤ 300 m, o la fuente más cercana si no hay ninguna.
-4. El modo «Todo en las cuencas de la finca» muestra ASADAS, fuentes y ríos de esas cuencas, cada capa desde cierto zoom.
+1. The watershed and subwatershed come from the layers published by `jobs/data-pipeline` in `public/data/geo` (subwatersheds and sources are downloaded only for the watersheds involved).
+2. The cadastral parcel is requested from SIRI (WMS GetFeatureInfo) through `/api/parcela`, because SIRI does not send CORS headers. The logic lives in `platform/siri/parcel.ts` and is used by the Pages Function `functions/api/parcela.ts` and by a Vite middleware. It returns only the parcel containing the point and seven fields, with a one-day HTTP cache.
+3. The overlays are computed in the browser with Turf (`features/watersheds/analysis`): the share of the farm in each watershed and subwatershed (parts under 1 % are ignored), rivers within ≤ 200 m requested directly from the IGN WFS (it allows CORS), and sources and ASADA offices within ≤ 300 m, or the nearest source if there are none.
+4. The "Everything in the farm's watersheds" mode shows ASADAS, sources and rivers of those watersheds, each layer from a certain zoom level.
 
-La cercanía no prueba recarga ni abastecimiento; la interfaz lo indica. La capa completa del catastro y las vías del SIRI no se muestran: MapLibre necesitaría un proxy de mosaicos.
+Proximity does not prove recharge or supply; the interface says so. The full cadastre layer and SIRI roads are not shown: MapLibre would need a tile proxy.
 
-## Evolución
+## Evolution
 
-La prioridad por tiempo es React responsive + PWA. Capacitor es una opción posterior para empaquetar la interfaz web y agregar capacidades del dispositivo; requiere adaptar y probar la experiencia para Android/iOS. React Native + Expo sigue siendo una alternativa si se necesita una interfaz nativa: compartiría tipos, reglas y backend, pero sus pantallas y navegación se construirían para esa plataforma. No se implementa ninguna de esas dos opciones móviles en esta entrega.
+Given the time, the priority is responsive React + PWA. Capacitor is a later option to package the web interface and add device capabilities; it requires adapting and testing the experience for Android/iOS. React Native + Expo remains an alternative if a native interface is needed: it would share types, rules and backend, but its screens and navigation would be built for that platform. Neither mobile option is implemented in this delivery.
 
-Incorporar FastAPI cuando un cálculo bajo demanda o integración requiera una API propia. Python accederá a proveedores, transformará y publicará resultados pequeños; los rasters quedan fuera del repositorio.
+Add FastAPI when an on-demand calculation or integration needs its own API. Python will access providers, transform data and publish small results; rasters stay out of the repository.

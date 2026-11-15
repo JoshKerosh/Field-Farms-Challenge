@@ -7,7 +7,6 @@ import { RestorationPage } from '../features/restoration';
 import { EnvironmentPage } from '../features/environment';
 import { AlertsPage } from '../features/alerts';
 import { BenefitsPage } from '../features/benefits';
-import { AssistantPage } from '../features/assistant';
 import { copy } from '../i18n';
 import { AppLayout } from './layouts/AppLayout';
 import { GuidePage } from './pages/GuidePage';
@@ -39,7 +38,7 @@ export const router = createBrowserRouter([
         loader: () => repositories.benefits.listOpportunities(),
         element: <BenefitsPage />,
       },
-      { path: 'assistant', element: <AssistantPage /> },
+      { path: 'assistant', element: <Navigate to="/guide" replace /> },
       { path: 'sources', element: <SourcesPage /> },
       { path: '*', element: <ErrorPage /> },
     ],

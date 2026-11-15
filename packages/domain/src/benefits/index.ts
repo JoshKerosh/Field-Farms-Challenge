@@ -1,6 +1,16 @@
 export type OpportunityKind = 'payment' | 'credit' | 'recognition' | 'grant';
 export type OpportunityAvailability = 'open' | 'closed' | 'verify';
 
+export interface OpportunityDetails {
+  forWhom: string;
+  offers: string[];
+  documents: string[];
+  steps: string[];
+  obligations: string[];
+  contact: { label: string; url: string };
+  sources: { label: string; url: string }[];
+}
+
 export interface SupportOpportunity {
   id: string;
   title: string;
@@ -13,6 +23,7 @@ export interface SupportOpportunity {
   reviewedAt: string;
   availability: OpportunityAvailability;
   deadline?: string;
+  details?: OpportunityDetails;
 }
 
 /** An advertised deadline can close a call; it cannot establish eligibility. */

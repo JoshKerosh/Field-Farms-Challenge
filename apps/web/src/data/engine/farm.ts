@@ -1,52 +1,81 @@
+import { localizedResource, message } from '../../i18n/messages';
 import type { Dataset } from '../real/types';
+import {
+  DEMO_SCENARIOS,
+  etMultiplier,
+  rainFactor,
+  type ClimateScenario,
+  type DemoScenario,
+} from './climate';
 import { comma, MONTHS } from './format';
-import { DEMO_SCENARIOS, etMultiplier, rainFactor, type ClimateScenario, type DemoScenario } from './climate';
 import type { PlaceContext } from './geo';
-
 export type ExampleFarmKey = 'lechera' | 'carne' | 'mixta';
 export type FarmKey = 'mia' | ExampleFarmKey;
-
 export interface FarmProfile {
   key: FarmKey;
   name: string;
   who: string;
   tipo: string;
   ha: number;
-  /** Hectáreas para sembrar (cultivo o forraje). */
+  /** Hectares to plant (crop or forage). */
   cult: number;
   animals: number;
-  /** true si son los datos del propio productor (guardados en su dispositivo). */
+  /** true if it is the farmer's own data (stored on their device). */
   own: boolean;
 }
-
-/** Perfiles de ejemplo (SIMULADOS) del prototipo v10. */
-export const EXAMPLE_FARMS: Record<ExampleFarmKey, FarmProfile> = {
-  lechera: { key: 'lechera', name: 'Lechería pequeña', who: 'Doña Ana · productora simulada', tipo: 'Leche con vacas en pastoreo', ha: 12, cult: 3, animals: 18, own: false },
-  carne: { key: 'carne', name: 'Ganado de carne', who: 'Don Luis · productor simulado', tipo: 'Engorde de ganado en potreros', ha: 45, cult: 6, animals: 60, own: false },
-  mixta: { key: 'mixta', name: 'Finca mixta', who: 'Familia Mora · productores simulados', tipo: 'Frijol, maíz y algunas vacas', ha: 6, cult: 4, animals: 6, own: false },
-};
-
-export const FARM_ACTIVITIES: [string, string][] = [
-  ['leche', 'Leche'],
-  ['carne', 'Carne'],
-  ['doble', 'Doble propósito'],
-  ['cultivos', 'Cultivos'],
-  ['mixta', 'Mixta'],
-];
-export const FARM_WATER: [string, string][] = [
-  ['naciente', 'Naciente propia'],
-  ['pozo', 'Pozo'],
-  ['rio', 'Río o quebrada'],
+/** Example profiles (SIMULATED) from the v10 prototype. */
+export const EXAMPLE_FARMS: Record<ExampleFarmKey, FarmProfile> = localizedResource(() => ({
+  lechera: {
+    key: 'lechera',
+    name: 'Lechería pequeña',
+    who: message('m472d4c7a5f2e'),
+    tipo: message('mca5fc8525826'),
+    ha: 12,
+    cult: 3,
+    animals: 18,
+    own: false,
+  },
+  carne: {
+    key: 'carne',
+    name: 'Ganado de carne',
+    who: message('m6bd8132c403b'),
+    tipo: message('m1dbf6e1fd37b'),
+    ha: 45,
+    cult: 6,
+    animals: 60,
+    own: false,
+  },
+  mixta: {
+    key: 'mixta',
+    name: 'Finca mixta',
+    who: message('mf75f81b7ad00'),
+    tipo: message('mae84b4640840'),
+    ha: 6,
+    cult: 4,
+    animals: 6,
+    own: false,
+  },
+}));
+export const FARM_ACTIVITIES: [string, string][] = localizedResource(() => [
+  ['leche', message('m5e29f4119cb0')],
+  ['carne', message('m7d537cbf9a91')],
+  ['doble', message('mc4d6f0f471d5')],
+  ['cultivos', message('mb0c6194ad8f5')],
+  ['mixta', message('ma21c720697dc')],
+]);
+export const FARM_WATER: [string, string][] = localizedResource(() => [
+  ['naciente', message('m725ff7d87314')],
+  ['pozo', message('me187971259d4')],
+  ['rio', message('m12874fa1afe4')],
   ['asada', 'ASADA'],
-  ['lluvia', 'Agua de lluvia'],
-];
-export const FARM_FLOODING: [string, string][] = [
+  ['lluvia', message('m0aaee352c4ce')],
+]);
+export const FARM_FLOODING: [string, string][] = localizedResource(() => [
   ['no', 'No'],
-  ['aveces', 'En meses muy lluviosos'],
-  ['si', 'Sí, seguido'],
-];
-
-/** Datos de la finca del productor; se guardan solo en su dispositivo. */
+  ['aveces', message('m7fd5abe9df95')],
+  ['si', message('mef612425c20b')],
+]);
+/** The farmer's farm data; stored only on their device. */
 export interface MyFarm {
   name: string;
   act: string;
@@ -56,7 +85,6 @@ export interface MyFarm {
   animals: number;
   ench: 'no' | 'aveces' | 'si';
 }
-
 export interface FarmFormInput {
   name: string;
   act: string;
@@ -66,27 +94,32 @@ export interface FarmFormInput {
   animals: string;
   ench: string;
 }
-
-export const EMPTY_FARM_FORM: FarmFormInput = { name: '', act: '', agua: '', ha: '', cult: '', animals: '', ench: 'no' };
-
+export const EMPTY_FARM_FORM: FarmFormInput = {
+  name: '',
+  act: '',
+  agua: '',
+  ha: '',
+  cult: '',
+  animals: '',
+  ench: 'no',
+};
 const num = (v: string | undefined): number => {
   const n = Number(String(v ?? '').replace(',', '.'));
   return Number.isFinite(n) ? n : NaN;
 };
-
 export function validateFarmForm(f: FarmFormInput) {
   const ha = num(f.ha);
   const cult = num(f.cult);
   const animals = f.animals === '' ? 0 : num(f.animals);
   const errors = {
-    ha: !(ha > 0) ? 'Escribe el área total, por ejemplo 12.' : ha > 5000 ? 'Revisa el número: parece muy grande.' : '',
+    ha: !(ha > 0) ? message('m9e2286da7397') : ha > 5000 ? message('m92378f9d3bf0') : '',
     cult: !(cult > 0)
-      ? 'Escribe cuántas hectáreas puedes sembrar.'
+      ? message('m2a30919fe6ff')
       : ha > 0 && cult > ha
-        ? `No puede ser mayor que el área total (${ha} ha).`
+        ? message('m31fc2dc6f978', ha)
         : '',
-    animals: !(animals >= 0) || animals > 20000 ? 'Escribe un número de animales válido.' : '',
-    act: f.act ? '' : 'Elige una opción.',
+    animals: !(animals >= 0) || animals > 20000 ? message('m216f9d62673d') : '',
+    act: f.act ? '' : message('m409005604aa8'),
   };
   const ok = !errors.ha && !errors.cult && !errors.animals && !errors.act;
   const farm: MyFarm | null = ok
@@ -102,7 +135,6 @@ export function validateFarmForm(f: FarmFormInput) {
     : null;
   return { errors, ok, farm };
 }
-
 export function myFarmToForm(f: MyFarm): FarmFormInput {
   return {
     name: f.name,
@@ -114,18 +146,21 @@ export function myFarmToForm(f: MyFarm): FarmFormInput {
     ench: f.ench,
   };
 }
-
 const lab = (list: [string, string][], k: string) => list.find((o) => o[0] === k)?.[1] ?? k;
-
-/** Finca activa: la del productor o uno de los perfiles de ejemplo. */
+/** Active farm: the farmer's or one of the example profiles. */
 export function activeFarm(key: FarmKey, my: MyFarm | null): FarmProfile {
   if (key === 'mia' && my) {
-    const water = my.agua ? ` · agua: ${lab(FARM_WATER, my.agua).toLowerCase()}` : '';
-    const ench = my.ench === 'si' ? ' · se encharca seguido' : my.ench === 'aveces' ? ' · se encharca a veces' : '';
+    const water = my.agua ? message('m1dd3302033b8', lab(FARM_WATER, my.agua).toLowerCase()) : '';
+    const ench =
+      my.ench === 'si'
+        ? message('m36424e3470fd')
+        : my.ench === 'aveces'
+          ? message('mff6b5f76a3e0')
+          : '';
     return {
       key: 'mia',
-      name: my.name || 'Mi finca',
-      who: `${my.name || 'Mi finca'} · tus datos`,
+      name: my.name || message('mba8875d8f580'),
+      who: message('m53da36542add', my.name || message('mba8875d8f580')),
       tipo: lab(FARM_ACTIVITIES, my.act) + water + ench,
       ha: my.ha,
       cult: my.cult,
@@ -135,9 +170,13 @@ export function activeFarm(key: FarmKey, my: MyFarm | null): FarmProfile {
   }
   return EXAMPLE_FARMS[key === 'mia' ? 'lechera' : key];
 }
-
-/** ¿La finca se puede encharcar? (mapa CNE/RIESGOS, drenaje del suelo, modo demo o dato del productor). */
-export function siteFloods(ctx: PlaceContext, demo: DemoScenario | null, key: FarmKey, my: MyFarm | null): boolean {
+/** Can the farm get waterlogged? (CNE/RIESGOS map, soil drainage, demo mode or the farmer's data). */
+export function siteFloods(
+  ctx: PlaceContext,
+  demo: DemoScenario | null,
+  key: FarmKey,
+  my: MyFarm | null,
+): boolean {
   return (
     ctx.flood ||
     ctx.clsRaw.includes('h') ||
@@ -145,7 +184,6 @@ export function siteFloods(ctx: PlaceContext, demo: DemoScenario | null, key: Fa
     (key === 'mia' && !!my && my.ench !== 'no')
   );
 }
-
 export interface ConservationAction {
   id: string;
   ic: string;
@@ -155,32 +193,85 @@ export interface ConservationAction {
   who: string;
   opp?: boolean;
 }
-
-/** Catálogo de acciones del dueño que protegen el agua (Ley Forestal, art. 33; PNUD). */
-export const CONSERVATION_ACTIONS: ConservationAction[] = [
-  { id: 'naciente', ic: '💧', t: 'Proteger la naciente', d: 'Cercar y dejar crecer el bosque en 100 m alrededor.', ley: 'Ley Forestal, art. 33', who: 'Finquero + ASADA' },
-  { id: 'ribera', ic: '🌳', t: 'Corredor ribereño', d: 'Árboles a cada lado de ríos y quebradas: 15 m en plano, 50 m en ladera.', ley: 'Ley Forestal, art. 33', who: 'Finquero' },
-  { id: 'potreros', ic: '🔄', t: 'Rotación de potreros', d: 'Mover el ganado entre apartos y dar descanso al pasto: el suelo absorbe más agua.', ley: '', who: 'Finquero' },
-  { id: 'bebederos', ic: '🚰', t: 'Bebederos lejos del agua', d: 'Que el ganado no entre a la quebrada ni pise la naciente.', ley: '', who: 'Finquero' },
-  { id: 'arboles', ic: '🌱', t: 'Árboles en potreros y cercas vivas', d: 'Dan sombra, guardan humedad y ayudan a que el agua se infiltre.', ley: '', who: 'Finquero' },
-  { id: 'lluvia', ic: '🌧', t: 'Cosechar agua de lluvia', d: 'Tanques o reservorios para el verano, sin sacar más de la naciente.', ley: '', who: 'Finquero' },
-  { id: 'quemas', ic: '🔥', t: 'No quemar', d: 'El fuego deja el suelo desnudo y duro: el agua corre en vez de infiltrarse.', ley: '', who: 'Finquero' },
-  { id: 'turismo', ic: '🦜', t: 'Turismo sostenible', d: 'Senderos y observación de aves en el corredor: un ingreso extra por cuidar el agua.', ley: '', who: 'Finquero + comunidad', opp: true },
-];
-
+/** Catalog of owner actions that protect the water (Forestry Law, art. 33; UNDP). */
+export const CONSERVATION_ACTIONS: ConservationAction[] = localizedResource(() => [
+  {
+    id: 'naciente',
+    ic: '',
+    t: message('m60414a7c0d35'),
+    d: message('m10b9d0db8d4d'),
+    ley: message('ma799cc98b16f'),
+    who: message('me5a8ae7b0be5'),
+  },
+  {
+    id: 'ribera',
+    ic: '',
+    t: message('m4ec28cf8bf1e'),
+    d: message('madeb542e4791'),
+    ley: message('ma799cc98b16f'),
+    who: message('m761f3a6d1bbe'),
+  },
+  {
+    id: 'potreros',
+    ic: '',
+    t: message('mf84fdd3b79a3'),
+    d: message('m915eb959e3b0'),
+    ley: '',
+    who: message('m761f3a6d1bbe'),
+  },
+  {
+    id: 'bebederos',
+    ic: '',
+    t: message('m4a575ff7a0b4'),
+    d: message('md4de59a92411'),
+    ley: '',
+    who: message('m761f3a6d1bbe'),
+  },
+  {
+    id: 'arboles',
+    ic: '',
+    t: message('mc29de0c02f68'),
+    d: message('m77b39eb67bba'),
+    ley: '',
+    who: message('m761f3a6d1bbe'),
+  },
+  {
+    id: 'lluvia',
+    ic: '',
+    t: message('m3948892529c4'),
+    d: message('m25a5604890b3'),
+    ley: '',
+    who: message('m761f3a6d1bbe'),
+  },
+  {
+    id: 'quemas',
+    ic: '',
+    t: message('m5978b178d0cf'),
+    d: message('mae0ef6633d61'),
+    ley: '',
+    who: message('m761f3a6d1bbe'),
+  },
+  {
+    id: 'turismo',
+    ic: '',
+    t: message('md81399711b16'),
+    d: message('m3a520eb2876b'),
+    ley: '',
+    who: message('m371956510ae6'),
+    opp: true,
+  },
+]);
 export type ActionStatus = 'hecho' | 'plan' | '';
-
 export interface RotationMonth {
   m: string;
-  /** Días de descanso recomendados ese mes. */
+  /** Recommended rest days that month. */
   rest: number;
-  /** Altura de la barra (4–70 px). */
+  /** Bar height (4–70 px). */
   h: number;
   col: string;
-  /** Animales que aguanta el pasto. */
+  /** Animals the pasture can support. */
   cap: number;
 }
-
 export interface Rotation {
   apartos: number;
   ha: string;
@@ -195,10 +286,9 @@ export interface Rotation {
   capMonth: string;
   animals: number;
 }
-
 /**
- * Rotación de potreros con humedad del suelo (NASA POWER), verdor (MODIS) y clima
- * esperado (El Niño según NOAA RONI). Estimación orientativa del prototipo v10.
+ * Pasture rotation using soil moisture (NASA POWER), greenness (MODIS) and expected
+ * weather (El Niño per NOAA RONI). Indicative estimate from the v10 prototype.
  */
 export function pastureRotation(
   ds: Dataset,
@@ -217,7 +307,10 @@ export function pastureRotation(
   const haP = Math.max(1, Number(farm.ha) - (farm.animals ? 0 : Number(farm.cult || 0)) || 10);
   const anP = farm.animals || 20;
   const apartos = Math.max(2, Math.min(40, apartosIn || 8));
-  const gNow = Math.max(0.15, Math.min(1, 0.5 * Math.min(1, NZ.gw30 / 0.8) + 0.5 * Math.min(1, vNow / 0.75)));
+  const gNow = Math.max(
+    0.15,
+    Math.min(1, 0.5 * Math.min(1, NZ.gw30 / 0.8) + 0.5 * Math.min(1, vNow / 0.75)),
+  );
   const ROTM = [10, 11, 0, 1, 2, 3];
   const gm: number[] = [];
   ROTM.forEach((m, k) => {
@@ -255,9 +348,19 @@ export function pastureRotation(
     months,
     lineY: Math.round(70 - (70 * anP) / mx),
     warn: short.length
-      ? `En ${short.map((x) => x.m).join(', ')} el pasto alcanzaría para unos ${Math.min(...short.map((x) => x.cap))} animales y tienes ${anP}: alarga el descanso, guarda forraje o reduce la carga.`
-      : `El pasto alcanzaría para tus ${anP} animales los próximos 6 meses.`,
-    now: `Hoy: deja descansar cada aparto ${rest} días y usa cada uno ${occ} ${occ === 1 ? 'día.' : 'días.'}`,
+      ? message(
+          'mdf95b2b18d7b',
+          short.map((x) => x.m).join(', '),
+          Math.min(...short.map((x) => x.cap)),
+          anP,
+        )
+      : message('m0e4a06e02610', anP),
+    now: message(
+      'm97c40a294ffa',
+      rest,
+      occ,
+      occ === 1 ? message('m52cf8502b836') : message('mccaa97b96dfa'),
+    ),
     minCap,
     capMonth,
     animals: anP,

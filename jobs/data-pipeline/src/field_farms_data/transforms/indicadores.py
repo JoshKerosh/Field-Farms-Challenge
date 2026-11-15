@@ -1,7 +1,7 @@
-"""Cálculo de indicadores con el contrato compartido (packages/domain/src/data).
+"""Indicator calculation with the shared contract (packages/domain/src/data).
 
-Las funciones son puras: reciben lo ya descargado y devuelven diccionarios listos para JSON.
-Los conectores no aplican umbrales: el estado queda `sin_evaluar` (o `sin_dato` si falta el valor).
+The functions are pure: they take what was already downloaded and return JSON-ready dictionaries.
+Connectors don't apply thresholds: the status stays `sin_evaluar` (or `sin_dato` if the value is missing).
 """
 
 from datetime import date, timedelta
@@ -9,7 +9,7 @@ from datetime import date, timedelta
 from field_farms_data.providers.noaa import season_end
 from field_farms_data.providers.zonas import Zona
 
-# Ventana mínima de días con dato para publicar un acumulado de 30 días.
+# Minimum number of days with data to publish a 30-day total.
 DIAS_VENTANA = 30
 
 
@@ -31,7 +31,7 @@ def ultima_fecha(rows, param: str) -> date | None:
 
 
 def power_zona(zona: Zona, rows, clim: dict[str, list[float]], fuente: str = 'nasa-power') -> dict:
-    """Indicadores de 30 días (y lluvia de 7 días) con su anomalía frente a 1991–2020."""
+    """30-day indicators (and 7-day rainfall) with their anomaly against 1991–2020."""
     fin = ultima_fecha(rows, 'PRECTOTCORR')
     if fin is None:
         raise ValueError(f'{zona.id}: POWER no trae lluvia en el periodo')
@@ -40,7 +40,7 @@ def power_zona(zona: Zona, rows, clim: dict[str, list[float]], fuente: str = 'na
     completa = len(lluvia) == DIAS_VENTANA
     lluvia_30 = round(sum(v for _, v in lluvia), 1) if completa else None
     normal_30 = sum(clim['PRECTOTCORR'][d.month - 1] for d, _ in lluvia) if completa else 0
-    # Con menos de 10 mm normales (pleno verano) el porcentaje no dice nada.
+    # With under 10 mm normally (peak dry season) the percentage means nothing.
     anom = round((lluvia_30 / normal_30 - 1) * 100) if lluvia_30 is not None and normal_30 >= 10 else None
 
     lluvia_7 = _ventana(rows, 'PRECTOTCORR', fin, 7)
@@ -78,7 +78,7 @@ def roni_item(rows: list[tuple[str, int, float]], fuente: str = 'noaa-roni') -> 
     fin = season_end(season, year)
     inds = [
         indicador('roni', f'Índice RONI de El Niño ({season} {year})', value, '°C', fuente, fin),
-        # Umbral oficial de NOAA: El Niño con RONI ≥ +0,5 y La Niña con RONI ≤ −0,5.
+        # Official NOAA threshold: El Niño with RONI ≥ +0.5 and La Niña with RONI ≤ −0.5.
         indicador('roni_fase', 'Fase ENOS según NOAA (1 El Niño, 0 neutral, −1 La Niña)',
                   1 if value >= 0.5 else -1 if value <= -0.5 else 0, 'fase', fuente, fin),
     ]
@@ -89,14 +89,14 @@ def roni_item(rows: list[tuple[str, int, float]], fuente: str = 'noaa-roni') -> 
 
 def modis_zona(zona: Zona, recientes: list[tuple[str, str, float | None]],
                historicos: list[float | None], fuente: str = 'nasa-modis') -> dict:
-    """Verdor de la imagen más reciente con dato frente al promedio de la misma fecha en años previos."""
+    """Greenness of the most recent image with data against the average for the same date in earlier years."""
     con_dato = [r for r in recientes if r[2] is not None]
     if not con_dato:
         raise ValueError(f'{zona.id}: MODIS sin imágenes válidas recientes')
     _, fecha_txt, ndvi = con_dato[-1]
     fecha = date.fromisoformat(fecha_txt)
     validos = [h for h in historicos if h is not None]
-    # Con menos de 5 años el promedio no es una referencia confiable.
+    # With fewer than 5 years the average is not a reliable reference.
     normal = round(sum(validos) / len(validos), 3) if len(validos) >= 5 else None
     inds = [
         indicador('verdor', 'Verdor de la vegetación (NDVI, 0 a 1)', ndvi, 'NDVI', fuente, fecha),

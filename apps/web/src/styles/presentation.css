@@ -1,0 +1,258 @@
+/* Content-only rules. Map and satellite workspaces keep their existing styles. */
+.content-card {
+  padding: var(--space-lg);
+  gap: var(--space-md);
+  align-content: start;
+}
+.content-card > p,
+.records-page .recovery .content-card > p {
+  margin: 0;
+}
+.content-card > h2,
+.content-card > h3,
+.records-page .recovery .content-card > h2 {
+  margin: 0;
+}
+.content-card :is(input, select, textarea) {
+  min-width: 0;
+  max-width: 100%;
+}
+.content-card :is(h2, h3, h4, dd, a) {
+  overflow-wrap: anywhere;
+}
+.farm-page .farm-facts {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: var(--space-lg);
+  margin: 0;
+}
+.farm-page .farm-facts > div {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 2;
+  gap: var(--space-sm);
+}
+.farm-page .farm-facts dd,
+.farm-page .farm-facts div:not(:last-child) dd {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.farm-page .farm-record-actions,
+.farm-page .farm-next-actions {
+  margin-top: 0;
+  gap: var(--space-md);
+}
+.farm-page .farm-record-location {
+  padding: var(--space-md);
+}
+.farm-page .v10-form-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: var(--space-lg);
+}
+.farm-page .v10-field {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 4;
+  align-content: start;
+  gap: var(--space-sm);
+}
+.farm-page .v10-field label {
+  min-height: 0;
+}
+.farm-page .v10-field :is(input, select),
+.records-page :is(input:not([type='checkbox']), select) {
+  min-height: 48px;
+}
+.farm-area-label {
+  font-size: 0.9375rem;
+  font-weight: 750;
+}
+.farm-area-output {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.farm-area-help {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+.farm-page .content-card .v10-pill-btn--primary {
+  color: var(--color-surface);
+  background: var(--color-primary);
+}
+.guide-page > .v10-grid-3 {
+  gap: var(--space-lg);
+}
+.guide-page > .v10-grid-3 > .content-card {
+  grid-template-rows: auto 1fr auto;
+}
+.sources-page .content-card > .v10-map-toolbar {
+  align-items: start;
+  gap: var(--space-md);
+}
+.sources-page .content-card .source-note {
+  margin-top: 0;
+}
+.sources-page .badge-green {
+  color: var(--color-forest);
+  background: var(--color-forest-tint);
+}
+.sources-page .source-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md) var(--space-xl);
+  margin: 0;
+}
+.source-metadata dt {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+.source-metadata dd {
+  margin: 4px 0 0;
+  font-variant-numeric: tabular-nums;
+}
+.benefits-page .benefits-summary {
+  padding: var(--space-lg);
+  color: var(--color-ink);
+  background: var(--color-forest-tint);
+}
+.benefits-page .section-kicker {
+  color: var(--color-forest);
+}
+.benefits-page .badge-neutral {
+  color: var(--color-muted);
+  background: var(--color-water-tint);
+}
+.benefits-page .benefit-summary {
+  gap: var(--space-lg);
+  margin: var(--space-lg) 0;
+}
+.benefits-page .benefit-summary > div {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 2;
+  gap: var(--space-sm);
+}
+.benefits-page .benefit-summary dt {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+.benefits-page .benefit-summary dd {
+  font-variant-numeric: tabular-nums;
+}
+.benefits-page .opportunity {
+  display: grid;
+  gap: var(--space-md);
+}
+.benefits-page .opportunity > :is(p, h3, details),
+.benefits-page .opportunity-footer .source-note {
+  margin: 0;
+}
+.benefits-page .opportunity-details {
+  margin-top: var(--space-md);
+}
+.benefits-page .opportunity-details > section {
+  margin-top: var(--space-lg);
+}
+.benefits-page .opportunity-meta,
+.benefits-page .opportunity-footer {
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+.records-page .recovery > [role='status']:empty {
+  display: none;
+}
+.records-page .recovery-fields {
+  gap: var(--space-lg);
+  align-items: start;
+}
+.records-page .recovery-fields > button {
+  align-self: end;
+}
+.records-page .recovery .content-card > label {
+  margin-top: var(--space-sm);
+}
+.records-page .recovery-goal > h3 {
+  margin-bottom: var(--space-md);
+}
+.records-page .recovery-goal details {
+  margin: var(--space-md) 0;
+}
+.records-page dl {
+  margin: 0;
+  align-items: baseline;
+  gap: var(--space-md);
+}
+.records-page dd {
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.records-page .record-share {
+  margin-top: var(--space-md);
+}
+.alerts-page > .v10-hero-card,
+.watershed-page > .v10-hero-card {
+  gap: var(--space-md);
+}
+.alerts-page details.content-card > summary {
+  min-height: 44px;
+}
+.alerts-page .content-card .v10-map-toolbar {
+  gap: var(--space-md);
+  align-items: start;
+}
+.watershed-page > .v10-grid-3 {
+  gap: var(--space-lg);
+}
+.environment-observations .content-card {
+  gap: var(--space-md);
+}
+.environment-observations .environment-explanation {
+  margin: 0;
+}
+.environment-observations .environment-metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.environment-observations .environment-metric > p {
+  margin: 0;
+}
+.environment-observations .environment-value {
+  font-variant-numeric: tabular-nums;
+}
+.environment-observations .environment-provenance {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+.environment-observations .environment-provenance > p {
+  margin: 0;
+}
+@media (max-width: 640px) {
+  .content-card {
+    padding: var(--space-md);
+  }
+  .farm-page .farm-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .benefits-page .benefit-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .benefits-page .benefit-summary > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+  .records-page dl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-sm);
+  }
+  .records-page dd:not(:last-child) {
+    margin-bottom: var(--space-sm);
+  }
+}

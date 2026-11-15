@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { loadDataset } from '../real/load';
-import { elNinoAlerts } from './alerts';
+import { environmentalAlerts } from './alerts';
 import { climateSignals } from './climate';
 import { EXAMPLE_FARMS, pastureRotation, validateFarmForm } from './farm';
 import { flucForCanton } from './fluc';
@@ -21,6 +21,14 @@ describe('Motor espacial y de cálculo con datos reales v10', () => {
     expect(ctx).not.toBeNull();
     expect(ctx?.canton.n.toLowerCase()).toContain('upala');
     expect(ctx?.sub.n.length).toBeGreaterThan(2);
+  });
+
+  it('convierte coordenadas locales de vuelta a lat/lon para el mapa satelital', async () => {
+    const ds = await loadDataset();
+    const geo = getGeo(ds);
+    const [lon, lat] = geo.localToLngLat(geo.llToLocal(9.8556, -83.9126));
+    expect(lon).toBeCloseTo(-83.9126, 5);
+    expect(lat).toBeCloseTo(9.8556, 5);
   });
 
   it('decodifica orillas IGN 1:5 000 + MODIS y arma el plan de subcuenca', async () => {
@@ -44,8 +52,9 @@ describe('Motor espacial y de cálculo con datos reales v10', () => {
     expect(rot.months).toHaveLength(6);
     expect(Number(rot.rest)).toBeGreaterThan(0);
 
-    const alerts = elNinoAlerts(ds, ctx, null, rot, ctx.flood);
-    expect(alerts.list).toHaveLength(3);
+    const alerts = environmentalAlerts(ds, ctx, null);
+    expect(alerts.list).toHaveLength(4);
+    expect(alerts.list.every((alert) => alert.severity === 'indeterminate')).toBe(true);
 
     const fluc = flucForCanton(ds, ctx.canton.n);
     expect(fluc.has).toBe(true);

@@ -1,8 +1,8 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "https://field-farms/data/esquemas/archivo-indicadores.schema.json",
- "title": "Archivo de indicadores de Field Farms Challenge",
- "description": "Mismo contrato que packages/domain/src/data/index.ts. Lo cumplen nasa/*/latest.json, noaa/*/latest.json y ejemplos/*.json.",
+ "title": "Sow Water indicator file",
+ "description": "Same contract as packages/domain/src/data/index.ts. Followed by nasa/*/latest.json, noaa/*/latest.json and ejemplos/*.json.",
  "type": "object",
  "required": ["meta", "datos"],
  "properties": {
@@ -47,7 +47,7 @@
    "type": "object",
    "required": ["fuente", "url", "capa", "simulado", "fecha_dato", "fecha_carga", "version"],
    "properties": {
-    "fuente": { "type": "string", "description": "id en fuentes.json" },
+    "fuente": { "type": "string", "description": "id in fuentes.json" },
     "url": { "type": "string", "pattern": "^https?://" },
     "capa": { "$ref": "#/$defs/capa" },
     "simulado": { "type": "boolean" },

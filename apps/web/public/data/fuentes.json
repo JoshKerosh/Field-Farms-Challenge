@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-11-15T04:14:56Z",
+ "actualizado": "2026-11-15T07:00:24Z",
  "fuentes": [
   {
    "id": "nasa-power",
@@ -15,7 +15,8 @@
    "ultima_carga_buena": "2026-11-11",
    "ultimo_error": null,
    "archivos": [
-    "nasa/power/latest.json"
+    "nasa/power/latest.json",
+    "alerts/climate/power/*"
    ],
    "nota": "PRECTOTCORR, T2M_MAX y GWETROOT diarios en 6 puntos de referencia; normal 1991–2020."
   },
@@ -33,7 +34,8 @@
    "ultima_carga_buena": "2026-10-31",
    "ultimo_error": null,
    "archivos": [
-    "noaa/roni/latest.json"
+    "noaa/roni/latest.json",
+    "alerts/climate/roni/*"
    ],
    "nota": "Índice oficial de El Niño de NOAA desde febrero de 2026. Va en la capa global junto a NASA."
   },
@@ -92,7 +94,7 @@
   {
    "id": "indicadores-subcuenca",
    "titulo": "SIMULADO · indicadores por subcuenca",
-   "institucion": "Field Farms Challenge",
+   "institucion": "Sow Water",
    "tipo_servicio": "metodo",
    "url": "https://github.com/JoshKerosh/Field-Farms-Challenge",
    "licencia": "Proyecto del equipo",
@@ -155,7 +157,8 @@
    "estado": "ok",
    "ultima_carga_buena": "2026-11-14",
    "archivos": [
-    "geo/cne/inundacion.geojson"
+    "geo/cne/inundacion.geojson",
+    "alerts/cne/*"
    ],
    "nota": "116 polígonos de Huetar Norte, simplificados a unos 200 m.",
    "ultimo_error": null
@@ -293,7 +296,7 @@
   {
    "id": "fincas-demo",
    "titulo": "SIMULADO · fincas, vecinos y modo demo",
-   "institucion": "Field Farms Challenge",
+   "institucion": "Sow Water",
    "tipo_servicio": "metodo",
    "url": "https://github.com/JoshKerosh/Field-Farms-Challenge",
    "licencia": "Proyecto del equipo",
@@ -304,6 +307,78 @@
    "ultima_carga_buena": null,
    "archivos": [],
    "nota": "Perfiles de finca y eventos de ejemplo para mostrar cómo funciona la app (X-06)."
+  },
+  {
+   "id": "recovery-power",
+   "titulo": "NASA POWER regional monthly history",
+   "institucion": "NASA",
+   "tipo_servicio": "api",
+   "url": "https://power.larc.nasa.gov/api/temporal/daily/regional?parameters=PRECTOTCORR&community=AG&longitude-min=-86&longitude-max=-82.5&latitude-min=8&latitude-max=11.3&start=20241101&end=20261031&format=JSON&time-standard=UTC",
+   "licencia": "Public NASA data",
+   "frecuencia": "estatica",
+   "capa": "nasa",
+   "simulado": false,
+   "estado": "ok",
+   "ultima_carga_buena": "2026-10-31",
+   "archivos": [
+    "recovery/rainfall.json"
+   ],
+   "ultimo_error": null
+  },
+  {
+   "id": "recovery-history",
+   "titulo": "Recovery MODIS and POWER history",
+   "institucion": "NASA LP DAAC / NASA POWER",
+   "tipo_servicio": "api",
+   "url": "https://appeears.earthdatacloud.nasa.gov/api",
+   "licencia": "Public NASA data",
+   "frecuencia": "estatica",
+   "capa": "nasa",
+   "simulado": false,
+   "estado": "ok",
+   "ultima_carga_buena": "2026-10-31",
+   "archivos": [
+    "recovery/*"
+   ],
+   "ultimo_error": null
+  },
+  {
+   "id": "alerts-regional-nasa",
+   "titulo": "NASA POWER y SRTM · contexto regional de alertas",
+   "institucion": "NASA; Open Topo Data",
+   "tipo_servicio": "api",
+   "url": "https://power.larc.nasa.gov/api/temporal/daily/regional",
+   "frecuencia": "diaria",
+   "capa": "nasa",
+   "estado": "ok",
+   "ultima_carga_buena": "2026-11-13",
+   "archivos": [
+    "alerts/nasa-regions.geojson",
+    "alerts/nasa-regions-status.json"
+   ],
+   "nota": "Estimaciones regionales POWER y muestras de relieve SRTM; no son mediciones de cada finca ni alertas oficiales.",
+   "simulado": false,
+   "ultimo_error": null,
+   "licencia": "Consultar las condiciones de las fuentes originales; método del proyecto documentado en el repositorio"
+  },
+  {
+   "id": "alerts-rules",
+   "titulo": "Reglas de evaluación de alertas · proyecto",
+   "institucion": "Sow Water",
+   "tipo_servicio": "metodo",
+   "url": "https://github.com/JoshKerosh/Field-Farms-Challenge/blob/dev/docs/alert-policies.md",
+   "frecuencia": "estatica",
+   "capa": "local",
+   "estado": "estatico",
+   "ultima_carga_buena": null,
+   "archivos": [
+    "alerts/rules.json",
+    "alerts/conditions.geojson"
+   ],
+   "nota": "Reglas pendientes de aprobación técnica y colección espacial sin observaciones publicadas; no confirman ausencia de riesgo.",
+   "simulado": false,
+   "ultimo_error": null,
+   "licencia": "Consultar las condiciones de las fuentes originales; método del proyecto documentado en el repositorio"
   }
  ]
 }

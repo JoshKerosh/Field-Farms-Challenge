@@ -1,4 +1,4 @@
-"""NASA MODIS MOD13Q1 (verdor NDVI, 16 días, 250 m) con el servicio web de ORNL DAAC, sin clave.
+"""NASA MODIS MOD13Q1 (NDVI greenness, 16 days, 250 m) through the ORNL DAAC web service, no key.
 
 https://modis.ornl.gov/data/modis_webservice.html
 """
@@ -11,7 +11,7 @@ BASE = 'https://modis.ornl.gov/rst/api/v1/MOD13Q1'
 BAND = '250m_16_days_NDVI'
 FILL = -3000
 SCALE = 0.0001
-# 1 km a cada lado: 9 × 9 píxeles alrededor del punto; se promedian los válidos.
+# 1 km on each side: 9 × 9 pixels around the point; the valid ones are averaged.
 KM = 1
 
 
@@ -26,18 +26,18 @@ def subset_url(lat: float, lon: float, start: str, end: str) -> str:
 
 
 def mean_ndvi(pixels: list[int]) -> float | None:
-    """Promedio de los píxeles válidos; agua y nubes quedan como relleno o valores negativos."""
+    """Average of the valid pixels; water and clouds come as fill or negative values."""
     valid = [p * SCALE for p in pixels if p != FILL and p > 0]
     return round(sum(valid) / len(valid), 3) if valid else None
 
 
 def list_dates(lat: float, lon: float) -> list[tuple[str, str]]:
-    """Fechas disponibles como (A2026289, 2026-10-16), de la más antigua a la más reciente."""
+    """Available dates as (A2026289, 2026-10-16), oldest to newest."""
     payload = get_json(dates_url(lat, lon))
     return [(d['modis_date'], d['calendar_date']) for d in payload['dates']]
 
 
 def fetch_range(lat: float, lon: float, start: str, end: str) -> list[tuple[str, str, float | None]]:
-    """El servicio admite hasta 10 fechas por consulta."""
+    """The service accepts up to 10 dates per request."""
     payload = get_json(subset_url(lat, lon, start, end), timeout=120)
     return [(s['modis_date'], s['calendar_date'], mean_ndvi(s['data'])) for s in payload['subset']]

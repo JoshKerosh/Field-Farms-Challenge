@@ -9,7 +9,7 @@ def test_source_kind_from_saga_names():
     assert geo.source_kind('POZO 2 ANTIGUO') == 'pozo'
     assert geo.source_kind('P1') == 'pozo'
     assert geo.source_kind('TOMA QUEBRADA HONDA') == 'superficial'
-    # "F-1" solo dice "fuente": no se presume que sea naciente.
+    # "F-1" only says "fuente" (source): it is not assumed to be a spring.
     assert geo.source_kind('F-1') == 'sin clasificar'
     assert geo.source_kind(None) == 'sin clasificar'
 

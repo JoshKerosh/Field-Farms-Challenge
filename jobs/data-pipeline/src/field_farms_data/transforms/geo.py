@@ -1,4 +1,4 @@
-"""Transformaciones geográficas reproducibles, sin lectura ni escritura de archivos."""
+"""Reproducible geographic transformations, with no file reading or writing."""
 
 import re
 
@@ -6,10 +6,10 @@ import shapely
 from pyproj import Transformer
 from shapely.geometry import mapping
 
-# Paleta categórica; cuencas vecinas nunca comparten color.
+# Categorical palette; neighboring watersheds never share a color.
 PALETTE = ['#2E7D9A', '#E08A2E', '#5B9E4D', '#C8506A', '#8A6BBE', '#C9A227', '#3FA7A0', '#A0603A']
 DECIMALS = 5  # ~1 m
-# Límites aproximados de Costa Rica en CRTM05 para descartar coordenadas vacías o erróneas.
+# Approximate bounds of Costa Rica in CRTM05 to drop empty or wrong coordinates.
 NORTE = (880000, 1250000)
 ESTE = (280000, 670000)
 
@@ -24,7 +24,7 @@ def project(geom: shapely.Geometry, transformer: Transformer) -> shapely.Geometr
 
 
 def to_web_polygon(geom: shapely.Geometry, tolerance_m: float, to_wgs84: Transformer) -> dict | None:
-    """Simplifica en metros, proyecta a WGS84 y redondea; None si no queda un polígono."""
+    """Simplifies in meters, projects to WGS84 and rounds; None if no polygon is left."""
     geom = project(geom.simplify(tolerance_m, preserve_topology=True), to_wgs84)
     geom = shapely.set_precision(geom, 10 ** -DECIMALS)
     polygons = [g for g in getattr(geom, 'geoms', [geom])
@@ -33,7 +33,7 @@ def to_web_polygon(geom: shapely.Geometry, tolerance_m: float, to_wgs84: Transfo
 
 
 def color_neighbors(geoms: list[shapely.Geometry], touch_m: float = 100) -> list[str]:
-    """Coloreo voraz que reparte la paleta: polígonos que se tocan reciben colores distintos."""
+    """Greedy coloring that spreads the palette: polygons that touch get different colors."""
     tree = shapely.STRtree(geoms)
     neighbors = {i: {int(j) for j in tree.query(g.buffer(touch_m), predicate='intersects') if j != i}
                  for i, g in enumerate(geoms)}
@@ -47,7 +47,7 @@ def color_neighbors(geoms: list[shapely.Geometry], touch_m: float = 100) -> list
 
 
 def basin_locator(basins: list[tuple[dict, shapely.Geometry]]):
-    """Función que devuelve el número de cuenca que contiene un punto (CRTM05), o 0."""
+    """Function that returns the number of the watershed containing a point (CRTM05), or 0."""
     tree = shapely.STRtree([geom for _, geom in basins])
 
     def locate(geom: shapely.Geometry) -> int:
@@ -58,7 +58,7 @@ def basin_locator(basins: list[tuple[dict, shapely.Geometry]]):
 
 
 def source_kind(name: str | None) -> str:
-    """El SAGA no trae el tipo de fuente; se deduce del nombre. "F-1" (fuente) queda sin clasificar."""
+    """SAGA has no source type; it is inferred from the name. "F-1" (fuente, source) stays unclassified."""
     n = (name or '').upper()
     if re.search(r'NAC|MANANTIAL|OJO DE AGUA|^N[\s.º°#-]*\d', n):
         return 'naciente'
@@ -70,7 +70,7 @@ def source_kind(name: str | None) -> str:
 
 
 def crtm05_point(norte, este) -> tuple[float, float] | None:
-    """(este, norte) válido dentro de Costa Rica, o None."""
+    """Valid (easting, northing) inside Costa Rica, or None."""
     if not (isinstance(norte, (int, float)) and isinstance(este, (int, float))):
         return None
     if not (NORTE[0] < norte < NORTE[1] and ESTE[0] < este < ESTE[1]):

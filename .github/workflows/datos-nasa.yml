@@ -1,7 +1,7 @@
 name: Datos NASA y NOAA
 
-# Descarga POWER, RONI y MODIS, valida los archivos y hace commit en apps/web/public/data/.
-# Los horarios de GitHub corren en la rama por defecto; con "Run workflow" se corre en cualquier rama.
+# Downloads POWER, RONI and MODIS, validates the files and commits them to apps/web/public/data/.
+# GitHub schedules run on the default branch; "Run workflow" runs it on any branch.
 on:
   schedule:
     - cron: '0 11 * * *' # 5:00 en Costa Rica
@@ -31,7 +31,7 @@ jobs:
       - name: Descargar y publicar
         id: conectores
         working-directory: jobs/data-pipeline
-        # Una fuente caída no frena a las demás: se registra en fuentes.json y la Action falla al final.
+        # A source that is down doesn't stop the others: it is recorded in fuentes.json and the Action fails at the end.
         run: python -m field_farms_data.publish.nasa --solo "${{ inputs.solo || 'power,roni,modis' }}" || echo "falla=1" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v4
         with:

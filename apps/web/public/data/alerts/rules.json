@@ -1,0 +1,5 @@
+{
+  "schemaVersion": "alert-risk-policies-v1",
+  "policies": [],
+  "pendingApproval": ["sequia", "inundacion", "saturacion", "deslizamiento"]
+}

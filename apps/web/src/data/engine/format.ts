@@ -1,8 +1,18 @@
-/** Utilidades de formato y normalización de texto para los datos de Costa Rica. */
+import { localizedResource, messageLanguage } from '../../i18n/messages';
+/** Formatting and text normalization helpers for the Costa Rica data. */
 
-export const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+export const MONTHS = localizedResource(() =>
+  Array.from({ length: 12 }, (_, month) =>
+    new Intl.DateTimeFormat(messageLanguage() === 'en' ? 'en-US' : 'es-CR', {
+      month: 'short',
+      timeZone: 'UTC',
+    })
+      .format(new Date(Date.UTC(2026, month, 1)))
+      .replace(/\.$/, ''),
+  ),
+);
 
-/** Restituye tildes que los archivos oficiales traen sin acentuar. */
+/** Restores accents that the official files lack. */
 export function fixName(t: string): string {
   return String(t)
     .replace(/^Cano /, 'Caño ')
@@ -20,7 +30,7 @@ export function fixName(t: string): string {
     .replace(/Ca.as\b/g, 'Cañas');
 }
 
-/** Minúsculas sin tildes, para búsquedas. */
+/** Lowercase without accents, for searching. */
 export function norm(t: string): string {
   return String(t)
     .normalize('NFD')
@@ -28,7 +38,7 @@ export function norm(t: string): string {
     .toLowerCase();
 }
 
-/** Mayúsculas sin tildes (clave de cantón del registro FLUC). */
+/** Uppercase without accents (canton key of the FLUC registry). */
 export function normUpper(t: string): string {
   return String(t || '')
     .normalize('NFD')
@@ -37,22 +47,31 @@ export function normUpper(t: string): string {
     .trim();
 }
 
-export const f2 = (v: number): string => v.toFixed(2).replace('.', ',');
-export const comma = (v: number | string): string => String(v).replace('.', ',');
-export const fmtInt = (v: number): string => Math.round(v).toLocaleString('es-CR');
+export const f2 = (v: number): string =>
+  v.toFixed(2).replace('.', messageLanguage() === 'en' ? '.' : ',');
+export const comma = (v: number | string): string =>
+  String(v).replace('.', messageLanguage() === 'en' ? '.' : ',');
+export const fmtInt = (v: number): string =>
+  Math.round(v).toLocaleString(messageLanguage() === 'en' ? 'en-US' : 'es-CR');
 export const fmtKm = (v: number): string =>
-  v >= 10 ? fmtInt(v) : v.toFixed(1).replace('.', ',');
+  v >= 10 ? fmtInt(v) : v.toFixed(1).replace('.', messageLanguage() === 'en' ? '.' : ',');
 
-/** Distancia legible: 'm' bajo 1 km, 'km' en adelante. */
+/** Readable distance: 'm' under 1 km, 'km' from there on. */
 export function distText(km: number): string {
-  return km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(1).replace('.', ',')} km`;
+  return km < 1
+    ? `${Math.round(km * 1000)} m`
+    : `${km.toFixed(1).replace('.', messageLanguage() === 'en' ? '.' : ',')} km`;
 }
 
 export function signedPct(v: number): string {
-  return `${v > 0 ? '+' : '−'}${Math.abs(v).toLocaleString('es-CR', {
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  })} %`;
+  return `${v > 0 ? '+' : '−'}${Math.abs(v).toLocaleString(
+    messageLanguage() === 'en' ? 'en-US' : 'es-CR',
+    {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    },
+  )} %`;
 }
 
-export const monthsText = (n: number): string => `${n} ${n === 1 ? 'mes' : 'meses'}`;
+export const monthsText = (n: number): string =>
+  `${n} ${messageLanguage() === 'en' ? (n === 1 ? 'month' : 'months') : n === 1 ? 'mes' : 'meses'}`;

@@ -1,15 +1,15 @@
 import { copy } from '../../../i18n';
+import { message, useMessageLanguage } from '../../../i18n/messages';
 import { STREAMS_RADIUS_M, WATER_RADIUS_M } from '../../watersheds/analysis/parcel-analysis';
 import { Block, formatArea, formatDistance } from '../../watersheds/components/BasinResults';
 import { LOW_ACCURACY_M, type FarmResult } from '../../watersheds/components/explorer-result';
-
 /** Text equivalent of everything the map shows for the farm. */
 export function FarmResults({ result }: { result: FarmResult }) {
+  useMessageLanguage();
   const c = copy.watershed.explorer;
   const parcel = result.parcel.state === 'done' ? result.parcel.value : null;
-  const coords = `${result.lat.toFixed(5)}, ${result.lng.toFixed(5)}`;
+  const coords = message('m57c10ec2d27b', result.lat.toFixed(5), result.lng.toFixed(5));
   const lowAccuracy = (result.accuracyM ?? 0) > LOW_ACCURACY_M;
-
   return (
     <section className="basin-results" aria-live="polite">
       <Block label={c.parcel}>
@@ -73,20 +73,25 @@ export function FarmResults({ result }: { result: FarmResult }) {
         </Block>
       )}
 
-      <p className={lowAccuracy ? 'muted warn' : 'muted'}>
+      <p className={lowAccuracy ? message('m2665094c5cbc') : 'muted'}>
         {result.accuracyM
-          ? `${c.yourLocation(coords, Math.round(result.accuracyM))}${lowAccuracy ? `. ${c.lowAccuracy}` : ''}`
+          ? `${c.yourLocation(coords, Math.round(result.accuracyM))}${lowAccuracy ? message('m951b558ae74c', c.lowAccuracy) : ''}`
           : c.pointChosen(coords)}
       </p>
     </section>
   );
 }
-
 function WaterSummary({
   water,
 }: {
-  water: Extract<FarmResult['water'], { state: 'done' }>['value'];
+  water: Extract<
+    FarmResult['water'],
+    {
+      state: 'done';
+    }
+  >['value'];
 }) {
+  useMessageLanguage();
   const c = copy.watershed.explorer;
   if (!water.sources.length) return <p className="muted">{c.noWater}</p>;
   const nearest = water.sources[0];
@@ -101,7 +106,7 @@ function WaterSummary({
       </h3>
       <p className="muted">
         {water.nearestOutsideRadius
-          ? `${nearest.name} (${c.sourceKind[nearest.kind]}). `
+          ? message('mb3bb3b6f18c9', nearest.name, c.sourceKind[nearest.kind])
           : inside.length
             ? `${c.waterInside(inside.map((s) => s.name).join(', '))} `
             : ''}

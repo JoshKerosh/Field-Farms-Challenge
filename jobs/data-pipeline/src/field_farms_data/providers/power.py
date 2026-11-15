@@ -1,6 +1,6 @@
-"""NASA POWER (Langley Research Center): lluvia, temperatura máxima y humedad del suelo diarias.
+"""NASA POWER (Langley Research Center): daily rainfall, maximum temperature and soil moisture.
 
-API pública sin clave: https://power.larc.nasa.gov/docs/services/api/
+Public API, no key: https://power.larc.nasa.gov/docs/services/api/
 """
 
 from datetime import date, timedelta
@@ -28,7 +28,7 @@ def climatology_url(lat: float, lon: float) -> str:
 
 
 def parse_daily(payload: dict) -> list[tuple[date, dict[str, float | None]]]:
-    """Filas por día en orden. Los días sin ningún dato (relleno -999 de POWER) se descartan."""
+    """Rows per day in order. Days with no data at all (POWER fill value -999) are dropped."""
     params = payload['properties']['parameter']
     days = sorted(params[PARAMS[0]])
     rows = []
@@ -41,7 +41,7 @@ def parse_daily(payload: dict) -> list[tuple[date, dict[str, float | None]]]:
 
 
 def parse_climatology(payload: dict) -> dict[str, list[float]]:
-    """Promedio 1991–2020 por mes (índice 0 = enero) para cada parámetro."""
+    """1991–2020 average per month (index 0 = January) for each parameter."""
     params = payload['properties']['parameter']
     return {p: [params[p][m] for m in MONTHS] for p in params}
 

@@ -1,17 +1,17 @@
-# Field Farms Challenge
+# Sow Water
 
-Base navegable de una PWA que relaciona fincas, fuentes de agua y ASADAS. Conserva la identidad del prototipo v10 y organiza las funcionalidades para desarrollarlas por etapas.
+Navigable base of a PWA that connects farms, water sources and ASADAS (community water systems). It keeps the identity of the v10 prototype and organizes the features so they can be built in stages.
 
-## Arranque
+## Getting started
 
-Requisitos: Node.js 22.12+ (22 LTS o 24+) y npm. No se necesitan cuentas externas, variables de entorno ni Python para abrir la demo.
+Requirements: Node.js 22.12+ (22 LTS or 24+) and npm. No external accounts, environment variables or Python are needed to open the demo.
 
 ```sh
 npm install
 npm run dev
 ```
 
-Abrir la dirección que muestra Vite, normalmente `http://127.0.0.1:5173`. La aplicación comienza en la guía ABC.
+Open the address Vite prints, usually `http://127.0.0.1:5173`. The app starts on the ABC guide.
 
 ```sh
 npm run typecheck
@@ -21,78 +21,100 @@ npm run build
 npm run preview
 ```
 
-El build queda en `apps/web/dist`. El service worker funciona en producción, no en el servidor de desarrollo. Después de la primera descarga, la base demo puede consultarse sin conexión. Esto no incluye guardar ni sincronizar observaciones.
+The build goes to `apps/web/dist`. The service worker runs in production, not in the dev server. After the first download, the demo data can be browsed offline. This does not include saving or syncing observations.
 
-## Pruebas de navegador
+## Browser tests
 
 ```sh
 npx playwright install chromium
 npm run test:e2e
 ```
 
-Las pruebas inician el servidor de producción en el puerto 4173 y cubren escritorio y teléfono. En Windows se puede usar un Edge ya instalado:
+The tests start the production server on port 4173 and cover desktop and phone. On Windows an installed Edge can be used:
 
 ```powershell
 $env:PLAYWRIGHT_CHANNEL = 'msedge'
 npm run test:e2e
 ```
 
-Estado de dependencias al 14 de noviembre de 2026: `npm audit --omit=dev` no reporta vulnerabilidades. La auditoría completa mantiene cuatro avisos de severidad baja en la cadena de herramientas de build PWA (`deepmerge` y sus dependientes). Los overrides de `glob` y `minimatch` resuelven los avisos moderados; su compatibilidad está comprobada con lint, compilación y las pruebas del service worker. No aplicar `npm audit fix --force` sin revisar los cambios de versiones.
+Dependency status as of November 14, 2026: `npm audit --omit=dev` reports no vulnerabilities. The full audit keeps four low-severity advisories in the PWA build toolchain (`deepmerge` and its dependents). The `glob` and `minimatch` overrides resolve the moderate advisories; their compatibility is checked with lint, the build and the service worker tests. Do not run `npm audit fix --force` without reviewing the version changes.
 
-## Organización
+## Layout
 
-| Directorio                      | Responsabilidad                                                       |
-| ------------------------------- | --------------------------------------------------------------------- |
-| `apps/web`                      | React, rutas, pantallas, componentes e integraciones del dispositivo. |
-| `packages/domain`               | Tipos, reglas y contrato de datos, independientes de React y Dexie.   |
-| `jobs/data-pipeline`            | Conectores Python: NASA, NOAA y capas locales en `public/data/`.      |
-| `functions`                     | Cloudflare Pages Functions (`/api/parcela`, consulta al SIRI).        |
-| `tests/e2e`                     | Navegación, accesibilidad, vigencia y uso sin conexión.               |
-| `references/prototype-v10.html` | Copia intacta del prototipo proporcionado.                            |
-| `docs`                          | Arquitectura, datos (`datos.md`), inventario y oportunidades.         |
+| Directory                       | Responsibility                                                      |
+| ------------------------------- | ------------------------------------------------------------------- |
+| `apps/web`                      | React, routes, screens, components and device integrations.         |
+| `packages/domain`               | Types, rules and the data contract, independent of React and Dexie. |
+| `jobs/data-pipeline`            | Python connectors: NASA, NOAA and local layers in `public/data/`.   |
+| `functions`                     | Cloudflare Pages Functions (`/api/parcela`, SIRI lookup).           |
+| `tests/e2e`                     | Navigation, accessibility, data freshness and offline use.          |
+| `references/prototype-v10.html` | Untouched copy of the provided prototype.                           |
+| `docs`                          | Architecture, data (`data.md`), inventory and opportunities.        |
 
-Los módulos están en `apps/web/src/features`. Registros integra mediciones de agua, acciones y eventos sin crear un almacenamiento paralelo. Los adaptadores demo implementan interfaces asíncronas por módulo; las futuras integraciones los reemplazarán desde la composición de rutas.
+The modules live in `apps/web/src/features`. Records brings together water measurements, actions and events without a parallel store. The demo adapters implement asynchronous interfaces per module; future integrations will replace them from the route composition.
 
-## Qué incluye
+## What it includes
 
-- Seis secciones principales y accesos a beneficios, ambiente, asistente y fuentes.
-- Finca, fuentes, relaciones y observaciones ficticias claramente identificadas.
-- Mi cuenca con datos reales: ubicar un punto (GPS o tocando el mapa) muestra la cuenca y subcuenca, el lindero de la finca según el catastro del SIRI, los ríos del IGN y las fuentes y ASADAS del SAGA cercanas, con un resumen textual equivalente y minimapa. Ver [cuencas reales](docs/architecture.md#mi-cuenca-con-capas-reales).
-- Gráficos acompañados de tablas.
-- Vistas demo de finquero, ASADA e institución; el selector no concede permisos.
-- Ayuda predefinida y lectura de voz cuando el dispositivo la permite.
-- Catálogo informativo de apoyos con procedencia y fecha de revisión.
-- Textos de interfaz centralizados en `src/i18n` para futuras traducciones.
+- Six main sections plus shortcuts to benefits, environment and sources.
+- Weather and satellite brings back the regional MODIS viewer with Play and adds NASA GIBS imagery by theme, color elevation and 3D relief, the farm and delimited watersheds. POWER and NOAA provide regional indicators with their dates; see [weather and satellite data](docs/weather-and-satellite.md).
+- Fictional farm, sources, relationships and observations, clearly labeled.
+- My watershed with real data: locating a point (GPS or tapping the map) shows the watershed and subwatershed, the farm boundary from the SIRI cadastre, IGN rivers and nearby SAGA sources and ASADAS, with an equivalent text summary and a minimap. See [real watersheds](docs/architecture.md#my-watershed-with-real-layers).
+- Charts paired with tables.
+- Demo views for farmer, ASADA and institution; the selector does not grant permissions.
+- Predefined help and text-to-speech when the device supports it.
+- Informational catalog of support programs with source and review date.
+- Interface text centralized in `src/i18n` for translations.
 
-El ahorro se muestra como **Aún no calculado**. Los enlaces a programas no equivalen a una convocatoria abierta ni a elegibilidad. Guardar, exportar y avisar están identificados como pendientes y no realizan envíos.
+Savings are shown as **Not calculated yet**. Links to programs do not mean an open call or eligibility. Save, export and notify are labeled as pending and do not send anything.
 
-## Próximas integraciones
+## Upcoming integrations
 
-1. Finca y registros en el dispositivo (Dexie), con cola de sincronización a archivos del repositorio mediante una Pages Function.
-2. IMERG y SMAP reales con la cuenta NASA Earthdata; POWER, RONI y MODIS ya se publican a diario (ver [datos](docs/datos.md)).
-3. Costos, inversiones y períodos comparables para evaluar beneficios económicos.
+Local tracking of goals and expenses in `/care`, the regional NASA rainfall package and the
+manual vegetation preparation are described in the [Recovery plan](docs/recovery-plan.md).
+The MODIS import from November 2024 to October 2026 already produced series for 34 watersheds
+and 310 tiles. A manual visual review of the view with a selected farm is still pending.
 
-La prioridad es React responsive + PWA. Después se puede evaluar Capacitor para reutilizar la interfaz web en Android/iOS; con React Native + Expo se compartirían tipos, reglas y backend, construyendo las pantallas para móvil.
+1. Farm and records on the device (Dexie), with a sync queue to repository files through a Pages Function.
+2. Real IMERG and SMAP with the NASA Earthdata account; POWER, RONI and MODIS are already published daily (see [data](docs/data.md)).
+3. Costs, investments and comparable periods to assess economic benefits.
 
-Autenticación, sincronización, ingesta, cálculos monetarios y trámites externos no están implementados. Tampoco se han migrado las 13 pantallas completas del prototipo.
+The priority is responsive React + PWA. Capacitor could later reuse the web interface on Android/iOS; with React Native + Expo, types, rules and backend would be shared while the screens are built for mobile.
 
-## Alojamiento
+Authentication, sync, ingestion, monetary calculations and external procedures are not implemented. The 13 full screens of the prototype have not been migrated either.
 
-Cloudflare Pages: instalar desde la raíz, comando `npm run build`, salida `apps/web/dist`. `_redirects` permite abrir rutas internas. La carpeta `functions/` de la raíz se publica como Pages Functions y atiende `/api/parcela`; en `npm run dev` y `npm run preview` la misma lógica corre como middleware de Vite. Esta entrega no publica ni crea recursos externos.
+## Hosting
 
-## Capas de cuencas y agua
+Cloudflare Pages: install from the root, command `npm run build`, output `apps/web/dist`. `_redirects` lets internal routes open directly. The root `functions/` folder is published as Pages Functions and serves `/api/parcela`; in `npm run dev` and `npm run preview` the same logic runs as Vite middleware. This delivery does not publish or create external resources.
 
-`apps/web/public/data/geo/` contiene las capas ya generadas (versionadas para que la app funcione con solo `npm install`). Para regenerarlas con los datasets de PNUD y el SAGA:
+## Watershed and water layers
+
+`apps/web/public/data/geo/` holds the generated layers (versioned so the app works with just `npm install`). To regenerate them from the PNUD datasets and SAGA:
 
 ```sh
 cd jobs/data-pipeline
 python -m venv .venv && .venv/bin/pip install -e ".[test]"
-.venv/bin/python -m field_farms_data.publish.basins --datasets <carpeta con los datasets de PNUD>
+.venv/bin/python -m field_farms_data.publish.basins --datasets <folder with the PNUD datasets>
 .venv/bin/pytest
 ```
 
-## Referencias y licencias
+## Use of Super Intelligence (SI)
 
-Consultar [arquitectura](docs/architecture.md), [inventario](docs/prototype-inventory.md), [oportunidades](docs/opportunities.md), [producto](PRODUCT.md) y [diseño](DESIGN.md).
+Under the NASA Space Apps Challenge rules, we declare where we used Super Intelligence (SI, artificial intelligence) tools. No generated content uses NASA logos, flags or insignia.
 
-Las fuentes Bricolage Grotesque y Nunito Sans proceden del HTML proporcionado; sus avisos y licencia SIL OFL se conservan en `apps/web/public/fonts/LICENSE.txt`. El prototipo conserva todos sus comentarios y recursos. Sus cifras y modelos no se consideran validados por esta implementación.
+| Part             | Tools                                    | How it was used                                                                                                                                                                                                | Where it is marked                                                                                                                       |
+| ---------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Code             | Claude Code, Codex, ChatGPT, Antigravity | Agentic programming: SI wrote and changed much of the code, and the team defined the design, reviewed the changes and ran the tests. Applies to the whole repository.                                          | This section and the app's **Sources** screen                                                                                            |
+| Data             | Claude Code, Codex, ChatGPT              | Study of the datasets (NASA, NOAA, MINAE, AyA, CNE, SINAC), design of the connectors and of how the app uses each dataset. The data is real and was not generated by SI, except files marked as **simulated**. | This section, [data](docs/data.md) and the **Sources** screen                                                                            |
+| Interface images | SI-generated                             | App icon (`apps/web/public/icon.svg`, `apps/web/public/icons/*.png`) and map icons (`map-icons.tsx`)                                                                                                           | Visible text "SI-generated (AI) icons" in the map legends, and metadata in the files (`<title>`/`<desc>` in the SVG, `tEXt` in the PNGs) |
+| Pitch video      | Claude Code, HyperFrames                 | Composition and animation of the video. The screens shown are real captures of the app.                                                                                                                        | Visible watermark for the whole video and MP4 metadata                                                                                   |
+| Video voice      | Kokoro TTS (voice `am_michael`)          | SI-generated synthetic narration                                                                                                                                                                               | Named in the video watermark and in each WAV's metadata                                                                                  |
+
+## References and licenses
+
+See [architecture](docs/architecture.md), [inventory](docs/prototype-inventory.md), [opportunities](docs/opportunities.md), [product](PRODUCT.md) and [design](DESIGN.md).
+
+The Bricolage Grotesque and Nunito Sans fonts come from the provided HTML; their notices and SIL OFL license are kept in `apps/web/public/fonts/LICENSE.txt`. The prototype keeps all its comments and resources. Its figures and models are not considered validated by this implementation.
+
+## Recovery tracking
+
+Set goals in the Recovery plan and record progress, photos and expenses in Records. Water measurements have their own section. Support programmes are centralised in Benefits. The Assistant route redirects to the guide; alert simulation controls have been retired.

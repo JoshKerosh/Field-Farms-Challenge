@@ -15,6 +15,7 @@
 }
 
 :root {
+  color-scheme: light;
   --color-primary: #17617c;
   --color-primary-deep: #10485d;
   --color-forest: #2e7a43;
@@ -38,4 +39,22 @@
   --space-md: 16px;
   --space-lg: 24px;
   --space-xl: 32px;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-primary: #76c9eb;
+  --color-primary-deep: #a9dff4;
+  --color-forest: #86d6a3;
+  --color-canvas: #111b20;
+  --color-surface: #1b292f;
+  --color-ink: #edf4f5;
+  --color-muted: #b6c8cd;
+  --color-line: #526970;
+  --color-water-tint: #203f4c;
+  --color-forest-tint: #223e30;
+  --color-amber: #f2c76d;
+  --color-amber-ink: #ffe0a0;
+  --color-amber-tint: #49391e;
+  --color-danger: #ffa8a0;
 }

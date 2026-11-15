@@ -3,6 +3,7 @@ import type { Feature, FeatureCollection, MultiPolygon, Point, Polygon } from 'g
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { FarmSite } from '../../../app/context/FieldContext';
 import { copy } from '../../../i18n';
+import { message, messageLanguage, useMessageLanguage } from '../../../i18n/messages';
 import { geometryContains } from '../../../shared/geo/geometry';
 import { PageLink } from '../../../shared/ui';
 import {
@@ -22,8 +23,8 @@ import type { BasinExplorerRepository, Bounds } from '../data/basin-explorer.rep
 import BasinMap, { type BasinMapHandle, type MapScene, type MapView } from './BasinMap';
 import { BasinMinimap } from './BasinMinimap';
 import { BasinResults } from './BasinResults';
-import { LegendMark } from './map-icons';
 import type { BasinResult } from './explorer-result';
+import { LegendMark } from './map-icons';
 import {
   EMPTY,
   collection,
@@ -32,9 +33,7 @@ import {
   streamTooltip,
   withTooltip,
 } from './map-tooltips';
-
 type LayerKey = 'operators' | 'springs' | 'otherSources' | 'streams';
-
 /** Minimum zoom of each layer, so a whole basin does not draw thousands of points at once. */
 const MIN_ZOOM: Record<LayerKey, number> = {
   operators: 9,
@@ -42,7 +41,6 @@ const MIN_ZOOM: Record<LayerKey, number> = {
   otherSources: 11,
   streams: 14,
 };
-
 /** Real map of "Mi cuenca": the basins and sub-basins of the farm chosen in "Mi finca". */
 export default function BasinExplorer({
   repository,
@@ -51,6 +49,7 @@ export default function BasinExplorer({
   repository: BasinExplorerRepository;
   site: FarmSite | null;
 }) {
+  useMessageLanguage();
   const c = copy.watershed.explorer;
   const mapRef = useRef<BasinMapHandle>(null);
   const [basins, setBasins] = useState<FeatureCollection<
@@ -74,7 +73,6 @@ export default function BasinExplorer({
     sources: Feature<Point, WaterSourceProperties>[];
   } | null>(null);
   const [streams, setStreams] = useState<FeatureCollection>(EMPTY);
-
   useEffect(() => {
     repository.listBasins().then(
       (data) => {
@@ -84,10 +82,9 @@ export default function BasinExplorer({
       () => setStatus(c.basinsError),
     );
   }, [repository, c]);
-
   const basinBoxes = useMemo(
     () => basins?.features.map((f) => ({ feature: f, box: bbox(f) })) ?? [],
-    [basins],
+    [basins, messageLanguage()],
   );
   const overlapping = useCallback(
     (area: Area) => {
@@ -96,9 +93,8 @@ export default function BasinExplorer({
         .filter(({ box }) => box[0] <= e && box[2] >= w && box[1] <= n && box[3] >= s)
         .map(({ feature }) => feature);
     },
-    [basinBoxes],
+    [basinBoxes, messageLanguage()],
   );
-
   // The farm's basins: the one under its point plus every basin its parcel touches.
   useEffect(() => {
     if (!basins || !site) {
@@ -134,7 +130,6 @@ export default function BasinExplorer({
     if (areas.length) mapRef.current?.fitBounds(bbox(collection(areas)) as Bounds, 13);
     if (!numbers.length) return;
     setStatus(c.loadingBasinWater);
-
     const subTask = Promise.all(
       numbers.map((n) => repository.listSubbasins(n).catch(() => EMPTY)),
     ).then((files) => {
@@ -201,15 +196,16 @@ export default function BasinExplorer({
       cancelled = true;
     };
   }, [basins, basinBoxes, overlapping, site, repository, c]);
-
   // Streams come from the IGN by area: only those of the view, once zoomed in enough.
   const zoom = view?.zoom ?? 0;
   const visible = (key: LayerKey) => selected.length > 0 && layers[key] && zoom >= MIN_ZOOM[key];
   const wantStreams = visible('streams');
   const selectedKey = selected.join(',');
-  const streamsLoaded = useRef<{ bounds: Bounds; key: string; features: StreamFeature[] } | null>(
-    null,
-  );
+  const streamsLoaded = useRef<{
+    bounds: Bounds;
+    key: string;
+    features: StreamFeature[];
+  } | null>(null);
   useEffect(() => {
     if (!wantStreams || !view || !basins) return;
     const loaded = streamsLoaded.current;
@@ -259,7 +255,6 @@ export default function BasinExplorer({
     );
     return () => controller.abort();
   }, [wantStreams, view, selectedKey, basins, repository]);
-
   const showOperators = visible('operators');
   const showSprings = visible('springs');
   const showOtherSources = visible('otherSources');
@@ -295,14 +290,13 @@ export default function BasinExplorer({
     showOperators,
     showSprings,
     showOtherSources,
+    messageLanguage(),
   ]);
-
   const pending = selected.length
     ? (Object.keys(MIN_ZOOM) as LayerKey[])
         .filter((k) => layers[k] && zoom < MIN_ZOOM[k])
-        .map((k) => `${c.layers[k].toLowerCase()} (zoom ${MIN_ZOOM[k]})`)
+        .map((k) => message('m1ca209490e56', c.layers[k].toLowerCase(), MIN_ZOOM[k]))
     : [];
-
   return (
     <div className="basin-explorer">
       {site ? (
@@ -363,6 +357,7 @@ export default function BasinExplorer({
           </label>
         ))}
         {pending.length > 0 && <p className="basin-hint">{c.zoomHint(pending.join(', '))}</p>}
+        <p className="basin-hint">{message('aiIconsNote')}</p>
       </fieldset>
       {result && <BasinResults result={result} />}
       <p className="source-note">{c.basinSources}</p>

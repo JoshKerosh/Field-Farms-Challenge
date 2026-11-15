@@ -1,8 +1,9 @@
 import type { WaterReading } from '@field-farms/domain';
 import { copy, number } from '../../i18n';
-
+import { message, useMessageLanguage } from '../../i18n/messages';
 /** The adjacent readings table is the text equivalent of this decorative chart. */
 export function FlowChart({ readings }: { readings: WaterReading[] }) {
+  useMessageLanguage();
   const values = readings
     .filter((reading) => reading.kind === 'flow')
     .sort((a, b) => a.recordedAt.localeCompare(b.recordedAt));
@@ -33,7 +34,10 @@ export function FlowChart({ readings }: { readings: WaterReading[] }) {
           </g>
         ))}
       </svg>
-      <figcaption>{copy.water.chartLabel} · L/s</figcaption>
+      <figcaption>
+        {copy.water.chartLabel}
+        {message('mae75154c344b')}
+      </figcaption>
     </figure>
   );
 }

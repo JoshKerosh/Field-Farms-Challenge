@@ -4,14 +4,20 @@ import { describe, expect, it } from 'vitest';
 import {
   validarArchivoIndicadores,
   validarMeta,
+  parseRiskPolicies,
   type CatalogoFuentes,
   type Fuente,
 } from '@field-farms/domain';
 import { ARCHIVOS } from './data-files';
+import { parseAlertSource } from '../../features/alerts/data/alert-sources';
+import { parseCneSource } from '../../features/alerts/data/cne-source';
+import { parseHazardMap } from '../../features/alerts/data/hazard-map';
+import { parseConditionMap } from '../../features/alerts/data/condition-map';
+import { parseNasaRegions } from '../../features/alerts/data/nasa-regions';
 
 /**
- * Guardia de calidad de `public/data/`: corre en `npm test` y en CI. Si un conector publica algo
- * mal formado, sin fuente o simulado donde debe ir dato real, la prueba falla.
+ * Quality guard for `public/data/`: runs in `npm test` and in CI. If a connector publishes something
+ * malformed, without a source, or simulated where real data belongs, the test fails.
  */
 const DATA = join(__dirname, '../../../public/data');
 const catalogo = JSON.parse(readFileSync(join(DATA, 'fuentes.json'), 'utf-8')) as CatalogoFuentes;
@@ -33,12 +39,55 @@ const leer = (path: string) =>
   JSON.parse(readFileSync(join(DATA, path), 'utf-8')) as Record<string, unknown>;
 
 const todos = archivos(DATA).filter((p) => p !== 'fuentes.json' && !p.startsWith('esquemas/'));
-// Las capas de geo/ publicadas antes del contrato no traen `meta`; su fuente está en el catálogo.
+// The geo/ layers published before the contract have no `meta`; their source is in the catalog.
 const conMeta = todos.filter(
-  (p) => p.endsWith('.json') || p.startsWith('geo/cne/') || p.startsWith('geo/sinac/'),
+  (p) =>
+    !p.startsWith('alerts/') &&
+    (p.endsWith('.json') || p.startsWith('geo/cne/') || p.startsWith('geo/sinac/')),
 );
 
-/** Hosts aceptados como origen de un dato real de la capa NASA. */
+// Alert files have versioned scientific/provenance schemas of their own. Validate them with
+// the same readers as the UI, while every file still has to belong to the shared catalog.
+describe('formatos publicados de alertas', () => {
+  it.each(todos.filter((p) => p.startsWith('alerts/')))('%s cumple su contrato', (path) => {
+    const json = leer(path);
+    switch (json.schemaVersion) {
+      case 'alert-source-v1':
+        expect(['power', 'roni']).toContain(json.kind);
+        expect(parseAlertSource(json, json.kind as 'power' | 'roni')).not.toBeNull();
+        break;
+      case 'alert-cne-v1':
+        expect(parseCneSource(json)).not.toBeNull();
+        break;
+      case 'alert-cne-map-v1':
+        expect(parseHazardMap(json)).not.toBeNull();
+        break;
+      case 'alert-condition-map-v1':
+        expect(parseConditionMap(json)).not.toBeNull();
+        break;
+      case 'alert-nasa-regions-v1':
+        expect(parseNasaRegions(json)).not.toBeNull();
+        break;
+      case 'alert-risk-policies-v1':
+        expect(json.policies).toEqual([]);
+        expect(parseRiskPolicies(json)).toEqual({});
+        expect(json.pendingApproval).toEqual([
+          'sequia',
+          'inundacion',
+          'saturacion',
+          'deslizamiento',
+        ]);
+        break;
+      default:
+        expect(path.endsWith('status.json')).toBe(true);
+        expect(Number.isFinite(Date.parse(String(json.attemptedAt)))).toBe(true);
+        expect(['ok', 'failed']).toContain(json.status);
+        expect(typeof json.lastValidAvailable).toBe('boolean');
+    }
+  });
+});
+
+/** Hosts accepted as the origin of real data in the NASA layer. */
 const HOSTS_NASA = ['nasa.gov', 'noaa.gov', 'ornl.gov'];
 
 describe('catálogo fuentes.json', () => {

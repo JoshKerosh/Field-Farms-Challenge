@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "alert-source-status-v1",
+  "kind": "power",
+  "attemptedAt": "2026-11-15T08:38:56.771492+00:00",
+  "lastValidAvailable": true,
+  "status": "ok",
+  "writeResult": "published",
+  "observedEnd": "2026-11-13"
+}

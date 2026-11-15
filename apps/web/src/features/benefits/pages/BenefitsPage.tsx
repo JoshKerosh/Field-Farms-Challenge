@@ -1,17 +1,27 @@
+import {
+  recoveryFarmId,
+  opportunityAvailability,
+  type SupportOpportunity,
+} from '@field-farms/domain';
+import { HandCoins } from 'lucide-react';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
-import { Check, HandCoins } from 'lucide-react';
-import { opportunityAvailability, type SupportOpportunity } from '@field-farms/domain';
-import { CONSERVATION_ACTIONS } from '../../../data/engine/farm';
-import { copy, date } from '../../../i18n';
-import { Badge, ExternalSource, PageHeader, PageLink } from '../../../shared/ui';
 import { useField } from '../../../app/context/FieldContext';
-
+import { useRecoveryPlan } from '../../restoration/data/use-recovery-plan';
+import { useBenefitsCopy } from '../benefits-copy';
+import { copy, date } from '../../../i18n';
+import { message, useMessageLanguage } from '../../../i18n/messages';
+import { Badge, ExternalSource, PageHeader, PageLink } from '../../../shared/ui';
+import './benefits.css';
 type Filter = 'all' | 'economic' | 'recognition';
-
 export function BenefitsPage() {
+  useMessageLanguage();
   const opportunities = useLoaderData<SupportOpportunity[]>();
-  const { ctx, journey, plan, acts, recs } = useField();
+  const { farmSite, myFarm } = useField();
+  const { plan, ready, readingFailed } = useRecoveryPlan(
+    farmSite && myFarm ? recoveryFarmId(farmSite) : null,
+  );
+  const labels = useBenefitsCopy();
   const [filter, setFilter] = useState<Filter>('all');
   const c = copy.benefits;
   const visible = opportunities.filter(
@@ -22,42 +32,44 @@ export function BenefitsPage() {
         : opportunity.kind !== 'recognition'),
   );
   const today = new Date().toISOString().slice(0, 10);
-  const doneCount = CONSERVATION_ACTIONS.filter((a) => acts[a.id] === 'hecho').length;
-  const planCount = CONSERVATION_ACTIONS.filter((a) => acts[a.id] === 'plan').length;
-
+  const doneCount = plan?.goals.filter((g) => g.status === 'completed').length ?? 0;
+  const planCount = (plan?.goals.length ?? 0) - doneCount;
+  const entryCount = plan?.goals.reduce((n, g) => n + g.entries.length, 0) ?? 0;
   return (
-    <div className="v10-stack">
+    <div className="v10-stack benefits-page">
       <PageHeader title={c.title} intro={c.intro} />
-      <section className="savings-panel">
+      <section className="savings-panel benefits-summary">
         <div>
-          <span className="section-kicker">Tu avance hacia PSA y reconocimientos</span>
-          <h2>
-            {doneCount > 0
-              ? `${doneCount} acciones activas en ${ctx?.sub.n ?? 'tu subcuenca'}`
-              : 'Empieza a documentar acciones en finca'}
-          </h2>
-          <p>
-            Tienes <strong>{doneCount}</strong> prácticas aplicadas, <strong>{planCount}</strong> en plan y{' '}
-            <strong>{recs.length}</strong> registros en este dispositivo.{' '}
-            {plan?.rip.has
-              ? `En ${ctx?.sub.n} hay ${plan.rip.haUrg} ha prioritarias de ribera cerca de ${journey?.op ?? 'tu ASADA'}.`
-              : ''}
-          </p>
+          <span className="section-kicker">{labels.summary}</span>
+          <h2>{plan?.goals.length ? myFarm?.name : message('md08dcf24c896')}</h2>
+          <p>{labels.summaryHelp}</p>
+          {!ready ? (
+            <p role="status">{labels.loading}</p>
+          ) : readingFailed ? (
+            <p role="alert">{labels.error}</p>
+          ) : (
+            <dl className="benefit-summary">
+              <div>
+                <dt>{labels.done}</dt>
+                <dd>{doneCount}</dd>
+              </div>
+              <div>
+                <dt>{labels.planned}</dt>
+                <dd>{planCount}</dd>
+              </div>
+              <div>
+                <dt>{labels.entries}</dt>
+                <dd>{entryCount}</dd>
+              </div>
+            </dl>
+          )}
           <div className="v10-pill-row" style={{ marginTop: 12 }}>
             <PageLink to="/care" primary>
-              Marcar acciones en finca
+              {message('m768d9cc61d26')}
             </PageLink>
-            <PageLink to="/records">Ver mis registros</PageLink>
+            <PageLink to="/records">{message('m0e47dd6dbeb2')}</PageLink>
           </div>
         </div>
-        <ul className="check-list">
-          {c.inputs.map((input) => (
-            <li key={input}>
-              <Check size={19} aria-hidden="true" />
-              {input}
-            </li>
-          ))}
-        </ul>
       </section>
       <section className="page-section">
         <div className="section-heading">
@@ -108,8 +120,46 @@ export function BenefitsPage() {
                 </p>
                 <p>{opportunity.description}</p>
                 <details>
-                  <summary>{c.requirements}</summary>
+                  <summary>{labels.details}</summary>
                   <p>{opportunity.requirements}</p>
+                  {opportunity.details && (
+                    <div className="opportunity-details">
+                      <h4>{labels.forWhom}</h4>
+                      <p>{opportunity.details.forWhom}</p>
+                      {(['offers', 'documents', 'steps', 'obligations'] as const).map((key) => (
+                        <section key={key}>
+                          <h4>{labels[key]}</h4>
+                          {key === 'steps' ? (
+                            <ol>
+                              {opportunity.details![key].map((item) => (
+                                <li key={item}>{item}</li>
+                              ))}
+                            </ol>
+                          ) : (
+                            <ul>
+                              {opportunity.details![key].map((item) => (
+                                <li key={item}>{item}</li>
+                              ))}
+                            </ul>
+                          )}
+                        </section>
+                      ))}
+                      <h4>{labels.contact}</h4>
+                      <a href={opportunity.details.contact.url} target="_blank" rel="noreferrer">
+                        {opportunity.details.contact.label}
+                      </a>
+                      <h4>{labels.sources}</h4>
+                      <ul>
+                        {opportunity.details.sources.map((source) => (
+                          <li key={source.url}>
+                            <a href={source.url} target="_blank" rel="noreferrer">
+                              {source.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </details>
                 {opportunity.deadline && (
                   <p className="deadline">
