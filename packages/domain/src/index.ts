@@ -20,3 +20,4 @@ export type { FieldAlert, FieldIncident } from './alerts';
 export type { Organization } from './organizations';
 export type { SupportOpportunity, OpportunityKind, OpportunityAvailability } from './benefits';
 export { opportunityAvailability } from './benefits';
+export * from './data';

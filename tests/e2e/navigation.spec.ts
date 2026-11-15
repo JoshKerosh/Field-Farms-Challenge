@@ -120,15 +120,10 @@ test('mantiene semántica y contraste WCAG 2.2 AA en todas las vistas', async ({
   }
 });
 
-test('abre satélite y fuentes y simula eventos extremos', async ({ page }) => {
+test('abre clima y satélite y pide ubicar la finca antes de mostrar datos', async ({ page }) => {
   await page.goto('/environment', { waitUntil: 'domcontentloaded' });
-  await expect(
-    page.getByRole('heading', { name: 'Satélite y clima en tu subcuenca' }),
-  ).toBeVisible();
-  await page.getByRole('button', { name: 'Sequía extrema' }).click();
-  await expect(page.locator('.demo-label')).toContainText('Simulación: Sequía extrema');
-  await page.getByRole('button', { name: 'Salir de la simulación' }).click();
-  await expect(page.locator('.demo-label')).toContainText('Fuentes de datos');
+  await expect(page.getByRole('heading', { name: 'Clima y satélite', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Primero ubica tu finca' })).toBeVisible();
 
   await page.getByRole('link', { name: 'Fuentes de los datos' }).first().click();
   await expect(page.getByRole('heading', { name: 'Fuentes de los datos' })).toBeVisible();
