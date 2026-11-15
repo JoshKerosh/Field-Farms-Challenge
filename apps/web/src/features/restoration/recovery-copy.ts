@@ -1,5 +1,21 @@
 import { useMessageLanguage } from '../../i18n/messages';
 const es = {
+  editGoal: 'Editar meta',
+  unitLocked: 'La unidad se conserva porque esta meta ya tiene mediciones.',
+  editEntry: 'Corregir registro',
+  saveChanges: 'Guardar cambios',
+  cancel: 'Cancelar',
+  backups: 'Respaldo del plan',
+  backupHelp:
+    'Descarga una copia con metas, fotos y gastos para restaurarla después. Guárdala en un lugar privado.',
+  downloadBackup: 'Descargar respaldo completo',
+  restoreBackup: 'Restaurar respaldo (JSON, hasta 50 MB)',
+  restoreConfirm:
+    'Se reemplazará el plan de la finca actual por este respaldo, incluidas sus metas y evidencias. Confirma que corresponde a esta finca.',
+  backupError:
+    'El archivo no es un respaldo válido o pertenece a otra parcela. No se modificó el plan.',
+  replacementPhotos: 'Si seleccionas fotos nuevas, reemplazarán las de este registro.',
+  valueError: 'Revisa la fecha, la cantidad y el gasto. No se guardaron los cambios.',
   livestock: 'animales',
   change: 'Cambio NDVI frente al mismo mes del año anterior',
   title: 'Plan de recuperación',
@@ -138,6 +154,22 @@ const es = {
   remove: 'Eliminar meta vacía',
 };
 const en: typeof es = {
+  editGoal: 'Edit goal',
+  unitLocked: 'The unit is fixed because this goal already has measurements.',
+  editEntry: 'Correct entry',
+  saveChanges: 'Save changes',
+  cancel: 'Cancel',
+  backups: 'Plan backup',
+  backupHelp:
+    'Download a copy with goals, photos and expenses to restore later. Keep it somewhere private.',
+  downloadBackup: 'Download full backup',
+  restoreBackup: 'Restore backup (JSON, up to 50 MB)',
+  restoreConfirm:
+    'This backup will replace the current farm’s plan, including its goals and evidence. Confirm that it belongs to this farm.',
+  backupError:
+    'The file is not a valid backup or belongs to another parcel. The plan was not changed.',
+  replacementPhotos: 'New photos will replace the photos for this entry.',
+  valueError: 'Check the date, quantity and expense. Changes were not saved.',
   title: 'Recovery plan',
   livestock: 'animals',
   change: 'NDVI change against the same month of the previous year',

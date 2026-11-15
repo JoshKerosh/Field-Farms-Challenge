@@ -42,12 +42,14 @@ export default function FarmExplorer({
   repository,
   site,
   onSite,
+  autoLocate = true,
 }: {
   repository: BasinExplorerRepository;
   /** Farm chosen earlier; it is shown again without asking the SIRI. */
   site: FarmSite | null;
   /** Called with the chosen point, and again with its parcel once the SIRI answers. */
   onSite: (site: FarmSite) => void;
+  autoLocate?: boolean;
 }) {
   useMessageLanguage();
   const c = copy.watershed.explorer;
@@ -234,8 +236,8 @@ export default function FarmExplorer({
     if (!basins || started.current) return;
     started.current = true;
     if (site) void locate(site.lng, site.lat, site.accuracyM, true, site.parcel);
-    else requestPosition(true);
-  }, [basins, site, locate, requestPosition]);
+    else if (autoLocate) requestPosition(true);
+  }, [basins, site, locate, requestPosition, autoLocate]);
   // Another picker on the page (district, sub-basin, example places) replaced the farm.
   useEffect(() => {
     if (site || !started.current) return;

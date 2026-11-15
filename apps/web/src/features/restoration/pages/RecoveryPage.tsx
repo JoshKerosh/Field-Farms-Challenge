@@ -26,6 +26,8 @@ import {
 } from '../data/recovery-environment';
 import { useRecoveryCopy, type RecoveryCopy } from '../recovery-copy';
 import './recovery.css';
+import { RecoveryBackup } from '../components/RecoveryBackup';
+import { EntryCorrection } from '../components/EntryCorrection';
 const today = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -101,18 +103,26 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
           if (active) setProvisional(p);
         })
         .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [id]);
+  useEffect(() => {
+    let active = true;
+    setEnvironment(null);
+    setSelected('');
     recoveryEnvironment(site)
-      .then((e) => {
+      .then((value) => {
         if (active) {
-          setEnvironment(e);
-          setSelected(e.basins[0]?.id ?? '');
+          setEnvironment(value);
+          setSelected(value.basins[0]?.id ?? '');
         }
       })
       .catch(() => {});
     return () => {
       active = false;
     };
-  }, [id]);
+  }, [site.lat, site.lng, site.parcel]);
   async function commit(next: RecoveryPlan) {
     setBusy(true);
     setError('');
@@ -153,7 +163,7 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
   }
   if (!ready) return <p role="status">{c.loading}</p>;
   if (readingFailed) return <p role="alert">{c.error}</p>;
-  const suggestions = suggestedRecoveryNeeds(needs);
+  const suggestions = suggestedRecoveryNeeds(plan?.needs ?? needs);
   return (
     <>
       <div className="recovery-feedback" aria-live="polite">
@@ -261,6 +271,18 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
           </section>
         </>
       )}
+      <RecoveryBackup
+        plan={plan}
+        id={id}
+        name={profile.name || c.farm}
+        busy={busy}
+        c={c}
+        onRestore={async (next) => {
+          const ok = await commit(next);
+          if (ok) setNeeds(next.needs);
+          return ok;
+        }}
+      />
       <section className="v10-card">
         <h2>{c.environment}</h2>
         <p>{c.measured}</p>
@@ -405,11 +427,13 @@ function NewGoal({
   c,
   busy,
   onAdd,
+  initial,
 }: {
   template: RecoveryNeed;
   c: RecoveryCopy;
   busy: boolean;
   onAdd: (g: RecoveryGoal) => Promise<boolean>;
+  initial?: RecoveryGoal;
 }) {
   const [error, setError] = useState(false);
   async function submit(e: FormEvent<HTMLFormElement>) {
@@ -417,22 +441,22 @@ function NewGoal({
     const form = e.currentTarget,
       d = new FormData(form);
     const g: RecoveryGoal = {
-      id: crypto.randomUUID(),
+      id: initial?.id ?? crypto.randomUUID(),
       template,
       target: Number(d.get('target')),
-      unit: d.get('unit') as RecoveryGoal['unit'],
+      unit: initial?.entries.length ? initial.unit : (d.get('unit') as RecoveryGoal['unit']),
       due: String(d.get('due')),
       place: String(d.get('place')),
       budget: d.get('budget') === '' ? null : Number(d.get('budget')),
-      status: 'pending',
-      entries: [],
+      status: initial?.status ?? 'pending',
+      entries: initial?.entries ?? [],
     };
     if (!validRecoveryGoal(g)) {
       setError(true);
       return;
     }
     if (await onAdd(g)) {
-      form.reset();
+      if (!initial) form.reset();
       setError(false);
     }
   }
@@ -441,14 +465,23 @@ function NewGoal({
       <fieldset disabled={busy} className="recovery-fields">
         <label>
           {c.target}
-          <input name="target" type="number" min="0.01" step="any" required />
+          <input
+            name="target"
+            type="number"
+            min="0.01"
+            step="any"
+            required
+            defaultValue={initial?.target}
+          />
         </label>
         <label>
           {c.unit}
           <select
             name="unit"
+            disabled={!!initial?.entries.length}
             defaultValue={
-              template === 'soil'
+              initial?.unit ??
+              (template === 'soil'
                 ? 'ha'
                 : template === 'cattle'
                   ? 'm'
@@ -456,7 +489,7 @@ function NewGoal({
                     ? 'trees'
                     : template === 'water'
                       ? 'points'
-                      : 'visits'
+                      : 'visits')
             }
           >
             {RECOVERY_UNITS.map((u) => (
@@ -465,20 +498,27 @@ function NewGoal({
               </option>
             ))}
           </select>
+          {!!initial?.entries.length && <small>{c.unitLocked}</small>}
         </label>
         <label>
           {c.due}
-          <input name="due" type="date" required />
+          <input name="due" type="date" required defaultValue={initial?.due} />
         </label>
         <label>
           {c.place}
-          <input name="place" maxLength={150} />
+          <input name="place" maxLength={150} defaultValue={initial?.place} />
         </label>
         <label>
           {c.budget}
-          <input name="budget" type="number" min="0" step="any" />
+          <input
+            name="budget"
+            type="number"
+            min="0"
+            step="any"
+            defaultValue={initial?.budget ?? ''}
+          />
         </label>
-        <button type="submit">{c.add}</button>
+        <button type="submit">{initial ? c.saveChanges : c.add}</button>
       </fieldset>
       {error && <p role="alert">{c.error}</p>}
     </form>
@@ -545,6 +585,17 @@ function Goal({
   return (
     <article className="recovery-goal">
       <h3>{c.templates[goal.template][0]}</h3>
+      <details className="recovery-no-print">
+        <summary>{c.editGoal}</summary>
+        <NewGoal
+          key={`${goal.id}-${goal.target}-${goal.due}-${goal.place}-${goal.budget}-${goal.unit}`}
+          template={goal.template}
+          initial={goal}
+          c={c}
+          busy={busy}
+          onAdd={onChange}
+        />
+      </details>
       <p>{c.templates[goal.template][1]}</p>
       <p>
         {goal.place} · {number(goal.target)} {c.units[goal.unit]} · {goal.due}
@@ -577,6 +628,17 @@ function Goal({
             {e.date} · {number(e.quantity)} {c.units[goal.unit]} · {money(e.expense)}
           </p>
           <p>{e.note}</p>
+          <EntryCorrection
+            entry={e}
+            c={c}
+            busy={busy}
+            onSave={(next) =>
+              onChange({
+                ...goal,
+                entries: goal.entries.map((old) => (old.id === next.id ? next : old)),
+              })
+            }
+          />
           <div className="recovery-photos">
             {e.photos.map((p) => (
               <Photo key={p.id} data={p.data} alt={`${c.entry} ${e.date}`} />
