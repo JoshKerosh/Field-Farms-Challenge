@@ -28,8 +28,8 @@ export default defineConfig({
       includeAssets: ['icon.svg', 'icons/*.png', 'fonts/*.woff2', 'fonts/LICENSE.txt'],
       manifest: {
         id: '/',
-        name: 'Field Farms Challenge',
-        short_name: 'Field Farms',
+        name: 'Sow Water',
+        short_name: 'Sow Water',
         description: 'El agua se siembra. Fincas y ASADAS, en una misma cuenca.',
         lang: 'es-CR',
         theme_color: '#17617C',

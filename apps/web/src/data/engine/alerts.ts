@@ -189,7 +189,7 @@ export function elNinoAlerts(
   raw.sort((a, b) => b.level - a.level);
   const list = raw.map((c, idx) => ({ ...c, defaultOpen: idx === 0 || c.level === 2 }));
   const top = list[0];
-  const waTxt = `Aviso del agua (Field Farms Challenge) · subcuenca ${ctx.sub.n}: ${top.title} – riesgo ${top.levelLabel.toLowerCase()}. ${top.recs[0]}`;
+  const waTxt = `Aviso del agua (Sow Water) · subcuenca ${ctx.sub.n}: ${top.title} – riesgo ${top.levelLabel.toLowerCase()}. ${top.recs[0]}`;
 
   return {
     face: caribe

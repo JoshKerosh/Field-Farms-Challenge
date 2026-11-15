@@ -1,5 +1,5 @@
 export const esCR = {
-  brand: { name: 'Field Farms Challenge', promise: 'El agua se siembra' },
+  brand: { name: 'Sow Water', promise: 'El agua se siembra' },
   nav: {
     farm: 'Mi finca',
     watershed: 'Mi cuenca',

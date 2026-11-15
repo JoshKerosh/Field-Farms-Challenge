@@ -64,7 +64,7 @@ export function AppLayout() {
             <Droplet size={25} aria-hidden="true" />
           </span>
           <span>
-            Field Farms<span className="brand-subtitle">Challenge</span>
+            Sow Water
           </span>
         </Link>
         <p className="brand-promise">{copy.brand.promise}</p>

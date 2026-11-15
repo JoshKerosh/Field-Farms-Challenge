@@ -164,7 +164,7 @@ export function flowProjection(ds: Dataset, records: FieldRecord[]) {
     bg: down ? '#8E2A21' : '#2E7A43',
     /** Texto para compartir; la app prepara el mensaje, no lo envía. */
     whatsapp: `https://wa.me/?text=${encodeURIComponent(
-      `Aviso de caudal (Field Farms Challenge): la fuente ${name} bajó a ${comma(last.v)} L/s (${drop} % menos). Si sigue así, en ${pm} daría unos ${pv.toFixed(1).replace('.', ',')} L/s.`,
+      `Aviso de caudal (Sow Water): la fuente ${name} bajó a ${comma(last.v)} L/s (${drop} % menos). Si sigue así, en ${pm} daría unos ${pv.toFixed(1).replace('.', ',')} L/s.`,
     )}`,
   };
 }
