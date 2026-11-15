@@ -1,4 +1,4 @@
-# Field Farms Challenge
+# Sow Water
 
 Navigable base of a PWA that connects farms, water sources and ASADAS (community water systems). It keeps the identity of the v10 prototype and organizes the features so they can be built in stages.
 
@@ -55,7 +55,7 @@ The modules live in `apps/web/src/features`. Records brings together water measu
 
 ## What it includes
 
-- Six main sections plus shortcuts to benefits, environment, assistant and sources.
+- Six main sections plus shortcuts to benefits, environment and sources.
 - Weather and satellite brings back the regional MODIS viewer with Play and adds NASA GIBS imagery by theme, color elevation and 3D relief, the farm and delimited watersheds. POWER and NOAA provide regional indicators with their dates; see [weather and satellite data](docs/weather-and-satellite.md).
 - Fictional farm, sources, relationships and observations, clearly labeled.
 - My watershed with real data: locating a point (GPS or tapping the map) shows the watershed and subwatershed, the farm boundary from the SIRI cadastre, IGN rivers and nearby SAGA sources and ASADAS, with an equivalent text summary and a minimap. See [real watersheds](docs/architecture.md#my-watershed-with-real-layers).
@@ -114,3 +114,7 @@ Under the NASA Space Apps Challenge rules, we declare where we used Super Intell
 See [architecture](docs/architecture.md), [inventory](docs/prototype-inventory.md), [opportunities](docs/opportunities.md), [product](PRODUCT.md) and [design](DESIGN.md).
 
 The Bricolage Grotesque and Nunito Sans fonts come from the provided HTML; their notices and SIL OFL license are kept in `apps/web/public/fonts/LICENSE.txt`. The prototype keeps all its comments and resources. Its figures and models are not considered validated by this implementation.
+
+## Recovery tracking
+
+Set goals in the Recovery plan and record progress, photos and expenses in Records. Water measurements have their own section. Support programmes are centralised in Benefits. The Assistant route redirects to the guide; alert simulation controls have been retired.

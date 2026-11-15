@@ -2,6 +2,26 @@
   min-width: 760px;
   overflow-wrap: normal;
 }
+.alert-observed-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+.alert-observed-summary > div {
+  padding: 1rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+}
+.alert-observed-summary dt {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+.alert-observed-summary dd {
+  margin: 0.5rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
 
 .alert-evidence-table caption {
   text-align: left;

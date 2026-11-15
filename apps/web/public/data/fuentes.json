@@ -94,7 +94,7 @@
   {
    "id": "indicadores-subcuenca",
    "titulo": "SIMULADO · indicadores por subcuenca",
-   "institucion": "Field Farms Challenge",
+   "institucion": "Sow Water",
    "tipo_servicio": "metodo",
    "url": "https://github.com/JoshKerosh/Field-Farms-Challenge",
    "licencia": "Proyecto del equipo",
@@ -296,7 +296,7 @@
   {
    "id": "fincas-demo",
    "titulo": "SIMULADO · fincas, vecinos y modo demo",
-   "institucion": "Field Farms Challenge",
+   "institucion": "Sow Water",
    "tipo_servicio": "metodo",
    "url": "https://github.com/JoshKerosh/Field-Farms-Challenge",
    "licencia": "Proyecto del equipo",
@@ -364,7 +364,7 @@
   {
    "id": "alerts-rules",
    "titulo": "Reglas de evaluación de alertas · proyecto",
-   "institucion": "Field Farms Challenge",
+   "institucion": "Sow Water",
    "tipo_servicio": "metodo",
    "url": "https://github.com/JoshKerosh/Field-Farms-Challenge/blob/dev/docs/alert-policies.md",
    "frecuencia": "estatica",

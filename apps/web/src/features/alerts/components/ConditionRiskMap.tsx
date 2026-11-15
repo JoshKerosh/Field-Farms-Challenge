@@ -38,6 +38,31 @@ export function ConditionRiskMap({
   }));
   const chosen = rows.find((row) => row.id === selected);
   const colorName = (color: keyof typeof CONDITION_COLORS) => message(`alerts.conditions.${color}`);
+  if (!loading && (!base || !rows.length))
+    return (
+      <section className="v10-card" aria-labelledby={`${id}-title`}>
+        <h2 id={`${id}-title`}>{message('alerts.conditions.title')}</h2>
+        <p>{message('alerts.conditions.missing')}</p>
+        <p>{message('alerts.futureNotice')}</p>
+        <details>
+          <summary>{message('alerts.missingEvidence')}</summary>
+          <p>
+            {message(
+              'alerts.conditions.landslideRule',
+              CONDITION_RULES.saturationRatioMin * 100,
+              CONDITION_RULES.landslideSlopeDegreesMin,
+            )}
+          </p>
+          <p>
+            {message(
+              'alerts.conditions.floodRule',
+              CONDITION_RULES.saturationRatioMin * 100,
+              CONDITION_RULES.floodHeightAboveDrainageMetresMax,
+            )}
+          </p>
+        </details>
+      </section>
+    );
   return (
     <section className="v10-card" aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`}>{message('alerts.conditions.title')}</h2>

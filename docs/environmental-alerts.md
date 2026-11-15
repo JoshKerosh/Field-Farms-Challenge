@@ -1,23 +1,14 @@
-# Environmental alerts without Earthdata
+# Sow Water environmental alerts
 
-The `/alerts` screen lets users try four categories: drought, flooding,
-excess water in the soil and landslide. It needs no accounts, tokens or
-external services to open or use the demo scenarios.
-
-## Try it
-
-From the root, run `npm run dev` and open `/alerts` at the address
-Vite prints. Use **Simulate drought**, **Simulate heavy rain** or **Simulate
-heat**. When leaving the simulation, the pending assessments come back and no
-fictional values are kept as if they were real data.
-
-The simulation mode is the same shared state used by Environment. It is
-not persisted on reload. The global and local controls let users exit.
+The `/alerts` screen shows only published real observations. Simulation controls and shared
+simulation state have been retired. Pure demo fixtures remain isolated for engine tests.
+Register a farm to inspect the four categories. Incomplete assessments explain missing data
+or unapproved rules; no risk level is fabricated. Empty tables are omitted and condition maps
+without verified observations are replaced with an explanation.
 
 ## History, comparison and mapping
 
-Below the scenarios there are three real-data views that don't change when
-a simulation is enabled and don't assign severity:
+The screen provides observed data and mapping without treating them as official risk alerts:
 
 - **History:** a series of up to 90 days of POWER precipitation and relative root-zone
   wetness. Users can choose the indicator and show 7, 30 or 90 days, with an
@@ -45,23 +36,14 @@ The sources are updated with the commands documented in
 `jobs/data-pipeline/CLIMATE.md`. The history uses published static data and the
 last available day; it is not a live weather query from the browser.
 
-## Two separate modes
+## Assessment limits
 
-- **Available data:** the four real assessments are indeterminate until
-  there are verifiable indicators and approved scientific rules. The engine
-  never turns missing data into low risk.
-- **Simulation:** every indicator comes from the isolated example in
-  `apps/web/src/demo/fixtures/environmental-alerts.ts`, including its periods.
-  The levels are a predefined visual script, **not comparisons with scientific
-  thresholds**. Neither the farm, its land use capacity nor cattle rotation
-  turn these examples into real assessments of the selected location.
-
-The cards are sorted by severity and show the reason, indicators, source,
-period and general guidance. The demo level is labeled as
-such on every card. Tables scroll horizontally on mobile. The generation
-date is shown in Costa Rica's time zone and stays separate
-from the observation period. The interface and the related assistant
-answers work in Spanish and English. There is no WhatsApp link in Alerts.
+Verified evidence and approved rules are required to assess a risk. Regional POWER wetness
+does not replace volumetric SMAP observations; sampled slopes do not replace a parcel DEM or
+HAND. Complete point-history windows provide rainfall totals for the latest day and seven days,
+and average relative root-zone wetness over thirty days. These observations are not applied to
+another farm. New verified measurements and approved rules can expand the assessments.
+The interface works in Spanish and English and does not replace official CNE or IMN advisories.
 
 ## Status of the real data
 
