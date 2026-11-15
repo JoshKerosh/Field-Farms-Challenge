@@ -26,6 +26,8 @@ import { ConnectionStatus } from '../../platform/offline/ConnectionStatus';
 import { PwaStatus } from '../../platform/offline/PwaStatus';
 import { Preferences } from '../../shared/ui/Preferences';
 import { useField } from '../context/FieldContext';
+import { useFarmFlowCopy } from '../../features/farms/flow-copy';
+import { PageHeader, PageLink } from '../../shared/ui';
 export function AppLayout() {
   useMessageLanguage();
   const { copy: c, language } = useI18n();
@@ -39,7 +41,8 @@ export function AppLayout() {
   ];
   const { pathname } = useLocation();
   const navigationState = useNavigation();
-  const { ctx, demo, setDemo, loading, error, farmKey, myFarm, farmSite } = useField();
+  const { ctx, demo, setDemo, loading, error, myFarm, farmSite } = useField();
+  const flow = useFarmFlowCopy();
   useEffect(() => {
     if (loading) return;
     const title = document.getElementById('page-title');
@@ -89,10 +92,12 @@ export function AppLayout() {
             <NavLink
               key={to}
               to={to}
+              aria-label={label}
               className={({ isActive }) => `nav-link${isActive ? ' is-active' : ''}`}
             >
               <Icon size={22} aria-hidden="true" />
-              <span>{label}</span>
+              <span className={to === '/care' ? 'nav-long' : undefined}>{label}</span>
+              {to === '/care' && <span className="nav-short">{flow.plan}</span>}
             </NavLink>
           ))}
         </nav>
@@ -144,17 +149,7 @@ export function AppLayout() {
               {c.exit}
             </button>
           </div>
-        ) : pathname === '/farm' ? null : (
-          <div className="demo-banner">
-            <span className="demo-label">{c.real}</span>
-            <p>
-              {message('m218685df89eb')}
-              {farmKey === 'mia' && myFarm
-                ? message('mf41956591be2', c.activeFarm, myFarm.name || c.farm)
-                : ` ${c.example}.`}
-            </p>
-          </div>
-        )}
+        ) : null}
         <main
           id="main"
           className="main-content"
@@ -170,6 +165,27 @@ export function AppLayout() {
             <p className="loading-page" role="status">
               {c.loading}
             </p>
+          ) : (!myFarm || !farmSite) &&
+            ['/watershed', '/alerts', '/environment', '/benefits', '/assistant'].includes(
+              pathname,
+            ) ? (
+            <div className="v10-stack">
+              <PageHeader
+                title={
+                  navigation.find((n) => n.to === pathname)?.label ??
+                  {
+                    '/environment': c.environment,
+                    '/benefits': c.benefits,
+                    '/assistant': c.assistant,
+                  }[pathname] ??
+                  c.farm
+                }
+                intro={flow.start}
+              />
+              <PageLink to="/farm" primary>
+                {c.locateAction}
+              </PageLink>
+            </div>
           ) : (
             <Outlet />
           )}

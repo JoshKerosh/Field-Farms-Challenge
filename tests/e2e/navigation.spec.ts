@@ -10,17 +10,16 @@ test('recorre las seis secciones principales con datos reales y foco accesible',
   const nav = page.getByRole('navigation', { name: 'Secciones principales' });
   const destinations: [string, RegExp][] = [
     ['Mi finca', /^Mi finca$/],
-    ['Mi cuenca', /Subcuenca/],
-    ['Alertas', /Alertas: las dos caras de El Niño/],
-    ['Cuidar', /Cuidar el agua y los potreros/],
+    ['Mi cuenca', /Mi cuenca/],
+    ['Alertas', /Alertas/],
+    ['Plan de recuperación', /Plan de recuperación/],
     ['Registros', /Registros del agua y monitoreo/],
     ['Guía', /Guía de uso/],
   ];
   for (const [link, heading] of destinations) {
     await nav.getByRole('link', { name: link, exact: true }).click();
     await expect(page.getByRole('heading', { name: heading, level: 1 })).toBeVisible();
-    if (link !== 'Mi finca')
-      await expect(page.locator('.demo-label')).toContainText('Fuentes de datos');
+    await expect(page.locator('.demo-banner')).toHaveCount(0);
     await expect(page.locator('#page-title')).toBeFocused();
   }
 });

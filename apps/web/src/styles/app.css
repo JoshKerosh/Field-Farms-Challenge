@@ -12,6 +12,17 @@ html {
 body {
   margin: 0;
 }
+.nav-link .nav-short {
+  display: none;
+}
+@media (max-width: 760px) {
+  .nav-link .nav-short {
+    display: inline;
+  }
+  .nav-link .nav-long {
+    display: none;
+  }
+}
 button,
 input,
 select {
@@ -1900,4 +1911,22 @@ summary {
   .v10-bar {
     width: 10px;
   }
+}
+
+/* Keep the editing caret inside editable controls; preserve text selection and keyboard focus. */
+body {
+  cursor: default;
+  caret-color: transparent;
+}
+input,
+textarea,
+[contenteditable='true'] {
+  caret-color: auto;
+  cursor: text;
+}
+select,
+button,
+summary,
+a {
+  cursor: pointer;
 }

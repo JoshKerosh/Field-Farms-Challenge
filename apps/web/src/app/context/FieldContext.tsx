@@ -44,6 +44,7 @@ import { loadDataset } from '../../data/real/load';
 import type { Dataset } from '../../data/real/types';
 import { message, messageLanguage, useMessageLanguage } from '../../i18n/messages';
 import type { ParcelFeature } from '../../platform/siri/parcel';
+import { isLegacyExampleName } from '../../features/farms/farm-flow';
 const LS_KEYS = {
   loc: 'ffc.v10.loc',
   farm: 'ffc.v10.farm',
@@ -112,6 +113,7 @@ export interface FieldContextValue {
   farmKey: FarmKey;
   setFarmKey: (k: FarmKey) => void;
   myFarm: MyFarm | null;
+  resetMyFarm: () => void;
   farm: FarmProfile | null;
   saveMyFarm: (input: FarmFormInput) =>
     | {
@@ -167,9 +169,11 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     const saved = readJson<{
       key?: FarmKey;
       my?: MyFarm | null;
+      version?: number;
     } | null>(LS_KEYS.farm, null);
-    if (saved && saved.my) return { key: saved.key || 'mia', my: saved.my };
-    return { key: saved?.key || 'lechera', my: null };
+    if (saved?.my && (saved.version === 2 || !isLegacyExampleName(saved.my.name)))
+      return { key: 'mia', my: saved.my };
+    return { key: 'mia', my: null };
   });
   const [acts, setActs] = useState<Record<string, ActionStatus>>(() =>
     readJson<Record<string, ActionStatus>>(LS_KEYS.acts, {}),
@@ -183,7 +187,10 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     readJson<boolean>(LS_KEYS.flucShare, false),
   );
   const [farmSite, setFarmSiteState] = useState<FarmSite | null>(() =>
-    readJson<FarmSite | null>(LS_KEYS.farmSite, null),
+    readJson<{ version?: number } | null>(LS_KEYS.farm, null)?.version !== 2 &&
+    isLegacyExampleName(readJson<{ my?: MyFarm } | null>(LS_KEYS.farm, null)?.my?.name ?? '')
+      ? null
+      : readJson<FarmSite | null>(LS_KEYS.farmSite, null),
   );
   const [demo, setDemo] = useState<DemoScenario | null>(null);
   const [satFrame, setSatFrame] = useState<number | null>(null);
@@ -289,7 +296,7 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
       if (!check.ok || !check.farm) {
         return { ok: false as const, errors: check.errors };
       }
-      const next = { key: 'mia' as const, my: check.farm };
+      const next = { version: 2, key: 'mia' as const, my: check.farm };
       setFarmState(next);
       writeJson(LS_KEYS.farm, next);
       return { ok: true as const };
@@ -367,7 +374,7 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     [ctx, storedLoc, applyLocation],
   );
   const farm = useMemo(
-    () => (ctx ? activeFarm(farmState.key, farmState.my) : null),
+    () => (ctx && farmState.my ? activeFarm('mia', farmState.my) : null),
     [ctx, farmState.key, farmState.my, messageLanguage()],
   );
   const siteFloodsFlag = useMemo(
@@ -456,6 +463,15 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     farmKey: farmState.key,
     setFarmKey,
     myFarm: farmState.my,
+    resetMyFarm: () => {
+      setFarmState({ key: 'mia', my: null });
+      setFarmSiteState(null);
+      setStoredLoc(null);
+      writeJson(LS_KEYS.farm, { key: 'mia', my: null });
+      writeJson(LS_KEYS.farmSite, null);
+      writeJson(LS_KEYS.loc, null);
+      setDemo(null);
+    },
     farm,
     saveMyFarm,
     siteFloodsFlag,

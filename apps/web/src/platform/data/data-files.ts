@@ -16,6 +16,7 @@ const DATA = '/data';
 /** Rutas de los archivos de indicadores. Los `ejemplos/` son simulados hasta tener el conector. */
 export const ARCHIVOS = {
   power: 'nasa/power/latest.json',
+  powerHistory: 'recovery/rainfall.json',
   modis: 'nasa/modis/latest.json',
   roni: 'noaa/roni/latest.json',
   imerg: 'ejemplos/imerg.json',

@@ -68,6 +68,11 @@ El ahorro se muestra como **Aún no calculado**. Los enlaces a programas no equi
 
 ## Próximas integraciones
 
+El seguimiento local de metas y gastos de `/care`, el paquete regional de lluvia NASA y la
+preparación manual de vegetación se describen en [Plan de recuperación](docs/recovery-plan.md).
+La importación MODIS de noviembre de 2024 a octubre de 2026 ya generó series para 34 cuencas
+y 310 teselas. Queda pendiente la revisión visual manual de la vista con una finca seleccionada.
+
 1. Finca y registros en el dispositivo (Dexie), con cola de sincronización a archivos del repositorio mediante una Pages Function.
 2. IMERG y SMAP reales con la cuenta NASA Earthdata; POWER, RONI y MODIS ya se publican a diario (ver [datos](docs/datos.md)).
 3. Costos, inversiones y períodos comparables para evaluar beneficios económicos.

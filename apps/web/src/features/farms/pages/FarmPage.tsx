@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, type FormEvent } from 'react';
+import { lazy, Suspense, useState, useRef, type FormEvent } from 'react';
 import { myFarmToForm, useField } from '../../../app/context/FieldContext';
 import {
   EMPTY_FARM_FORM,
@@ -11,10 +11,14 @@ import { copy } from '../../../i18n';
 import { message, useMessageLanguage } from '../../../i18n/messages';
 import { PageHeader, PageLink } from '../../../shared/ui';
 import type { BasinExplorerRepository } from '../../watersheds';
+import { useFarmFlowCopy } from '../flow-copy';
 const FarmExplorer = lazy(() => import('../components/FarmExplorer'));
 export function FarmPage({ explorer }: { explorer: BasinExplorerRepository }) {
   useMessageLanguage();
-  const { myFarm, saveMyFarm, farmSite, setFarmSite } = useField();
+  const { myFarm, saveMyFarm, farmSite, setFarmSite, resetMyFarm } = useField();
+  const flow = useFarmFlowCopy();
+  const [mapEpoch, setMapEpoch] = useState(0);
+  const mapEpochRef = useRef(0);
   const [formInput, setFormInput] = useState<FarmFormInput>(() =>
     myFarm ? myFarmToForm(myFarm) : EMPTY_FARM_FORM,
   );
@@ -33,13 +37,31 @@ export function FarmPage({ explorer }: { explorer: BasinExplorerRepository }) {
   return (
     <div className="v10-stack">
       <PageHeader title={message('mba8875d8f580')} intro={message('introFarmPage')} />
+      {myFarm && (
+        <button
+          type="button"
+          className="v10-pill-btn"
+          onClick={() => {
+            resetMyFarm();
+            mapEpochRef.current += 1;
+            setMapEpoch(mapEpochRef.current);
+            setFormInput({ ...EMPTY_FARM_FORM });
+            setFormErrors({});
+            setFormSaved(false);
+          }}
+        >
+          {flow.newFarm}
+        </button>
+      )}
       <section className="v10-card" aria-labelledby="farm-explorer-title">
         <h2 id="farm-explorer-title">{message('m4c8dd20e4c82')}</h2>
         <Suspense fallback={<p role="status">{copy.watershed.mapLoading}</p>}>
           <FarmExplorer
+            key={mapEpoch}
             repository={explorer}
             site={farmSite}
             onSite={(site) => {
+              if (mapEpoch !== mapEpochRef.current) return;
               setFarmSite(site);
               setFormSaved(false);
             }}

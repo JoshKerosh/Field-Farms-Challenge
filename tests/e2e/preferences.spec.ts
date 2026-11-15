@@ -27,7 +27,7 @@ test('muestra las secciones en inglés y mantiene accesible la configuración en
     await page.goto(route, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('#page-title')).toBeVisible();
     await expect(page.locator('#page-title')).not.toContainText(
-      /Mi finca|Subcuenca|Alertas|Registros|Cuidar|Fuentes de/,
+      /Mi finca|Subcuenca|Alertas|Registros|Plan de recuperación|Fuentes de/,
     );
   }
   await page.goto('/farm', { waitUntil: 'domcontentloaded' });

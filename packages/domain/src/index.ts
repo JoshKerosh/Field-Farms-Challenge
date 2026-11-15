@@ -15,6 +15,7 @@ export type {
 export { isPublicRoad } from './basins';
 export type { WaterSource, WaterReading } from './water';
 export type { RestorationAction } from './restoration';
+export * from './restoration/recovery';
 export type { EnvironmentalIndicator } from './environment';
 export type { FieldAlert, FieldIncident } from './alerts';
 export type { Organization } from './organizations';
