@@ -15,11 +15,13 @@ import { useFarmFlowCopy } from '../flow-copy';
 import { recoveryFarmId } from '@field-farms/domain';
 import { deleteRecoveryPlans } from '../../restoration';
 import './farm.css';
+import { parcelHectares } from '../parcel-hectares';
 const FarmExplorer = lazy(() => import('../components/FarmExplorer'));
 export function FarmPage({ explorer }: { explorer: BasinExplorerRepository }) {
   useMessageLanguage();
   const { myFarm, saveMyFarm, farmSite, setFarmSite, resetMyFarm } = useField();
   const flow = useFarmFlowCopy();
+  const automaticArea = parcelHectares(farmSite);
   const [mapEpoch, setMapEpoch] = useState(0);
   const mapEpochRef = useRef(0);
   const [editing, setEditing] = useState(false);
@@ -76,7 +78,10 @@ export function FarmPage({ explorer }: { explorer: BasinExplorerRepository }) {
       setFormErrors({ location: message('m4c3cc084777f') });
       return;
     }
-    const result = saveMyFarm(formInput);
+    const result = saveMyFarm({
+      ...formInput,
+      ha: automaticArea === null ? formInput.ha : String(automaticArea),
+    });
     setFormSaved(result.ok);
     setFormErrors(result.ok ? {} : result.errors);
     if (result.ok) {
@@ -90,7 +95,7 @@ export function FarmPage({ explorer }: { explorer: BasinExplorerRepository }) {
       <PageHeader title={message('mba8875d8f580')} intro={message('introFarmPage')} />
       {deleted && <p role="status">{flow.deleted}</p>}
       {myFarm && (
-        <section className="v10-card" aria-labelledby="farm-record-title">
+        <section className="v10-card content-card" aria-labelledby="farm-record-title">
           <div className="farm-record-header">
             <div>
               <span className="farm-record-kicker">{flow.savedFarm}</span>
@@ -201,7 +206,7 @@ export function FarmPage({ explorer }: { explorer: BasinExplorerRepository }) {
         </Suspense>
       </section>
       {(!myFarm || editing) && (
-        <section className="v10-card" aria-label={message('m34483368c677')}>
+        <section className="v10-card content-card" aria-label={message('m34483368c677')}>
           {formErrors.location && <p role="alert">{formErrors.location}</p>}
           <form onSubmit={handleFormSubmit} className="v10-stack" noValidate>
             <h3>{myFarm ? message('m43d92b9ea607') : message('m0c9fe23d8960')}</h3>
@@ -240,16 +245,34 @@ export function FarmPage({ explorer }: { explorer: BasinExplorerRepository }) {
               </div>
 
               <div className="v10-field">
-                <label htmlFor="fm-ha">{message('m83d0c27e39ad')}</label>
-                <input
-                  id="fm-ha"
-                  type="number"
-                  step="0.5"
-                  min="0.1"
-                  value={formInput.ha}
-                  onChange={(e) => setFormInput((f) => ({ ...f, ha: e.target.value }))}
-                  placeholder={message('m6748b1ba9ea8')}
-                />
+                {automaticArea === null ? (
+                  <>
+                    <label htmlFor="fm-ha">{message('m83d0c27e39ad')}</label>
+                    <input
+                      id="fm-ha"
+                      type="number"
+                      step="0.5"
+                      min="0.1"
+                      value={formInput.ha}
+                      onChange={(e) => setFormInput((f) => ({ ...f, ha: e.target.value }))}
+                      placeholder={message('m6748b1ba9ea8')}
+                    />
+                    <small className="farm-area-help">{flow.manualAreaHelp}</small>
+                  </>
+                ) : (
+                  <>
+                    <span className="farm-area-label" id="farm-area-label">
+                      {flow.automaticArea}
+                    </span>
+                    <output className="farm-area-output" aria-labelledby="farm-area-label">
+                      {new Intl.NumberFormat(document.documentElement.lang, {
+                        maximumFractionDigits: 4,
+                      }).format(automaticArea)}{' '}
+                      ha
+                    </output>
+                    <small className="farm-area-help">{flow.automaticAreaHelp}</small>
+                  </>
+                )}
                 {formErrors.ha && (
                   <span className="v10-field-error" role="alert">
                     {formErrors.ha}

@@ -18,6 +18,9 @@ export function useFarmFlowCopy() {
         deleted: 'The farm and its recovery plan were deleted from this device.',
         deleteError: 'Could not complete deletion. The farm details remain available. Try again.',
         area: 'Total area',
+        automaticArea: 'Parcel area · SIRI',
+        automaticAreaHelp: 'Taken from the parcel selected on the map.',
+        manualAreaHelp: 'The map has not provided a valid area. Enter the total area in hectares.',
         crops: 'Crop or forage area',
         animals: 'Cattle',
         activity: 'Activity',
@@ -59,6 +62,10 @@ export function useFarmFlowCopy() {
         deleteError:
           'No se pudo completar el borrado. La ficha de la finca sigue disponible. Intenta de nuevo.',
         area: 'Área total',
+        automaticArea: 'Área de la parcela · SIRI',
+        automaticAreaHelp: 'Obtenida de la parcela seleccionada en el mapa.',
+        manualAreaHelp:
+          'El mapa no ha proporcionado un área válida. Ingresa el área total en hectáreas.',
         crops: 'Área de cultivo o forraje',
         animals: 'Ganado',
         activity: 'Actividad',
