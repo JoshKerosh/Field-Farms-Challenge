@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "alert-source-v1",
+  "kind": "roni",
+  "dataMode": "real",
+  "inputFingerprint": "614faf46ac702d5bf0bccbf6e989c380db308c96fd84bb5306b2558a5460131c",
+  "sample": {
+    "source": "NOAA CPC",
+    "index": "RONI",
+    "sstVersion": "ERSSTv6",
+    "origin": "provider-data",
+    "unit": "degC",
+    "season": "ASO",
+    "year": 2026,
+    "value": 2.0,
+    "observedStart": "2026-08-01",
+    "observedEnd": "2026-10-31",
+    "lagDays": 15,
+    "revisionStatus": "Recent values are estimates and may be revised by NOAA",
+    "method": "Official three-month seasonal RONI; NOT daily local drought",
+    "riskEvaluation": "not-performed; regional rules and thresholds not approved",
+    "evidence": {
+      "url": "https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso/roni/",
+      "resolvedUrl": "https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso/roni/",
+      "sha256": "45a29af6d57b0a231dcc2fd50b636e823c43d591208e9dd6196358bfaed85834"
+    },
+    "retrievedAt": "2026-11-15T07:58:14.933970+00:00"
+  }
+}

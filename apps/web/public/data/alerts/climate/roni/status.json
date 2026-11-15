@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "alert-source-status-v1",
+  "kind": "roni",
+  "attemptedAt": "2026-11-15T08:38:57.713178+00:00",
+  "lastValidAvailable": true,
+  "status": "ok",
+  "writeResult": "unchanged",
+  "observedEnd": "2026-10-31"
+}
