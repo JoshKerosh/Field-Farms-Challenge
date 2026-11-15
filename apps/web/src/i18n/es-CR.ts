@@ -1,4 +1,11 @@
-import { localizedResource, message } from './messages';
+import { localizedResource, message, messageLanguage } from './messages';
+
+/** Counts in the reader's language: 1 457 (es-CR) or 1,457 (en). */
+const count = (value: number) =>
+  value.toLocaleString(messageLanguage() === 'en' ? 'en-US' : 'es-CR');
+/** +42, −9 or 0, with a true minus sign. */
+const signed = (value: number) =>
+  `${value > 0 ? '+' : value < 0 ? '−' : ''}${count(Math.abs(value))}`;
 export const esCR = localizedResource(
   () =>
     ({
@@ -238,14 +245,85 @@ export const esCR = localizedResource(
           lowAccuracy: message('md6db58e32f75'),
           minimap: message('m78d6bcf8d9d9'),
           sourceKind: {
-            naciente: 'naciente',
-            pozo: 'pozo',
+            naciente: message('m1e1a27ea8799'),
+            pozo: message('m3bc7f74b69c3'),
             superficial: message('m08c0391f9fe0'),
             'sin clasificar': message('m15637ca5776d'),
           },
           basinSources: message('m21fe65c61bf9'),
           farmSources: message('m542929adfc61'),
         },
+      },
+      rain: {
+        title: message('m559f16dd7a0c'),
+        zone: (zone: string, point: string) => message('ma64405a79dcc', zone, point),
+        ensoIndex: (value: string, season: string) => message('m8a79106198c6', value, season),
+        enso: {
+          ninoStrong: message('m05eea8f636aa'),
+          ninoModerate: message('mf0e09fa0c318'),
+          ninoWeak: message('mbb9f86ad9638'),
+          nina: message('mfea4fcbfd617'),
+          neutral: message('ma525a523094a'),
+        },
+        seasonChange: message('m6044d3700ca9'),
+        seasonChangeDetail: message('m1472a5eb6f65'),
+        dryMonths: message('m27e3beec8e4c'),
+        months: (n: number) =>
+          n === 1 ? message('m0c8fff026723', count(n)) : message('m1fbe5f177297', count(n)),
+        dryNormal: (n: number) =>
+          n === 1 ? message('mee7f878e2706', count(n)) : message('m80343a6a8769', count(n)),
+        last30: message('m43b4552642c1'),
+        anomaly: (v: number) => message('mca51e0da6afd', signed(v)),
+        hint: message('mac0c3e8f76a3'),
+        readout: (month: string, normal: number, nino: number) =>
+          message('m47eab7b52bc7', month, normal, nino),
+        normal: message('m2f6d8482b072'),
+        nino: message('mae9d9fa7fbf9'),
+        month: message('m024261f9bfba'),
+        table: message('mc876e07d6868'),
+        chartLabel: message('m753b579acfd0'),
+        year: (v: number) => `${signed(v)} %`,
+        note: (year: string, day: string) => message('m9d9b337dbe97', year, day),
+      },
+      subbasinChoice: {
+        label: (n: number) => message('md1572c8a288b', n),
+        option: (name: string, percent: string) => message('mfb14210f5bad', name, percent),
+      },
+      journey: {
+        title: message('m6ff37ca4d8f5'),
+        loading: message('m246dbc058e31'),
+        error: message('maa7787bba39b'),
+        none: message('m9e9a570a9b80'),
+        lead: (farm: string, source: string, kind: string, where: string, operator: string) =>
+          message('m88550dcd5cd5', farm, source, kind, where, operator),
+        approxLead: (source: string, where: string, operator: string) =>
+          message('m92fd73c83b53', source, where, operator),
+        farm: message('ma31292836217'),
+        farmNumber: (n: string) => message('m5b17fe7fda5b', n),
+        farmCard: message('mfd1c360fc8ac'),
+        farmCardNumber: (n: string) => message('ma795c49bf159', n),
+        farmStep: message('m19b34e192b2b'),
+        nearestBadge: message('m2c21da992be1'),
+        approxBadge: message('m9a0e1c5ae007'),
+        inside: message('m79bb1248a14c'),
+        distance: (value: string) => message('m75d95d74970b', value),
+        approxDistance: (value: string) => message('m342b7c0aa692', value),
+        services: (n: number) =>
+          n === 1 ? message('m52065b4750e8', count(n)) : message('m5f119ef8349d', count(n)),
+        operatorStep: message('m9ce618b85bb5'),
+        note: message('m519152e3544a'),
+        approxNote: message('mb5776f5dc49b'),
+        diagramLabel: (source: string, where: string, operator: string) =>
+          message('m8747eb02ced2', source, where, operator),
+        diagramSoil: message('m939b4a687b37'),
+        diagramSpring: message('m1e1a27ea8799'),
+        /** `masculine` for "pozo"; English ignores it. */
+        diagramNearest: (kind: string, masculine: boolean) =>
+          masculine ? message('mf4d0841132c9', kind) : message('m9aab93f55f75', kind),
+        diagramOperator: message('m33f0a8c147c8'),
+        diagramServices: (n: number) =>
+          n === 1 ? message('m42abff47f78b', count(n)) : message('mae4d893fd7dc', count(n)),
+        diagramCommunity: message('ma0cdf28d60b7'),
       },
       water: {
         readingsTitle: message('m77531b2b7b77'),

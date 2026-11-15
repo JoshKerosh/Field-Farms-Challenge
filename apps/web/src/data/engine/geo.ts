@@ -80,6 +80,29 @@ export class Geo {
     };
   }
 
+  /**
+   * Coordenadas locales → [longitud, latitud], invirtiendo el polinomio con Newton.
+   * Error típico ~50 m (la resolución de la cuadrícula local).
+   */
+  localToLngLat(loc: Loc): [number, number] {
+    const { bx, by } = this.ds.territory;
+    let lon = -84;
+    let lat = 10;
+    for (let k = 0; k < 8; k++) {
+      const t = [1, lon, lat, lon * lon, lat * lat, lon * lat];
+      const ex = t.reduce((a, v, i) => a + v * bx[i], 0) - loc.x;
+      const ey = t.reduce((a, v, i) => a + v * by[i], 0) - loc.y;
+      const a = bx[1] + 2 * bx[3] * lon + bx[5] * lat;
+      const b = bx[2] + 2 * bx[4] * lat + bx[5] * lon;
+      const c = by[1] + 2 * by[3] * lon + by[5] * lat;
+      const d = by[2] + 2 * by[4] * lat + by[5] * lon;
+      const det = a * d - b * c;
+      lon -= (d * ex - b * ey) / det;
+      lat -= (a * ey - c * ex) / det;
+    }
+    return [lon, lat];
+  }
+
   /** Celda de 3 km más cercana (busca hasta 3 celdas alrededor). */
   cellAt(loc: Loc): GridCell | null {
     const { grid, step } = this.ds.territory;

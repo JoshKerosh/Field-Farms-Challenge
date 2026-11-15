@@ -239,7 +239,7 @@ export default function BasinMap({
     />
   );
 }
-function baseStyle() {
+export function baseStyle() {
   return {
     version: 8 as const,
     sources: {
@@ -402,7 +402,7 @@ function addOverlayLayers(map: Map, basins: FeatureCollection) {
 }
 const iconName = (id: MapIconId) => `icon-${id}`;
 /** Tooltip text comes from external data, so it is set as text, never as HTML. */
-function tooltipContent(text: string): HTMLElement {
+export function tooltipContent(text: string): HTMLElement {
   const [title, ...lines] = text.split('\n');
   const element = document.createElement('div');
   element.className = 'basin-tooltip';

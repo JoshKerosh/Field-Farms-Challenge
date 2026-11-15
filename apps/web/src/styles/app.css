@@ -671,6 +671,192 @@ p + p {
   box-shadow: 0 0 0 1px #90a4ae;
   vertical-align: -2px;
 }
+.rain-outlook h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.rain-enso {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-amber-tint);
+  color: var(--color-amber-ink);
+}
+.rain-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+.rain-stats > div {
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: #eff6f2;
+}
+.rain-stats dt {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+.rain-stats dd {
+  margin: 0;
+  font-family: var(--font-headline);
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+.rain-stats dd.v10-small {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+.rain-outlook {
+  align-content: start;
+}
+.rain-chart {
+  position: relative;
+  padding: 22px 0 26px 40px;
+}
+.rain-unit,
+.rain-tick span,
+.rain-value,
+.rain-label {
+  white-space: nowrap;
+}
+.rain-unit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+.rain-plot {
+  position: relative;
+  display: flex;
+  height: 180px;
+}
+.rain-tick {
+  position: absolute;
+  right: 0;
+  left: 0;
+  border-top: 1px solid #e6ece7;
+}
+.rain-tick.rain-base {
+  border-top-color: #9aa89f;
+}
+.rain-tick span {
+  position: absolute;
+  right: calc(100% + 6px);
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+.rain-month {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  border-radius: 6px;
+}
+.rain-month.is-active {
+  background: #eef3ef;
+}
+.rain-bar {
+  position: relative;
+  width: min(28px, 30%);
+  border-radius: 4px 4px 0 0;
+}
+.rain-value {
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+.rain-label {
+  position: absolute;
+  top: calc(100% + 4px);
+  font-size: 0.8125rem;
+  color: var(--color-ink);
+}
+.rain-readout {
+  min-height: 1.5em;
+  margin: 0;
+}
+.rain-table summary {
+  cursor: pointer;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+.rain-table table {
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.rain-table th,
+.rain-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--color-line);
+  text-align: right;
+}
+.rain-table th:first-child {
+  text-align: left;
+}
+@media (max-width: 640px) {
+  .rain-stats {
+    grid-template-columns: 1fr;
+  }
+}
+.water-journey-lead {
+  font-size: 1.0625rem;
+}
+.water-journey-steps {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.water-journey-steps > li:not(.water-journey-arrow) {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: #eff6f2;
+  overflow-wrap: anywhere;
+}
+.water-journey-steps .legend-parcel {
+  width: 28px;
+  height: 28px;
+  margin: 0;
+}
+.water-journey-arrow {
+  display: flex;
+  align-items: center;
+  color: #17617c;
+}
+.water-journey-badge {
+  background: #e2f1e5;
+  color: #1f5a32;
+}
+@media (max-width: 640px) {
+  .water-journey-steps {
+    flex-direction: column;
+  }
+  .water-journey-arrow {
+    justify-content: center;
+    transform: rotate(90deg);
+  }
+}
 .legend-icons {
   display: inline-flex;
   flex: none;

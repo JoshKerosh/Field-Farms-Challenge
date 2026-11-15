@@ -1,7 +1,8 @@
-import { Droplet, Layers, MapPin, RotateCcw, Trees, Waves, ZoomIn, ZoomOut } from 'lucide-react';
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { Droplet, Layers, MapPin, Waves } from 'lucide-react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useField } from '../../../app/context/FieldContext';
 import { distText, fmtInt } from '../../../data/engine/format';
+import { getGeo } from '../../../data/engine/geo';
 import {
   RISK_LABEL,
   RISK_STYLE,
@@ -9,17 +10,21 @@ import {
   type MapLayer,
   type SourceInfo,
 } from '../../../data/engine/watershed';
-import { copy } from '../../../i18n';
+import { copy, number } from '../../../i18n';
 import {
   localizedResource,
   message,
   messageLanguage,
   useMessageLanguage,
 } from '../../../i18n/messages';
-import { PageHeader, PageLink } from '../../../shared/ui';
+import { PageHeader } from '../../../shared/ui';
+import { RainOutlook } from '../components/RainOutlook';
+import { farmSubbasins, subbasinLayers } from '../components/subbasin-layers';
+import { WaterJourney } from '../components/WaterJourney';
 import type { BasinExplorerRepository } from '../data/basin-explorer.repository';
 // MapLibre and Turf load only when this page opens.
 const BasinExplorer = lazy(() => import('../components/BasinExplorer'));
+const SubbasinMap = lazy(() => import('../components/SubbasinMap'));
 const LAYERS: {
   id: MapLayer;
   label: string;
@@ -31,27 +36,31 @@ const LAYERS: {
 ]);
 export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository }) {
   useMessageLanguage();
-  const { ds, ctx, plan, basin, alerts, journey, farmSite } = useField();
+  const { ds, ctx, plan, basin, alerts, journey, farmSite, setSubbasin, demo } = useField();
   const [layer, setLayer] = useState<MapLayer>('agua');
-  const [zoom, setZoom] = useState(1);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const terrain = useMemo(
     () => (ds && ctx ? terrainCards(ds, ctx) : []),
     [ds, ctx, messageLanguage()],
   );
-  if (!ds || !ctx || !plan || !basin || !alerts || !journey) return null;
-  const pin = ctx.geo.toPx(ctx.loc.x, ctx.loc.y);
-  const BW = ctx.geo.box.BW;
-  const BH = ctx.geo.box.BH;
-  const zw = BW / zoom;
-  const zh = BH / zoom;
+  const farmSubs = useMemo(
+    () => (ds && farmSite ? farmSubbasins(ds, farmSite) : []),
+    [ds, farmSite],
+  );
+  // The app's 3 km grid can place the farm in a neighboring sub-basin: show one it is really in.
+  const subId = ctx?.subId;
+  useEffect(() => {
+    if (subId !== undefined && farmSubs.length && !farmSubs.some((s) => s.id === subId)) {
+      setSubbasin(farmSubs[0].id);
+    }
+  }, [farmSubs, subId, setSubbasin]);
+  const mapLayers = useMemo(
+    () => (ds && ctx && plan ? subbasinLayers(getGeo(ds), ctx, plan, farmSite) : null),
+    [ds, ctx, plan, farmSite, messageLanguage()],
+  );
+  if (!ds || !ctx || !plan || !basin || !alerts || !journey || !mapLayers) return null;
   const activeSource: SourceInfo | null =
     plan.sources.find((s) => s.i === selectedIdx) ?? plan.sources[0] ?? null;
-  const activePx = activeSource ? ctx.geo.toPx(activeSource.q[0], activeSource.q[1]) : null;
-  const focus = activePx ?? pin;
-  const zvx = zoom <= 1 ? 0 : Math.max(0, Math.min(BW - zw, focus.x - zw / 2));
-  const zvy = zoom <= 1 ? 0 : Math.max(0, Math.min(BH - zh, focus.y - zh / 2));
-  const maxRain = Math.max(40, ...plan.forecast.flatMap((m) => [m.n, m.e]));
   return (
     <div className="v10-stack">
       <PageHeader
@@ -124,63 +133,7 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
         </article>
       </section>
 
-      <section className="v10-card" aria-labelledby="hydro-title">
-        <h2 id="hydro-title">{message('m556b7b961ed0')}</h2>
-        <svg
-          viewBox="0 0 640 150"
-          className="v10-svg-canvas"
-          style={{ background: '#EFF6F2' }}
-          role="img"
-          aria-label={message('m58a6c2ddaf74', journey.src, journey.dist, journey.op)}
-        >
-          <path d="M0,78 Q160,55 320,88 T640,104 L640,150 L0,150 Z" fill="#C7DFCE" />
-          <path
-            d="M0,108 Q180,98 340,114 T640,124 L640,150 L0,150 Z"
-            fill="#9BC9DC"
-            opacity="0.7"
-          />
-          <path
-            d="M110,68 C170,115 280,118 390,106 C450,100 500,98 555,102"
-            fill="none"
-            stroke="#17617C"
-            strokeWidth="4"
-            className="v10-flow-anim"
-          />
-          <circle cx="110" cy="64" r="10" fill="#2E7A43" />
-          <text x="110" y="34" textAnchor="middle" fontSize="13" fontWeight="700" fill="#16231C">
-            {message('mfd1c360fc8ac')}
-          </text>
-          <text x="110" y="48" textAnchor="middle" fontSize="11" fill="#46574C">
-            {message('m2e1c91eeb606')}
-          </text>
-
-          <circle cx="345" cy="108" r="11" fill="#17617C" />
-          <text x="345" y="76" textAnchor="middle" fontSize="13" fontWeight="700" fill="#0D3A4B">
-            {journey.src.slice(0, 26)}
-          </text>
-          <text x="345" y="90" textAnchor="middle" fontSize="11" fill="#46574C">
-            A {journey.dist}
-          </text>
-
-          <rect
-            x="505"
-            y="78"
-            width="110"
-            height="44"
-            rx="10"
-            fill="#FFFFFF"
-            stroke="#17617C"
-            strokeWidth="2"
-          />
-          <text x="560" y="98" textAnchor="middle" fontSize="12" fontWeight="800" fill="#0D3A4B">
-            {journey.op.slice(0, 18)}
-          </text>
-          <text x="560" y="113" textAnchor="middle" fontSize="11" fill="#46574C">
-            {journey.conn}
-            {message('me8ca53293c9d')}
-          </text>
-        </svg>
-      </section>
+      <WaterJourney repository={explorer} site={farmSite} approx={journey} />
 
       <section className="v10-svg-box" aria-labelledby="map-layers-title">
         <div className="v10-map-toolbar">
@@ -209,10 +162,36 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
           </div>
         </div>
 
+        {farmSubs.length > 1 && (
+          <div
+            className="v10-pill-row"
+            role="group"
+            aria-label={copy.subbasinChoice.label(farmSubs.length)}
+          >
+            <span className="v10-small" style={{ alignSelf: 'center' }}>
+              {copy.subbasinChoice.label(farmSubs.length)}
+            </span>
+            {farmSubs.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className="v10-pill-btn"
+                aria-pressed={ctx.subId === s.id}
+                onClick={() => {
+                  setSelectedIdx(null);
+                  setSubbasin(s.id);
+                }}
+              >
+                {copy.subbasinChoice.option(s.name, number(s.share * 100, 0))}
+              </button>
+            ))}
+          </div>
+        )}
+
         <div className="v10-map-toolbar">
           <div className="v10-legend-row">
             <span className="v10-legend-dot">
-              <i style={{ background: '#17617C' }} />
+              <i style={{ background: farmSite?.parcel ? '#C2185B' : '#17617C' }} />
               {message('mfd1c360fc8ac')}
             </span>
             {layer === 'agua' && (
@@ -264,121 +243,23 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
               </>
             )}
           </div>
-
-          <div className="v10-pill-row">
-            <button
-              type="button"
-              className="v10-pill-btn"
-              aria-label={message('mf2f70a94f1de')}
-              onClick={() => setZoom((z) => Math.min(4, z * 2))}
-            >
-              <ZoomIn size={16} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="v10-pill-btn"
-              aria-label={message('m6b280883f5c3')}
-              onClick={() => setZoom((z) => Math.max(1, z / 2))}
-            >
-              <ZoomOut size={16} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="v10-pill-btn"
-              aria-label={message('meed352b60569')}
-              onClick={() => setZoom(1)}
-            >
-              <RotateCcw size={16} aria-hidden="true" />
-            </button>
-          </div>
         </div>
 
-        <svg
-          viewBox={message(
-            'm5cb3ceceab8b',
-            zvx.toFixed(1),
-            zvy.toFixed(1),
-            zw.toFixed(1),
-            zh.toFixed(1),
-          )}
-          className="v10-svg-canvas"
-          style={{ maxHeight: 360 }}
-          role="img"
-          aria-label={message(
-            'm3b810f5f01e1',
-            ctx.sub.n,
-            LAYERS.find((l) => l.id === layer)?.label,
-          )}
+        <Suspense
+          fallback={
+            <p className="map-loading" role="status">
+              {copy.watershed.mapLoading}
+            </p>
+          }
         >
-          <g>
-            <svg viewBox={ctx.geo.vb} width={BW} height={BH} preserveAspectRatio="none">
-              <path d={ctx.geo.d} fill="#F4F8F5" stroke="#5A7566" strokeWidth="1.5" />
-            </svg>
-          </g>
-
-          {layer === 'restaurar' &&
-            plan.tilesRestaurar.map((t, i) => (
-              <rect
-                key={`rest-${i}`}
-                x={t.x}
-                y={t.y}
-                width={9}
-                height={9}
-                fill={t.col}
-                fillOpacity={0.72}
-                rx={1.5}
-              />
-            ))}
-
-          {layer === 'orillas' &&
-            plan.tilesOrillas.map((t, i) => (
-              <rect
-                key={`ori-${i}`}
-                x={t.x}
-                y={t.y}
-                width={9}
-                height={9}
-                fill={t.col}
-                fillOpacity={0.76}
-                rx={1.5}
-              />
-            ))}
-
-          {layer === 'agua' &&
-            plan.halos.map((h, i) => (
-              <circle
-                key={`halo-${i}`}
-                cx={h.x}
-                cy={h.y}
-                r={12}
-                fill={h.col}
-                fillOpacity={0.14}
-                stroke={h.col}
-                strokeOpacity={0.45}
-                strokeDasharray="3 3"
-              />
-            ))}
-
-          {plan.sources.map((s) => {
-            const pt = ctx.geo.toPx(s.q[0], s.q[1]);
-            const style = RISK_STYLE[s.risk];
-            return (
-              <g key={s.i} style={{ cursor: 'pointer' }} onClick={() => setSelectedIdx(s.i)}>
-                <circle
-                  cx={pt.x}
-                  cy={pt.y}
-                  r={activeSource?.i === s.i ? 7.5 : 5}
-                  fill={style[1]}
-                  stroke="#FFFFFF"
-                  strokeWidth="1.5"
-                />
-              </g>
-            );
-          })}
-
-          <circle cx={pin.x} cy={pin.y} r={9} fill="#17617C" fillOpacity={0.22} />
-          <circle cx={pin.x} cy={pin.y} r={5} fill="#17617C" stroke="#FFFFFF" strokeWidth="2" />
-        </svg>
+          <SubbasinMap
+            layers={mapLayers}
+            layer={layer}
+            selected={activeSource?.i ?? null}
+            onSelect={setSelectedIdx}
+            label={message('m3b810f5f01e1', ctx.sub.n, LAYERS.find((l) => l.id === layer)?.label)}
+          />
+        </Suspense>
 
         {activeSource ? (
           <div
@@ -429,81 +310,7 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
         )}
       </section>
 
-      <section className="v10-grid-2">
-        <article className="v10-card">
-          <h2>{message('m6b124942883e')}</h2>
-          <p className="v10-muted">{plan.forecastTxt}</p>
-          <div
-            className="v10-bar-chart"
-            role="img"
-            aria-label={message('mee649e1f8435', plan.forecastTxt)}
-          >
-            {plan.forecast.map((m) => (
-              <div key={m.m} className="v10-bar-col">
-                <div className="v10-bar-stack">
-                  <div
-                    className="v10-bar"
-                    style={{
-                      height: Math.max(8, Math.round((m.n / maxRain) * 76)),
-                      background: '#9AB8C7',
-                    }}
-                    title={message('m548b34bbfad7', m.m, m.n)}
-                  />
-                  <div
-                    className="v10-bar"
-                    style={{
-                      height: Math.max(8, Math.round((m.e / maxRain) * 76)),
-                      background: '#17617C',
-                    }}
-                    title={message('m729b54563884', m.m, m.e)}
-                  />
-                </div>
-                <strong style={{ fontSize: '0.8125rem' }}>{m.m}</strong>
-                <span className="v10-small">{m.e} mm</span>
-              </div>
-            ))}
-          </div>
-          <div className="v10-legend-row">
-            <span className="v10-legend-dot">
-              <i style={{ background: '#9AB8C7' }} />
-              {message('m5edfb3a53dad')}
-            </span>
-            <span className="v10-legend-dot">
-              <i style={{ background: '#17617C' }} />
-              {message('mbc1193f252fb')}
-            </span>
-          </div>
-        </article>
-
-        <article className="v10-card">
-          <h2>
-            <Trees size={18} aria-hidden="true" />
-            {message('macecfede2cc9')}
-          </h2>
-          <ul className="v10-list">
-            {plan.actions.map((act) => (
-              <li key={act.num} className="v10-list-item">
-                <div className="v10-map-toolbar">
-                  <strong>{act.t}</strong>
-                  <span className="v10-tag" style={{ background: '#E2F1E5', color: '#1F5A32' }}>
-                    {act.when}
-                  </span>
-                </div>
-                <span className="v10-muted">{act.d}</span>
-                <span className="v10-small">
-                  {message('m2d19b45930f5')}
-                  {act.imp}
-                  {message('mfed5b5baaff6')}
-                  {act.who}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <PageLink to="/care" primary>
-            {message('mc2405bff91e0')}
-          </PageLink>
-        </article>
-      </section>
+      <RainOutlook ds={ds} reg={ctx.reg} demo={demo} />
 
       <section aria-labelledby="terrain-title">
         <h2 id="terrain-title" style={{ marginBottom: 12 }}>

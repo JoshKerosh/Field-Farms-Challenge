@@ -107,6 +107,8 @@ export interface FieldContextValue {
   farmSite: FarmSite | null;
   /** Sets the farm chosen on the real map; it also becomes the app's location. */
   setFarmSite: (site: FarmSite) => void;
+  /** Shows another sub-basin for the same location, keeping the farm (one on a divide). */
+  setSubbasin: (subId: number) => void;
   farmKey: FarmKey;
   setFarmKey: (k: FarmKey) => void;
   myFarm: MyFarm | null;
@@ -358,6 +360,12 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     },
     [messageLanguage()],
   );
+  const setSubbasin = useCallback(
+    (subId: number) => {
+      if (ctx) applyLocation(ctx.loc, { subId, approx: Boolean(storedLoc?.approx) });
+    },
+    [ctx, storedLoc, applyLocation],
+  );
   const farm = useMemo(
     () => (ctx ? activeFarm(farmState.key, farmState.my) : null),
     [ctx, farmState.key, farmState.my, messageLanguage()],
@@ -444,6 +452,7 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     pickLatLon,
     farmSite,
     setFarmSite,
+    setSubbasin,
     farmKey: farmState.key,
     setFarmKey,
     myFarm: farmState.my,
