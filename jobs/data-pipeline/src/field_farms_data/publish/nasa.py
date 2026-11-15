@@ -62,6 +62,15 @@ def _referencia_previa(out: Path) -> dict[str, dict]:
     return {i['id']: i['referencia'] for i in previo['datos']['items'] if 'referencia' in i}
 
 
+def _anio_historico(zona, anio: int, doy: str) -> float | None:
+    """Un año que ORNL no entrega (503) queda sin dato; la normal exige al menos 5 años válidos."""
+    try:
+        fila = modis.fetch_range(zona.lat, zona.lon, f'A{anio}{doy}', f'A{anio}{doy}')
+    except Exception:  # noqa: BLE001
+        return None
+    return fila[0][2] if fila else None
+
+
 def _modis_zona(zona, previa: dict[str, dict]):
     fechas = modis.list_dates(zona.lat, zona.lon)
     recientes = modis.fetch_range(zona.lat, zona.lon, fechas[-10][0], fechas[-1][0])
@@ -75,9 +84,8 @@ def _modis_zona(zona, previa: dict[str, dict]):
     else:
         # Cada consulta al servicio de ORNL tarda ~40 s: los años van en paralelo.
         with ThreadPoolExecutor(max_workers=5) as pool:
-            filas = pool.map(lambda y: modis.fetch_range(zona.lat, zona.lon, f'A{y}{doy}', f'A{y}{doy}'),
-                             range(MODIS_DESDE, anio))
-            historicos = [f[0][2] if f else None for f in filas]
+            filas = pool.map(lambda y: _anio_historico(zona, y, doy), range(MODIS_DESDE, anio))
+            historicos = list(filas)
     item = ind.modis_zona(zona, recientes, historicos)
     item['referencia'] = {'dia_del_anio': doy, 'desde': MODIS_DESDE, 'hasta': anio - 1,
                           'valores': historicos}

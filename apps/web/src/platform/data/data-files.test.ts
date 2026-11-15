@@ -51,8 +51,9 @@ describe('catálogo fuentes.json', () => {
     expect(todos.filter((p) => !fuenteDe(p))).toEqual([]);
   });
 
-  it('cada archivo declarado existe', () => {
+  it('cada archivo declarado existe, salvo de un conector que nunca ha tenido un dato bueno', () => {
     const faltan = catalogo.fuentes
+      .filter((f) => !(f.estado === 'falla' && f.ultima_carga_buena === null))
       .flatMap((f) => f.archivos)
       .filter((p) => !todos.some((t) => cubre(p, t)));
     expect(faltan).toEqual([]);

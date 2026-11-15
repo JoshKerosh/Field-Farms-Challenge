@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-11-15T04:00:54Z",
+ "actualizado": "2026-11-15T04:14:56Z",
  "fuentes": [
   {
    "id": "nasa-power",
@@ -49,7 +49,7 @@
    "simulado": false,
    "estado": "falla",
    "ultima_carga_buena": null,
-   "ultimo_error": "Todavía no se ha corrido el conector",
+   "ultimo_error": "RuntimeError: https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=10.55&longitude=-85.45&band=250m_16_days_NDVI&startDate=A2014289&endDate=A2014289&kmAboveBelow=1&kmLeftRight=1: HTTP Error 503: Service Unavailable",
    "archivos": [
     "nasa/modis/latest.json"
    ],
