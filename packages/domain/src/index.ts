@@ -43,7 +43,12 @@ export type {
 export type { Organization } from './organizations';
 export { REGIONAL_NASA_RULES, evaluateRegionalNasaRisk } from './alerts/regional-risk';
 export type { RegionalWeather, RegionalTerrain } from './alerts/regional-risk';
-export type { SupportOpportunity, OpportunityKind, OpportunityAvailability } from './benefits';
+export type {
+  SupportOpportunity,
+  OpportunityKind,
+  OpportunityAvailability,
+  OpportunityDetails,
+} from './benefits';
 export { opportunityAvailability } from './benefits';
 export type {
   CapaDato,
