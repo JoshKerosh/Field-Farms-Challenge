@@ -97,6 +97,18 @@ python -m venv .venv && .venv/bin/pip install -e ".[test]"
 .venv/bin/pytest
 ```
 
+## Uso de Super Intelligence (SI)
+
+Según las reglas del NASA Space Apps Challenge, declaramos dónde usamos herramientas de Super Intelligence (SI, inteligencia artificial). Ningún contenido generado usa logos, banderas ni insignias de NASA.
+
+| Parte                   | Herramientas                             | Cómo se usó                                                                                                                                                                                                     | Dónde queda indicado                                                                                                                                |
+| ----------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Código                  | Claude Code, Codex, ChatGPT, Antigravity | Programación agéntica: la SI escribió y modificó gran parte del código, y el equipo definió el diseño, revisó los cambios y ejecutó las pruebas. Aplica a todo el repositorio.                                  | Esta sección y la pantalla **Fuentes** de la app                                                                                                    |
+| Datos                   | Claude Code, Codex, ChatGPT              | Estudio de los datasets (NASA, NOAA, MINAE, AyA, CNE, SINAC), diseño de los conectores y de cómo la app usa cada dato. Los datos son reales y no fueron generados por SI, salvo los marcados como **simulado**. | Esta sección, [datos](docs/datos.md) y la pantalla **Fuentes**                                                                                      |
+| Imágenes de la interfaz | Generadas con SI                         | Ícono de la app (`apps/web/public/icon.svg`, `apps/web/public/icons/*.png`) e íconos del mapa (`map-icons.tsx`)                                                                                                 | Texto visible «Íconos generados con SI (IA)» en la leyenda de los mapas y metadatos en los archivos (`<title>`/`<desc>` del SVG, `tEXt` de los PNG) |
+| Video del pitch         | Claude Code, HyperFrames                 | Composición y animación del video. Las pantallas que aparecen son capturas reales de la app.                                                                                                                    | Marca de agua visible durante todo el video y metadatos del MP4                                                                                     |
+| Voz del video           | Kokoro TTS (voz `am_michael`)            | Narración sintética generada con SI                                                                                                                                                                             | Mencionada en la marca de agua del video y en los metadatos de cada WAV                                                                             |
+
 ## Referencias y licencias
 
 Consultar [arquitectura](docs/architecture.md), [inventario](docs/prototype-inventory.md), [oportunidades](docs/opportunities.md), [producto](PRODUCT.md) y [diseño](DESIGN.md).

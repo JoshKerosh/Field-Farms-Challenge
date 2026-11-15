@@ -168,6 +168,19 @@ export function SourcesPage() {
           </article>
         ))}
       </section>
+
+      <section className="v10-stack" aria-labelledby="ai-use-title">
+        <h2 id="ai-use-title">{message('aiUseTitle')}</h2>
+        <article className="v10-card">
+          <p className="v10-muted">{message('aiUseIntro')}</p>
+          <ul>
+            <li>{message('aiUseIcons')}</li>
+            <li>{message('aiUseCode')}</li>
+            <li>{message('aiUseData')}</li>
+            <li>{message('aiUseVideo')}</li>
+          </ul>
+        </article>
+      </section>
     </div>
   );
 }

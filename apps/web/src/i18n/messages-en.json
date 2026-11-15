@@ -1138,5 +1138,12 @@
   "m33f0a8c147c8": "Water system",
   "m42abff47f78b": "ZXQ0QXZ connection",
   "ma0cdf28d60b7": "for the community",
-  "m3bc7f74b69c3": "well"
+  "m3bc7f74b69c3": "well",
+  "aiIconsNote": "SI-generated (AI) icons.",
+  "aiUseTitle": "Use of Super Intelligence (SI)",
+  "aiUseIntro": "This project used Super Intelligence (SI, artificial intelligence) tools under the NASA Space Apps Challenge rules.",
+  "aiUseIcons": "Images: the app icon and the map icons are SI-generated.",
+  "aiUseCode": "Code: built with agentic programming (Claude Code, Codex, ChatGPT and Antigravity), reviewed by the team.",
+  "aiUseData": "Data: the study of the data and how the app uses it was done with SI assistance. The data comes from NASA, NOAA and national sources; SI did not create it.",
+  "aiUseVideo": "Video: SI-generated with Claude Code and HyperFrames, with an SI-generated voice (Kokoro TTS)."
 }

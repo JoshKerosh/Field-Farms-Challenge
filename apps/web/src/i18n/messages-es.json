@@ -1138,5 +1138,12 @@
   "m33f0a8c147c8": "Acueducto",
   "m42abff47f78b": "ZXQ0QXZ servicio",
   "ma0cdf28d60b7": "de la comunidad",
-  "m3bc7f74b69c3": "pozo"
+  "m3bc7f74b69c3": "pozo",
+  "aiIconsNote": "Íconos generados con SI (IA).",
+  "aiUseTitle": "Uso de Super Intelligence (SI)",
+  "aiUseIntro": "Este proyecto usó herramientas de Super Intelligence (SI, inteligencia artificial) según las reglas del NASA Space Apps Challenge.",
+  "aiUseIcons": "Imágenes: el ícono de la app y los íconos del mapa se generaron con SI.",
+  "aiUseCode": "Código: desarrollado con programación agéntica (Claude Code, Codex, ChatGPT y Antigravity), revisado por el equipo.",
+  "aiUseData": "Datos: el estudio de los datos y su uso en la app se hicieron con apoyo de SI. Los datos provienen de NASA, NOAA y fuentes nacionales; la SI no los inventó.",
+  "aiUseVideo": "Video: compuesto con SI (Claude Code y HyperFrames), con voz sintética generada con SI (Kokoro TTS)."
 }

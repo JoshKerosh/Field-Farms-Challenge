@@ -361,6 +361,7 @@ export default function FarmExplorer({
             {c.layers[key]}
           </label>
         ))}
+        <p className="basin-hint">{message('aiIconsNote')}</p>
       </fieldset>
       {result && <FarmResults result={result} />}
       <p className="source-note">{c.farmSources}</p>

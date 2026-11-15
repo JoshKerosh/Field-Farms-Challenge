@@ -105,6 +105,10 @@ pytest
 
 La Action `.github/workflows/datos-nasa.yml` corre a las 5:00 de Costa Rica en la rama por defecto. Con **Run workflow** se puede correr en cualquier rama.
 
+## Uso de Super Intelligence (SI)
+
+El análisis de los datasets, el diseño de los conectores y la forma en que la app presenta cada dato se hicieron con apoyo de herramientas de Super Intelligence, SI (ver [Uso de SI](../README.md#uso-de-super-intelligence-si)). Los valores provienen de las fuentes indicadas y no fueron generados por SI; los archivos simulados están marcados como tales.
+
 ## Pendiente
 
 - IMERG (SPA-28) y SMAP (SPA-29) necesitan la cuenta NASA Earthdata. Cuando estén, escriben en `nasa/imerg/latest.json` y `nasa/smap/latest.json` y se borran los ejemplos.
