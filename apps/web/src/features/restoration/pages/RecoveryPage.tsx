@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
+import { LockKeyhole } from 'lucide-react';
 import {
   RECOVERY_NEEDS,
   RECOVERY_UNITS,
@@ -51,6 +52,7 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
   const { plan, ready, busy, saved, error, readingFailed, commit } = useRecoveryPlan(id);
   const [provisional, setProvisional] = useState<RecoveryPlan | null>(null),
     [environment, setEnvironment] = useState<RecoveryEnvironment | null>(null),
+    [environmentReady, setEnvironmentReady] = useState(false),
     [selected, setSelected] = useState('');
   const [needs, setNeeds] = useState<RecoveryPlan['needs']>({
     water: 'unknown',
@@ -75,15 +77,19 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
   useEffect(() => {
     let active = true;
     setEnvironment(null);
+    setEnvironmentReady(false);
     setSelected('');
     recoveryEnvironment(site)
       .then((value) => {
         if (active) {
           setEnvironment(value);
           setSelected(value.basins[0]?.id ?? '');
+          setEnvironmentReady(true);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        if (active) setEnvironmentReady(true);
+      });
     return () => {
       active = false;
     };
@@ -122,54 +128,111 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
         {busy ? c.saving : saved ? c.saved : ''}
       </div>
       {error && <p role="alert">{error}</p>}
-      <section className="v10-card">
-        <h2>{c.priorities}</h2>
-        <h3>{plan?.farmName || profile.name || c.farm}</h3>
-        <p>
-          {c.profile}: {number(plan?.profile.hectares ?? profile.ha)} {'ha'} ·{' '}
-          {number(plan?.profile.animals ?? profile.animals)} {c.livestock}
-        </p>
-        <p>
-          {FARM_ACTIVITIES.find(([key]) => key === (plan?.profile.activity ?? profile.act))?.[1]} ·{' '}
-          {FARM_WATER.find(([key]) => key === (plan?.profile.water ?? profile.agua))?.[1]}
-        </p>
-        <p>{c.profileHelp}</p>
-        <p>{site.parcel ? site.parcel.properties.identifica : c.provisional}</p>
-        {environment?.subbasins.length ? (
-          <p>{environment.subbasins.map((s) => s.name).join(' · ')}</p>
-        ) : null}
-        <p>{c.local}</p>
-        {!plan && provisional && (
-          <button disabled={busy} onClick={() => void commit({ ...provisional, farmId: id })}>
-            {c.link}
-          </button>
-        )}
-        <form onSubmit={confirm}>
-          <fieldset disabled={busy}>
-            <legend>{c.needs}</legend>
-            <div className="recovery-needs">
-              {RECOVERY_NEEDS.map((n) => (
-                <label key={n}>
-                  {c.questions[n]}
-                  <select
-                    value={needs[n]}
-                    onChange={(e) =>
-                      setNeeds({
-                        ...needs,
-                        [n]: e.target.value as RecoveryPlan['needs'][RecoveryNeed],
-                      })
-                    }
-                  >
-                    <option value="unknown">{c.unknown}</option>
-                    <option value="yes">{c.yes}</option>
-                    <option value="no">{c.no}</option>
-                  </select>
-                </label>
-              ))}
+      <section className="v10-card recovery-priorities" aria-labelledby="recovery-priorities-title">
+        <h2 id="recovery-priorities-title">{c.priorities}</h2>
+        <div className="recovery-priorities-layout">
+          <div className="recovery-farm-summary">
+            <div className="recovery-farm-heading">
+              <h3>{plan?.farmName || profile.name || c.farm}</h3>
+              <p>{c.profile}</p>
             </div>
-            <button type="submit">{plan ? c.update : c.confirm}</button>
-          </fieldset>
-        </form>
+            <dl className="recovery-farm-facts">
+              <div>
+                <dt>{c.farmArea}</dt>
+                <dd>{number(plan?.profile.hectares ?? profile.ha)} ha</dd>
+              </div>
+              <div>
+                <dt>{c.farmAnimals}</dt>
+                <dd>{number(plan?.profile.animals ?? profile.animals)}</dd>
+              </div>
+              <div>
+                <dt>{c.farmActivity}</dt>
+                <dd>
+                  {
+                    FARM_ACTIVITIES.find(
+                      ([key]) => key === (plan?.profile.activity ?? profile.act),
+                    )?.[1]
+                  }
+                </dd>
+              </div>
+              <div>
+                <dt>{c.farmWater}</dt>
+                <dd>
+                  {FARM_WATER.find(([key]) => key === (plan?.profile.water ?? profile.agua))?.[1]}
+                </dd>
+              </div>
+            </dl>
+            <dl className="recovery-farm-location">
+              <div>
+                <dt>{c.parcel}</dt>
+                <dd>{site.parcel ? site.parcel.properties.identifica : c.provisional}</dd>
+              </div>
+              <div>
+                <dt>{c.basin}</dt>
+                <dd>
+                  {environment?.basins.length
+                    ? environment.basins.map((b) => b.name).join(' · ')
+                    : environmentReady
+                      ? c.noBasin
+                      : c.loadingLocation}
+                </dd>
+              </div>
+              {environment?.subbasins.length ? (
+                <div>
+                  <dt>{c.subbasin}</dt>
+                  <dd>{environment.subbasins.map((s) => s.name).join(' · ')}</dd>
+                </div>
+              ) : null}
+            </dl>
+            <details className="recovery-profile-help">
+              <summary>{c.aboutProfile}</summary>
+              <p>{c.profileHelp}</p>
+            </details>
+            {!plan && provisional && (
+              <button disabled={busy} onClick={() => void commit({ ...provisional, farmId: id })}>
+                {c.link}
+              </button>
+            )}
+          </div>
+          <form className="recovery-priorities-form" onSubmit={confirm}>
+            <fieldset disabled={busy} aria-describedby="recovery-needs-help">
+              <legend>{c.needsTitle}</legend>
+              <p id="recovery-needs-help" className="recovery-needs-help">
+                {c.needsHelp}
+              </p>
+              <div className="recovery-needs">
+                {RECOVERY_NEEDS.map((n) => (
+                  <label key={n}>
+                    <span>{c.questions[n]}</span>
+                    <select
+                      value={needs[n]}
+                      onChange={(e) =>
+                        setNeeds({
+                          ...needs,
+                          [n]: e.target.value as RecoveryPlan['needs'][RecoveryNeed],
+                        })
+                      }
+                    >
+                      <option value="unknown">{c.unknown}</option>
+                      <option value="yes">{c.yes}</option>
+                      <option value="no">{c.no}</option>
+                    </select>
+                  </label>
+                ))}
+              </div>
+              <div className="recovery-priorities-actions">
+                {!plan && <p>{c.confirmHelp}</p>}
+                <button className="button button-primary" type="submit">
+                  {plan ? c.update : c.confirm}
+                </button>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+        <div className="recovery-privacy-note">
+          <LockKeyhole size={18} aria-hidden="true" />
+          <p>{c.local}</p>
+        </div>
       </section>
       {plan && (
         <>
