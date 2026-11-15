@@ -7,7 +7,13 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { elNinoAlerts, type AlertsSummary } from '../../data/engine/alerts';
+import { environmentalAlerts, type AlertsSummary } from '../../data/engine/alerts';
+import {
+  emptyAlertSources,
+  loadAlertSources,
+  type AlertSources,
+} from '../../features/alerts/data/alert-sources';
+import { imergEvidenceForPoint } from '../../features/alerts/data/imerg-source';
 import { answerQuestion, type QuestionId } from '../../data/engine/assistant';
 import {
   climateSignals,
@@ -149,6 +155,7 @@ export interface FieldContextValue {
   satView: ReturnType<typeof satelliteView> | null;
   rotation: Rotation | null;
   alerts: AlertsSummary | null;
+  alertSources: AlertSources;
   fluc: FlucSummary | null;
   chatTurns: ChatTurn[];
   askAssistant: (id: QuestionId, questionText: string) => string;
@@ -194,6 +201,23 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
       : readJson<FarmSite | null>(LS_KEYS.farmSite, null),
   );
   const [demo, setDemo] = useState<DemoScenario | null>(null);
+  const [alertSources, setAlertSources] = useState<AlertSources>(emptyAlertSources);
+  const [spatialAlertEvidence, setSpatialAlertEvidence] = useState<AlertSources['spatial']>(null);
+  useEffect(() => {
+    let alive = true;
+    let storage: Storage | undefined;
+    try {
+      storage = window.localStorage;
+    } catch {
+      /* Restricted storage. */
+    }
+    void loadAlertSources(fetch, storage).then((sources) => {
+      if (alive) setAlertSources(sources);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
   const [satFrame, setSatFrame] = useState<number | null>(null);
   const [chatTurns, setChatTurns] = useState<ChatTurn[]>([]);
   useEffect(() => {
@@ -223,6 +247,17 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     const upalaLoc = geo.llToLocal(10.8, -85.08);
     return placeAt(ds, upalaLoc, null);
   }, [ds, storedLoc, messageLanguage()]);
+  useEffect(() => {
+    if (!ds || !ctx) return;
+    let alive = true;
+    const [longitude, latitude] = getGeo(ds).localToLngLat(ctx.loc);
+    void imergEvidenceForPoint(alertSources.imerg, longitude, latitude).then((evidence) => {
+      if (alive) setSpatialAlertEvidence({ longitude, latitude, evidence });
+    });
+    return () => {
+      alive = false;
+    };
+  }, [ds, ctx, alertSources.imerg]);
   const applyLocation = useCallback(
     (
       loc: Loc,
@@ -427,9 +462,12 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     return pastureRotation(ds, ctx, demo, farm, apartos, vNow);
   }, [ds, ctx, demo, farm, apartos, satView, messageLanguage()]);
   const alerts = useMemo(() => {
-    if (!ds || !ctx || !rotation) return null;
-    return elNinoAlerts(ds, ctx, demo, rotation, siteFloodsFlag);
-  }, [ds, ctx, demo, rotation, siteFloodsFlag, messageLanguage()]);
+    if (!ds || !ctx) return null;
+    return environmentalAlerts(ds, ctx, demo, undefined, {
+      ...alertSources,
+      spatial: spatialAlertEvidence,
+    });
+  }, [ds, ctx, demo, alertSources, spatialAlertEvidence, messageLanguage()]);
   const fluc = useMemo(
     () => (ds && ctx ? flucForCanton(ds, ctx.canton.n) : null),
     [ds, ctx, messageLanguage()],
@@ -520,6 +558,7 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     satView,
     rotation,
     alerts,
+    alertSources,
     fluc,
     chatTurns,
     askAssistant,

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "alert-cne-v1",
+  "dataMode": "real",
+  "location": {
+    "longitude": -85.08,
+    "latitude": 10.8
+  },
+  "retrievedAt": "2026-11-15T08:38:58.978324+00:00",
+  "observedEnd": null,
+  "transport": "HTTP; no transport integrity guarantee",
+  "indicators": [
+    {
+      "id": "floodZone",
+      "productId": "cne:inundaciones",
+      "source": "CNE",
+      "evidence": {
+        "url": "http://mapas.cne.go.cr/servicios/cne/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cne%3Ainundaciones&srsName=EPSG%3A4326&outputFormat=application%2Fjson&maxFeatures=100&bbox=-85.081%2C10.799000000000001%2C-85.079%2C10.801%2CEPSG%3A4326",
+        "resolvedUrl": "http://mapas.cne.go.cr/servicios/cne/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cne%3Ainundaciones&srsName=EPSG%3A4326&outputFormat=application%2Fjson&maxFeatures=100&bbox=-85.081%2C10.799000000000001%2C-85.079%2C10.801%2CEPSG%3A4326",
+        "sha256": "cad87a81e3f2686bc5efaec4a30471aafae0c74f474ce9b2ebc65decfafa080e"
+      },
+      "value": null,
+      "intersectingFeatureIds": [],
+      "returnedFeatureCount": 0,
+      "unsupportedGeometryCount": 0,
+      "status": "unverified",
+      "observedStart": null,
+      "observedEnd": null,
+      "reason": "The service does not supply a verified observation date. No intersecting feature does not prove no hazard or complete mapping coverage."
+    },
+    {
+      "id": "landslideZone",
+      "productId": "cne:deslizamientos",
+      "source": "CNE",
+      "evidence": {
+        "url": "http://mapas.cne.go.cr/servicios/cne/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cne%3Adeslizamientos&srsName=EPSG%3A4326&outputFormat=application%2Fjson&maxFeatures=100&bbox=-85.081%2C10.799000000000001%2C-85.079%2C10.801%2CEPSG%3A4326",
+        "resolvedUrl": "http://mapas.cne.go.cr/servicios/cne/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cne%3Adeslizamientos&srsName=EPSG%3A4326&outputFormat=application%2Fjson&maxFeatures=100&bbox=-85.081%2C10.799000000000001%2C-85.079%2C10.801%2CEPSG%3A4326",
+        "sha256": "17d85403da3738634d884b22170d718cd2baa012b54282974eb5401897bbf30e"
+      },
+      "value": null,
+      "intersectingFeatureIds": [],
+      "returnedFeatureCount": 0,
+      "unsupportedGeometryCount": 0,
+      "status": "unverified",
+      "observedStart": null,
+      "observedEnd": null,
+      "reason": "The service does not supply a verified observation date. No intersecting feature does not prove no hazard or complete mapping coverage."
+    }
+  ]
+}
