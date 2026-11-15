@@ -26,7 +26,7 @@ export function PageLink({
 }) {
   useMessageLanguage();
   return (
-    <Link className={primary ? message('m95e4d94eb970') : 'text-link'} to={to}>
+    <Link className={primary ? 'button button-primary' : 'text-link'} to={to}>
       {children}
       <ArrowRight size={18} aria-hidden="true" />
     </Link>

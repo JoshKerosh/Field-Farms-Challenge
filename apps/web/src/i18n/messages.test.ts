@@ -14,6 +14,17 @@ describe('application translations', () => {
       );
     }
   });
+  it('never translates markup or CSS class names', () => {
+    // A translated class or SVG breaks the layout only in English (e.g. "button button-primary"
+    // became "button button"), so code-like messages must be identical in both catalogs.
+    const classList = (value: string) =>
+      /^[a-z0-9-]+(?: [a-z0-9-]+)*$/.test(value) && value.includes('-');
+    const markup = /<\/?[a-z]+[\s>/]|="/;
+    const looksLikeCode = (value: string) => classList(value) || markup.test(value);
+    for (const key of Object.keys(es) as (keyof typeof es)[]) {
+      if (looksLikeCode(es[key])) expect(en[key], key).toBe(es[key]);
+    }
+  });
   it('updates presentation tables without changing their identity on ordinary reads', () => {
     const resource = localizedResource(() => ({ nested: { label: message('mba8875d8f580') } }));
     expect(resource.nested).toBe(resource.nested);

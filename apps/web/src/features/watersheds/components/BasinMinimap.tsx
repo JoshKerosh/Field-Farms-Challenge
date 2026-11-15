@@ -49,7 +49,7 @@ export function BasinMinimap({
   const tiny = box && (box.w < MIN_BOX || box.h < MIN_BOX);
   return (
     <svg
-      className={plain ? message('mafe2fa70ef8c') : 'basin-minimap'}
+      className={plain ? 'basin-minimap basin-minimap--plain' : 'basin-minimap'}
       viewBox={message('m5cb3ceceab8b', FRAME.west, -FRAME.north, width, height)}
       role="img"
       aria-label={copy.watershed.explorer.minimap}
