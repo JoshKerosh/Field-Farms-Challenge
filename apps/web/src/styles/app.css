@@ -1781,15 +1781,15 @@ summary {
 .v10-field textarea {
   min-height: 44px;
   padding: 10px 12px;
-  border: 1px solid #9ab0a2;
+  border: 1px solid var(--color-line);
   border-radius: var(--radius-sm);
-  background: #ffffff;
+  background: var(--color-surface);
   color: var(--color-ink);
   font: inherit;
   width: 100%;
 }
 .v10-field-error {
-  color: #8e2a21;
+  color: var(--color-danger);
   font-size: 0.8125rem;
   font-weight: 750;
 }

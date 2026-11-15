@@ -3,6 +3,7 @@ export function useFarmFlowCopy() {
   return useMessageLanguage() === 'en'
     ? {
         plan: 'Plan',
+        watershedTab: 'Basin',
         start: 'Enter your farm details to continue.',
         newFarm: 'Register another farm',
         savedFarm: 'Registered farm',
@@ -42,6 +43,7 @@ export function useFarmFlowCopy() {
       }
     : {
         plan: 'Plan',
+        watershedTab: 'Cuenca',
         start: 'Ingresa los datos de tu finca para continuar.',
         newFarm: 'Registrar otra finca',
         savedFarm: 'Finca registrada',
