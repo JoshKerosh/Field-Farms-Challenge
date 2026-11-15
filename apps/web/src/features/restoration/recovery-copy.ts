@@ -14,7 +14,7 @@ const es = {
   progressHelp:
     'Este porcentaje compara lo que declaraste haber hecho con tu meta. Por ejemplo, 3 puntos revisados de una meta de 5 equivalen al 60 %. No mide por sí solo la recuperación ambiental.',
   profileHelp:
-    'Estos datos fueron ingresados por ti. Una hectárea equivale a 10 000 metros cuadrados.',
+    'El perfil reúne datos de tu finca. El área puede proceder de la parcela o de un dato ingresado por ti. Una hectárea equivale a 10 000 metros cuadrados.',
   methodSource: 'Consultar el producto de vegetación de NASA',
   vegetationSource: 'NASA MODIS · MOD13Q1',
 
@@ -186,7 +186,7 @@ const es = {
   contextNote:
     'CNE y SINAC tienen cobertura parcial de Huetar Norte. No encontrar coincidencias no demuestra ausencia de riesgo o restricciones.',
   loading: 'Cargando el plan…',
-  profile: 'Datos declarados',
+  profile: 'Datos del perfil',
   maintenance: 'El mantenimiento puede continuar después de alcanzar la meta.',
   remove: 'Eliminar meta vacía',
 };
@@ -204,7 +204,8 @@ const en: typeof es = {
     'Shows the selected watershed and the area within 5 km of the farm. MODIS observes areas about 250 m on each side; one pixel may cover several properties. This is not an exact measurement of your parcel.',
   progressHelp:
     'This percentage compares your reported work with your target. For example, inspecting 3 out of 5 points is 60%. This does not itself measure environmental recovery.',
-  profileHelp: 'You entered these details. One hectare equals 10,000 square metres.',
+  profileHelp:
+    'This profile contains your farm details. The area may come from the parcel or a value you entered. One hectare equals 10,000 square metres.',
   methodSource: 'Consult the NASA vegetation product',
   vegetationSource: 'NASA MODIS · MOD13Q1',
 
@@ -375,7 +376,7 @@ const en: typeof es = {
   contextNote:
     'CNE and SINAC have partial coverage in Huetar Norte. No overlap does not demonstrate absence of risk or restrictions.',
   loading: 'Loading the plan…',
-  profile: 'Self-reported details',
+  profile: 'Farm profile details',
   maintenance: 'Maintenance may continue after the target is reached.',
   remove: 'Remove empty goal',
 };
