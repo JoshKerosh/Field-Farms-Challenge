@@ -21,7 +21,7 @@ export function AssistantPage() {
       u.rate = 0.92;
       ss.speak(u);
     } catch {
-      // Síntesis de voz no soportada en este navegador
+      // Speech synthesis not supported in this browser
     }
   };
   const handleSubmit = (e: FormEvent) => {

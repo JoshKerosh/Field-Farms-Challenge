@@ -1,5 +1,5 @@
 import { localizedResource, messageLanguage } from '../../i18n/messages';
-/** Utilidades de formato y normalización de texto para los datos de Costa Rica. */
+/** Formatting and text normalization helpers for the Costa Rica data. */
 
 export const MONTHS = localizedResource(() =>
   Array.from({ length: 12 }, (_, month) =>
@@ -12,7 +12,7 @@ export const MONTHS = localizedResource(() =>
   ),
 );
 
-/** Restituye tildes que los archivos oficiales traen sin acentuar. */
+/** Restores accents that the official files lack. */
 export function fixName(t: string): string {
   return String(t)
     .replace(/^Cano /, 'Caño ')
@@ -30,7 +30,7 @@ export function fixName(t: string): string {
     .replace(/Ca.as\b/g, 'Cañas');
 }
 
-/** Minúsculas sin tildes, para búsquedas. */
+/** Lowercase without accents, for searching. */
 export function norm(t: string): string {
   return String(t)
     .normalize('NFD')
@@ -38,7 +38,7 @@ export function norm(t: string): string {
     .toLowerCase();
 }
 
-/** Mayúsculas sin tildes (clave de cantón del registro FLUC). */
+/** Uppercase without accents (canton key of the FLUC registry). */
 export function normUpper(t: string): string {
   return String(t || '')
     .normalize('NFD')
@@ -56,7 +56,7 @@ export const fmtInt = (v: number): string =>
 export const fmtKm = (v: number): string =>
   v >= 10 ? fmtInt(v) : v.toFixed(1).replace('.', messageLanguage() === 'en' ? '.' : ',');
 
-/** Distancia legible: 'm' bajo 1 km, 'km' en adelante. */
+/** Readable distance: 'm' under 1 km, 'km' from there on. */
 export function distText(km: number): string {
   return km < 1
     ? `${Math.round(km * 1000)} m`

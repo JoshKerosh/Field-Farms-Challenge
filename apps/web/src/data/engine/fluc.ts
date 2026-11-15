@@ -39,7 +39,7 @@ function formatRegionName(regCode: string): string {
     .replace(/(^|\s)\S/g, (t) => t.toUpperCase())
     .replace('Pacifico', 'Pacífico');
 }
-/** Federaciones, ligas, uniones y confederaciones de ASADAS en la región del cantón. */
+/** ASADA federations, leagues, unions and confederations in the canton's region. */
 export function flucForCanton(ds: Dataset, cantonName: string): FlucSummary {
   const regCode = ds.fluc.c[normUpper(cantonName)] || '';
   const region = formatRegionName(regCode) || message('m9648dfdc9eb4');

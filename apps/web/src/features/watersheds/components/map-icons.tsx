@@ -5,7 +5,7 @@ const badge = (color: string, glyph: string) =>
   message('m3562b598ccce', color) +
   `${glyph}</svg>`;
 const STROKE = message('m88f63dc7c7e2');
-/** Map and legend icons. Source icons are named after the SAGA `tipo`. */
+/** Map and legend icons (SI-generated, see README "Use of Super Intelligence (SI)"). Source icons are named after the SAGA `tipo`. */
 export const MAP_ICONS = localizedResource(
   () =>
     ({

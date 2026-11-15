@@ -8,12 +8,12 @@ import {
 } from '@field-farms/domain';
 
 /**
- * Lectura de los archivos de `public/data/` (ver docs/datos.md). Cada archivo se descarga una vez
- * por sesión; el service worker lo guarda para usarlo sin conexión.
+ * Reading of the files in `public/data/` (see docs/data.md). Each file is downloaded once
+ * per session; the service worker stores it for offline use.
  */
 const DATA = '/data';
 
-/** Rutas de los archivos de indicadores. Los `ejemplos/` son simulados hasta tener el conector. */
+/** Paths of the indicator files. The `ejemplos/` files are simulated until the connector exists. */
 export const ARCHIVOS = {
   power: 'nasa/power/latest.json',
   powerHistory: 'recovery/rainfall.json',
@@ -35,14 +35,14 @@ async function getJson<T>(path: string, refresh = false): Promise<T> {
       if (!response.ok) throw new Error(`${path}: ${response.status}`);
       return (await response.json()) as T;
     });
-    // Una descarga fallida se reintenta la próxima vez.
+    // A failed download is retried next time.
     promise.catch(() => cache.delete(path));
     cache.set(path, promise);
   }
   return cache.get(path) as Promise<T>;
 }
 
-/** Descarga y valida un archivo de indicadores. Un archivo mal formado falla con sus errores. */
+/** Downloads and validates an indicator file. A malformed file fails with its errors. */
 export async function cargarIndicadores(
   archivo: ArchivoConocido,
   refresh = false,
@@ -61,12 +61,12 @@ export async function fuente(id: string): Promise<Fuente | undefined> {
   return (await cargarFuentes()).fuentes.find((f) => f.id === id);
 }
 
-/** Busca la unidad (zona, subcuenca…) por id. */
+/** Finds the unit (zone, subwatershed…) by id. */
 export function unidad(archivo: ArchivoIndicadores, id: string): UnidadIndicadores | undefined {
   return archivo.datos.items.find((item) => item.id === id);
 }
 
-/** Busca un indicador por id dentro de una unidad. */
+/** Finds an indicator by id inside a unit. */
 export function indicador(item: UnidadIndicadores | undefined, id: string): Indicador | undefined {
   return item?.indicadores.find((i) => i.id === id);
 }

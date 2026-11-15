@@ -16,8 +16,8 @@ import { parseConditionMap } from '../../features/alerts/data/condition-map';
 import { parseNasaRegions } from '../../features/alerts/data/nasa-regions';
 
 /**
- * Guardia de calidad de `public/data/`: corre en `npm test` y en CI. Si un conector publica algo
- * mal formado, sin fuente o simulado donde debe ir dato real, la prueba falla.
+ * Quality guard for `public/data/`: runs in `npm test` and in CI. If a connector publishes something
+ * malformed, without a source, or simulated where real data belongs, the test fails.
  */
 const DATA = join(__dirname, '../../../public/data');
 const catalogo = JSON.parse(readFileSync(join(DATA, 'fuentes.json'), 'utf-8')) as CatalogoFuentes;
@@ -39,7 +39,7 @@ const leer = (path: string) =>
   JSON.parse(readFileSync(join(DATA, path), 'utf-8')) as Record<string, unknown>;
 
 const todos = archivos(DATA).filter((p) => p !== 'fuentes.json' && !p.startsWith('esquemas/'));
-// Las capas de geo/ publicadas antes del contrato no traen `meta`; su fuente está en el catálogo.
+// The geo/ layers published before the contract have no `meta`; their source is in the catalog.
 const conMeta = todos.filter(
   (p) =>
     !p.startsWith('alerts/') &&
@@ -87,7 +87,7 @@ describe('formatos publicados de alertas', () => {
   });
 });
 
-/** Hosts aceptados como origen de un dato real de la capa NASA. */
+/** Hosts accepted as the origin of real data in the NASA layer. */
 const HOSTS_NASA = ['nasa.gov', 'noaa.gov', 'ornl.gov'];
 
 describe('catálogo fuentes.json', () => {

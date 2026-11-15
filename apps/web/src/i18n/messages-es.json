@@ -1325,5 +1325,12 @@
   "alerts.conditions.source": "Fuente del dato",
   "alerts.conditions.limits": "Cortes iniciales del proyecto, pendientes de calibración local. Verde significa que no se activó ninguna de estas tres condiciones, no ausencia de peligro. POWER GWETROOT y la capacidad de uso agrícola no sustituyen saturación y susceptibilidad geotécnica.",
   "alerts.nasa.powerLink": "NASA POWER ZXQ0QXZ",
-  "alerts.nasa.terrainLink": "SRTM / Open Topo Data"
+  "alerts.nasa.terrainLink": "SRTM / Open Topo Data",
+  "aiIconsNote": "Íconos generados con SI (IA).",
+  "aiUseTitle": "Uso de Super Intelligence (SI)",
+  "aiUseIntro": "Este proyecto usó herramientas de Super Intelligence (SI, inteligencia artificial) según las reglas del NASA Space Apps Challenge.",
+  "aiUseIcons": "Imágenes: el ícono de la app y los íconos del mapa se generaron con SI.",
+  "aiUseCode": "Código: desarrollado con programación agéntica (Claude Code, Codex, ChatGPT y Antigravity), revisado por el equipo.",
+  "aiUseData": "Datos: el estudio de los datos y su uso en la app se hicieron con apoyo de SI. Los datos provienen de NASA, NOAA y fuentes nacionales; la SI no los inventó.",
+  "aiUseVideo": "Video: compuesto con SI (Claude Code y HyperFrames), con voz sintética generada con SI (Kokoro TTS)."
 }

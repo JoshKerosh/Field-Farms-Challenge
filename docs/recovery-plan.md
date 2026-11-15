@@ -1,59 +1,59 @@
-# Plan de recuperación
+# Recovery plan
 
-La ruta `/care` usa la finca real elegida en Mi finca. No consume escenarios simulados ni las
-prioridades numéricas del prototipo. Los mapas y los estados anteriores de acciones se conservan.
+The `/care` route uses the real farm chosen in My farm. It does not use simulated scenarios or the
+prototype's numeric priorities. The maps and the previous action states are kept.
 
-## Seguimiento local
+## Local tracking
 
-IndexedDB `ffc-recovery`, almacén `plans`, separa planes por identificador SIRI. Sin parcela,
-la ubicación activa conserva un identificador provisional estable aunque cambie el GPS.
-Las ubicaciones antiguas conservan su clave de punto como identificador provisional para
-seguir encontrando los planes existentes. «Registrar otra finca» inicia una identidad nueva.
-Si aparece una parcela para ese mismo punto,
-la vista ofrece copiar el plan provisional mediante confirmación; conserva el original.
-El perfil se confirma al crear el plan. Los cambios posteriores del perfil global no reescriben
-el perfil confirmado de otro plan.
+IndexedDB `ffc-recovery`, store `plans`, separates plans by SIRI identifier. Without a parcel,
+the active location keeps a stable provisional identifier even if the GPS changes.
+Old locations keep their point key as a provisional identifier so existing plans can still
+be found. "Register another farm" starts a new identity.
+If a parcel appears for that same point,
+the view offers to copy the provisional plan after confirmation; the original is kept.
+The profile is confirmed when the plan is created. Later changes to the global profile do not rewrite
+the confirmed profile of another plan.
 
-Mi finca presenta primero un resumen del registro, con accesos al plan y a la cuenca, edición
-de datos y borrado. «Borrar registro» pide confirmación y elimina la ficha, la ubicación y el
-plan asociado (incluida su copia provisional conocida), con sus fotos y gastos. Mantiene otros
-planes. Ante un fallo al limpiar la ficha intenta restaurar los planes eliminados.
+My farm first shows a summary of the record, with shortcuts to the plan and the watershed, data
+editing and deletion. "Delete record" asks for confirmation and removes the profile, the location and the
+associated plan (including its known provisional copy), with its photos and expenses. Other plans
+are kept. If clearing the profile fails, it tries to restore the deleted plans.
 
-El plan permite editar meta, plazo, lugar y presupuesto. La unidad queda fija cuando existen
-mediciones para no reinterpretar los registros anteriores. Los avances permiten corregir fecha,
-cantidad, nota y gasto sin perder las fotos. El respaldo JSON incluye fotos codificadas y puede
-restaurarse con confirmación: reemplaza el plan actual, no suma gastos duplicados. Se rechazan
-archivos inválidos y respaldos de una parcela catastral diferente. Un respaldo provisional puede
-vincularse explícitamente a la finca actual. La importación admite archivos de hasta 50 MB.
+The plan lets users edit the goal, deadline, place and budget. The unit is locked once
+measurements exist, so earlier records are not reinterpreted. Progress entries let users correct the date,
+amount, note and expense without losing the photos. The JSON backup includes encoded photos and can
+be restored after confirmation: it replaces the current plan and does not add duplicate expenses. Invalid
+files and backups from a different cadastral parcel are rejected. A provisional backup can
+be explicitly linked to the current farm. Imports accept files up to 50 MB.
 
-Las cantidades son acumuladas a la fecha indicada: el avance usa la última medición, no suma
-mediciones repetidas. Si dos registros tienen la misma fecha, prevalece el agregado después.
-Los gastos sí se suman. Completar una tarea no demuestra recuperación ambiental.
-Se admiten tres fotos por registro, JPG/PNG/WebP de hasta 20 MB cada una. Se redimensionan a
-1600 píxeles y guardan como JPEG, junto con notas y gastos. Los fallos de guardado no muestran
-éxito ni borran el formulario. La impresión permite compartir un resumen, sin envíos automáticos.
-Eliminar datos del navegador también elimina estos planes: no hay sincronización remota.
+Amounts are cumulative up to the given date: progress uses the latest measurement and does not add up
+repeated measurements. If two records have the same date, the one added last wins.
+Expenses are added up. Completing a task does not prove environmental recovery.
+Three photos are accepted per record, JPG/PNG/WebP up to 20 MB each. They are resized to
+1600 pixels and stored as JPEG, along with notes and expenses. Save failures don't show
+success or clear the form. Printing lets users share a summary, with no automatic sending.
+Clearing the browser's data also removes these plans: there is no remote sync.
 
-Los textos están en `features/restoration/recovery-copy.ts`, con versiones española e inglesa
-comprobadas por TypeScript. Los identificadores, respuestas y unidades persistidos no dependen
-del idioma. Los estilos usan los tokens de ambos temas.
+The text is in `features/restoration/recovery-copy.ts`, with Spanish and English versions
+checked by TypeScript. Persisted identifiers, answers and units don't depend on
+the language. The styles use the tokens of both themes.
 
-## Datos disponibles
+## Available data
 
-Se incorporó `public/data/recovery/rainfall.json`, descargado directamente de NASA POWER:
-42 puntos de su rejilla meteorológica nativa, noviembre de 2024 a octubre de 2026.
-Cada total mensual exige todos los días con dato válido. Las peticiones regionales se dividen
-en intervalos de hasta 366 días, límite de la API. La vista elige la referencia regional más
-cercana; no la presenta como pluviómetro de la parcela ni como promedio de la cuenca.
+`public/data/recovery/rainfall.json` was added, downloaded directly from NASA POWER:
+42 points of its native meteorological grid, November 2024 to October 2026.
+Each monthly total requires every day to have valid data. Regional requests are split
+into intervals of up to 366 days, the API limit. The view picks the nearest regional
+reference; it does not present it as a rain gauge on the parcel or as the watershed average.
 
-También se consultan los 90 días de POWER existentes. CNE y SINAC sólo aportan coincidencias
-con cartografía parcial de Huetar Norte: polígonos de potencial de inundación simplificados
-y contornos históricos de áreas protegidas. No encontrar una coincidencia no demuestra
-ausencia de riesgo o restricciones. Los ejemplos IMERG/SMAP quedan excluidos.
+The existing 90 days of POWER are also used. CNE and SINAC only provide matches
+with partial Huetar Norte mapping: simplified flood-potential polygons
+and historical outlines of protected areas. Not finding a match does not prove
+the absence of risk or restrictions. The IMERG/SMAP examples are excluded.
 
-## Preparación manual de MODIS y lluvia
+## Manual MODIS and rainfall preparation
 
-Desde la raíz, en PowerShell:
+From the root, in PowerShell:
 
 ```powershell
 py -3.13 -m venv jobs/data-pipeline/.venv
@@ -61,56 +61,56 @@ py -3.13 -m venv jobs/data-pipeline/.venv
 & jobs/data-pipeline/.venv/Scripts/python.exe -m field_farms_data.publish.recovery --rainfall-only
 ```
 
-El comando usa los últimos 24 meses completos anteriores al mes de ejecución. Para reproducir
-esta entrega, agregar `--start 2024-11-01 --end 2026-10-31`.
+The command uses the last 24 full months before the month it runs in. To reproduce
+this delivery, add `--start 2024-11-01 --end 2026-10-31`.
 
-MODIS requiere una cuenta Earthdata habilitada en AppEEARS. Configurar credenciales únicamente
-en la sesión local, nunca en el frontend, archivos versionados o mensajes:
+MODIS requires an Earthdata account enabled in AppEEARS. Set credentials only
+in the local session, never in the frontend, versioned files or messages:
 
 ```powershell
-$env:EARTHDATA_USERNAME = Read-Host 'Usuario Earthdata'
-$env:EARTHDATA_PASSWORD = [System.Net.NetworkCredential]::new('', (Read-Host 'Contraseña Earthdata' -AsSecureString)).Password
+$env:EARTHDATA_USERNAME = Read-Host 'Earthdata username'
+$env:EARTHDATA_PASSWORD = [System.Net.NetworkCredential]::new('', (Read-Host 'Earthdata password' -AsSecureString)).Password
 & jobs/data-pipeline/.venv/Scripts/python.exe -m field_farms_data.publish.recovery --request
-# El comando devuelve el ID y las fechas para reanudar la misma solicitud:
+# The command returns the ID and the dates to resume the same request:
 & jobs/data-pipeline/.venv/Scripts/python.exe -m field_farms_data.publish.recovery --task ID --start 2024-11-01 --end 2026-10-31
 Remove-Item Env:EARTHDATA_USERNAME, Env:EARTHDATA_PASSWORD
 ```
 
-AppEEARS procesa la solicitud de forma asíncrona. Repetir `--task` cuando indique que sigue
-pendiente; no se mantiene un proceso de espera ni se añade una tarea programada.
-Alternativamente, importar GeoTIFFs AppEEARS con `--input <carpeta>` y fechas explícitas.
-Se solicitan MOD13Q1.061 NDVI, VI Quality y pixel reliability en proyección geographic.
+AppEEARS processes the request asynchronously. Repeat `--task` while it reports that it is still
+pending; no waiting process is kept running and no scheduled task is added.
+Alternatively, import AppEEARS GeoTIFFs with `--input <folder>` and explicit dates.
+MOD13Q1.061 NDVI, VI Quality and pixel reliability are requested in geographic projection.
 
-El importador conserva tierra con QA buena, sin nubes adyacentes/mixtas, sombras, nieve ni
-aerosoles altos. Respeta el rango NDVI válido [-0.2, 1], incluidos valores negativos. Genera
-medianas mensuales, series por cuenca ponderadas por área y teselas JSON para consultas a 5 km.
-La inclusión espacial usa centros de píxel, una aproximación adecuada para este contexto
-regional, no una delimitación de franjas de restauración. No se confunde tamaño de tesela con
-resolución de observación. La lluvia conserva su rejilla regional de origen.
+The importer keeps land with good QA, without adjacent/mixed clouds, shadows, snow or
+high aerosols. It respects the valid NDVI range [-0.2, 1], including negative values. It produces
+monthly medians, area-weighted series per watershed and JSON tiles for 5 km queries.
+Spatial inclusion uses pixel centers, an approximation suited to this regional
+context, not a delineation of restoration strips. Tile size is not confused with
+observation resolution. Rainfall keeps its original regional grid.
 
-Las comparaciones NDVI usan el mismo mes del año anterior y píxeles válidos comunes que cubran
-al menos el 80 % del área. Ese umbral es de disponibilidad, no un umbral de degradación.
-El manifiesto se publica después de las teselas. Los archivos originales permanecen ignorados
-en `jobs/data-pipeline/data/`. La ruta `recovery/history.json` sólo aparece tras importar datos
-reales; mientras falte, la vista informa que la vegetación está pendiente.
+NDVI comparisons use the same month of the previous year and shared valid pixels that cover
+at least 80 % of the area. That threshold is about availability, not degradation.
+The manifest is published after the tiles. The original files stay ignored
+in `jobs/data-pipeline/data/`. The `recovery/history.json` route only appears after importing real
+data; while it is missing, the view says the vegetation data is pending.
 
-El 15 de noviembre de 2026 se comprobó la importación AppEEARS realizada por el equipo:
-24 meses (noviembre de 2024 a octubre de 2026), series de 34 cuencas y 310 teselas,
-sin archivos faltantes ni valores NDVI fuera del rango del producto. También está incorporada
-la adquisición pública de POWER. Las pruebas con rasters sintéticos se mantienen separadas
-de estos archivos reales. Queda pendiente la revisión visual manual de la interfaz.
+On November 15, 2026 the AppEEARS import made by the team was checked:
+24 months (November 2024 to October 2026), series for 34 watersheds and 310 tiles,
+with no missing files and no NDVI values outside the product range. The public POWER
+acquisition is also included. Tests with synthetic rasters are kept separate
+from these real files. A manual visual review of the interface is still pending.
 
-## Validación
+## Validation
 
-`npm test`, `npm run typecheck`, `npm run lint`, `npm run build` y
+`npm test`, `npm run typecheck`, `npm run lint`, `npm run build` and
 `jobs/data-pipeline/.venv/Scripts/python.exe -m pytest jobs/data-pipeline/tests`.
-La revisión posterior utilizó Playwright CLI con Edge: registro manual de una finca,
-creación de meta y avance con foto/gasto, persistencia al recargar, reinicio del formulario,
-idiomas español/inglés, temas claro/oscuro y adaptación a 390 px. Se revisaron capturas en
-`output/playwright/`. Impeccable permanece desactivado. Earthdata ya fue importado.
+The follow-up review used the Playwright CLI with Edge: manual registration of a farm,
+creating a goal and a progress entry with photo/expense, persistence on reload, form reset,
+Spanish/English, light/dark themes and adaptation to 390 px. Screenshots were reviewed in
+`output/playwright/`. Impeccable stays disabled. Earthdata has already been imported.
 
-El inicio ya no carga un perfil de ejemplo automáticamente. Los registros antiguos llamados
-«Finja Ejemplo» o «Finca Ejemplo» se ignoran como residuos; una finca registrada nuevamente
-mediante el formulario lleva una versión explícita y puede conservar cualquier nombre.
-«Registrar otra finca» vacía el perfil y la ubicación activos, conservando los planes por parcela.
-Las fichas nuevas de Fuentes muestran el período y la fecha real de MODIS y POWER.
+Startup no longer loads an example profile automatically. Old records named
+"Finja Ejemplo" or "Finca Ejemplo" are ignored as leftovers; a farm registered again
+through the form carries an explicit version and can keep any name.
+"Register another farm" empties the active profile and location, keeping the plans per parcel.
+The new Sources entries show the real period and date of MODIS and POWER.

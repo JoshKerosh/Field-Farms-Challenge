@@ -1325,5 +1325,12 @@
   "alerts.conditions.source": "Observation source",
   "alerts.conditions.limits": "Initial project cutoffs awaiting local calibration. Green means none of these three conditions were triggered, not an absence of danger. POWER GWETROOT and agricultural land capability do not replace saturation and geotechnical susceptibility.",
   "alerts.nasa.powerLink": "NASA POWER ZXQ0QXZ",
-  "alerts.nasa.terrainLink": "SRTM / Open Topo Data"
+  "alerts.nasa.terrainLink": "SRTM / Open Topo Data",
+  "aiIconsNote": "SI-generated (AI) icons.",
+  "aiUseTitle": "Use of Super Intelligence (SI)",
+  "aiUseIntro": "This project used Super Intelligence (SI, artificial intelligence) tools under the NASA Space Apps Challenge rules.",
+  "aiUseIcons": "Images: the app icon and the map icons are SI-generated.",
+  "aiUseCode": "Code: built with agentic programming (Claude Code, Codex, ChatGPT and Antigravity), reviewed by the team.",
+  "aiUseData": "Data: the study of the data and how the app uses it was done with SI assistance. The data comes from NASA, NOAA and national sources; SI did not create it.",
+  "aiUseVideo": "Video: SI-generated with Claude Code and HyperFrames, with an SI-generated voice (Kokoro TTS)."
 }

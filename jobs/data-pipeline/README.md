@@ -1,53 +1,53 @@
-# Proceso de datos ambientales
+# Environmental data jobs
 
-Proyecto Python independiente de los workspaces de npm.
+Python project independent of the npm workspaces.
 
-Los [conectores POWER, RONI y cruces CNE](CLIMATE.md) ya publican JSON que consume
-Alertas, sin Earthdata. Incluyen referencia histórica explícita para anomalías,
-validación, fechas separadas de descarga/observación y conservación ante fallos.
+The [POWER, RONI and CNE overlay connectors](CLIMATE.md) already publish JSON consumed by
+Alerts, without Earthdata. They include an explicit historical baseline for anomalies,
+validation, separate download/observation dates and preservation on failure.
 
-## Comprobar fuentes de alertas
+## Checking alert sources
 
-La [comprobación de fuentes](SOURCE_CHECK.md) descarga muestras pequeñas de POWER
-y RONI y consulta los catálogos NASA y el WFS de la CNE. Usa solo la biblioteca
-estándar de Python; guarda resultados locales en `data/source-check/`, sin publicar
-indicadores ni descargar rásteres. Incluye resultados verificados, límites y pruebas.
+The [source check](SOURCE_CHECK.md) downloads small POWER and RONI samples
+and queries the NASA catalogs and the CNE WFS. It uses only the Python standard
+library; it stores results locally in `data/source-check/`, without publishing
+indicators or downloading rasters. It includes verified results, limits and tests.
 
-El [conector IMERG](IMERG.md) prepara acumulados reales de 1 y 7 días por subcuenca
-mediante OPeNDAP, con pruebas NetCDF y conservación del último resumen válido.
-La descarga autenticada requiere `EARTHDATA_TOKEN` y autorización GES DISC;
-por defecto los resultados se guardan localmente para revisión.
+The [IMERG connector](IMERG.md) prepares real 1- and 7-day totals per subwatershed
+through OPeNDAP, with NetCDF tests and preservation of the last valid summary.
+The authenticated download requires `EARTHDATA_TOKEN` and GES DISC authorization;
+by default the results are stored locally for review.
 
-## Capas de cuencas y agua
+## Watershed and water layers
 
-`python -m field_farms_data.publish.basins --datasets <carpeta>` lee `cuencas_hidrograficas.shp`, `Subcuencas_CRTM05.zip` y `Operadores y Fuentes (Ubicaciones).xlsx` (SAGA, AyA) y escribe en `apps/web/public/data/geo/`:
+`python -m field_farms_data.publish.basins --datasets <folder>` reads `cuencas_hidrograficas.shp`, `Subcuencas_CRTM05.zip` and `Operadores y Fuentes (Ubicaciones).xlsx` (SAGA, AyA) and writes to `apps/web/public/data/geo/`:
 
-| Archivo                  | Contenido                                                                                |
-| ------------------------ | ---------------------------------------------------------------------------------------- |
-| `cuencas.geojson`        | 34 cuencas simplificadas a 10 m; cuencas vecinas con colores distintos.                  |
-| `subcuencas/<n>.geojson` | Subcuencas de la cuenca `n`, simplificadas a 5 m; `0` agrupa islas y franjas costeras.   |
-| `fuentes/<n>.geojson`    | Fuentes del SAGA por cuenca; el tipo (naciente, pozo, superficial) se deduce del nombre. |
-| `asadas.geojson`         | Operadores con su cuenca, servicios y cantidad de fuentes.                               |
+| File                     | Content                                                                                   |
+| ------------------------ | ----------------------------------------------------------------------------------------- |
+| `cuencas.geojson`        | 34 watersheds simplified to 10 m; neighboring watersheds get different colors.            |
+| `subcuencas/<n>.geojson` | Subwatersheds of watershed `n`, simplified to 5 m; `0` groups islands and coastal strips. |
+| `fuentes/<n>.geojson`    | SAGA sources per watershed; the type (spring, well, surface) is inferred from the name.   |
+| `asadas.geojson`         | Operators with their watershed, services and number of sources.                           |
 
-Las coordenadas se convierten de CRTM05 a WGS84 con la proyección de cada archivo. Se descartan 69 fuentes y 1 operador sin coordenadas. El SAGA no indica la unidad del caudal. Pruebas: `pytest`.
+Coordinates are converted from CRTM05 to WGS84 with each file's projection. 69 sources and 1 operator without coordinates are dropped. SAGA does not state the flow unit. Tests: `pytest`.
 
-Cada subcuenca lleva un `id` estable `"<cuenca>-<orden>"`: es la llave de los archivos de indicadores por subcuenca.
+Each subwatershed has a stable `id` `"<cuenca>-<orden>"` (watershed-order): it is the key of the per-subwatershed indicator files.
 
-## NASA, NOAA, capas locales y ejemplos
+## NASA, NOAA, local layers and examples
 
-Formato, contrato y verificación en [docs/datos.md](../../docs/datos.md).
+Format, contract and verification in [docs/data.md](../../docs/data.md).
 
-| Comando                                                      | Escribe en `apps/web/public/data/`                                                                                                                               |
-| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `python -m field_farms_data.publish.nasa`                    | `nasa/power/latest.json`, `noaa/roni/latest.json`, `nasa/modis/latest.json` y el estado en `fuentes.json`. Lo corre a diario `.github/workflows/datos-nasa.yml`. |
-| `python -m field_farms_data.publish.climate`                 | `alerts/climate/power/*` y `alerts/climate/roni/*`; observaciones de alertas con formato propio, sin reemplazar los indicadores anteriores.                      |
-| `python -m field_farms_data.publish.local --ffc <FFC_datos>` | `geo/cne/*`, `geo/sinac/areas_protegidas.geojson`, `local/orillas_verdor_1.5km.json`                                                                             |
-| `python -m field_farms_data.publish.ejemplos`                | `ejemplos/*.json`, simulados, para trabajar sin esperar a otro conector                                                                                          |
+| Command                                                      | Writes to `apps/web/public/data/`                                                                                                                              |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `python -m field_farms_data.publish.nasa`                    | `nasa/power/latest.json`, `noaa/roni/latest.json`, `nasa/modis/latest.json` and the status in `fuentes.json`. Run daily by `.github/workflows/datos-nasa.yml`. |
+| `python -m field_farms_data.publish.climate`                 | `alerts/climate/power/*` and `alerts/climate/roni/*`; alert observations in their own format, without replacing the earlier indicators.                        |
+| `python -m field_farms_data.publish.local --ffc <FFC_datos>` | `geo/cne/*`, `geo/sinac/areas_protegidas.geojson`, `local/orillas_verdor_1.5km.json`                                                                           |
+| `python -m field_farms_data.publish.ejemplos`                | `ejemplos/*.json`, simulated, to work without waiting for another connector                                                                                    |
 
-Las descargas usan solo la biblioteca estándar (`providers/http.py`), sin claves. Si una fuente falla, su archivo anterior no se toca y `fuentes.json` la marca `falla`.
+Downloads use only the standard library (`providers/http.py`), with no keys. If a source fails, its previous file is left untouched and `fuentes.json` marks it as `falla` (failure).
 
-- `providers/`: acceso a NASA, NOAA y fuentes locales, con credenciales fuera del repositorio.
-- `transforms/`: normalización y cálculos mediante GeoPandas/Rasterio cuando se incorpore la ingesta.
-- `publish/`: indicadores y capas preparados para web/móvil, con fuente, fecha, unidades y versión de metodología.
+- `providers/`: access to NASA, NOAA and local sources, with credentials kept outside the repository.
+- `transforms/`: normalization and calculations with GeoPandas/Rasterio once ingestion is added.
+- `publish/`: indicators and layers prepared for web/mobile, with source, date, units and methodology version.
 
-La vinculación hidrológica y las recomendaciones técnicas requieren validación independiente de la proximidad de los puntos. Los rasters y datos descargados no se guardan en Git; `data/` está ignorado. Se agregarán pruebas de transformaciones junto con el primer proceso funcional.
+Hydrological linking and technical recommendations require validation beyond the proximity of the points. Rasters and downloaded data are not stored in Git; `data/` is ignored. Transformation tests will be added along with the first working job.

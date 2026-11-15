@@ -62,7 +62,7 @@ export interface AlertsSummary {
   history: DroughtHistorySummary;
   sourceWarnings: string[];
 }
-/** Conexiones de la cuenca completa y reportes reales de sequía 2014–2015 (HIST). */
+/** Connections of the whole watershed and real 2014–2015 drought reports (HIST). */
 export function droughtHistory(ds: Dataset, ctx: PlaceContext): DroughtHistorySummary {
   const geo = getGeo(ds);
   const { byCuenca, hist } = geo.cuencaConnections();

@@ -1,1 +1,1 @@
-"""Publicación futura de resultados pequeños con procedencia y metodología."""
+"""Publishing of small results with source and methodology."""

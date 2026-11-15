@@ -7,14 +7,14 @@ export interface Loc {
 
 export interface SubGeo {
   box: { vx: number; vy: number; w: number; h: number; BW: number; BH: number };
-  /** Path SVG del contorno. */
+  /** SVG path of the outline. */
   d: string;
-  /** viewBox SVG ('x y w h'). */
+  /** SVG viewBox ('x y w h'). */
   vb: string;
   toPx: (x: number, y: number) => { x: number; y: number };
-  /** Índices en `sources.fuentes` dentro de la subcuenca. */
+  /** Indexes in `sources.fuentes` inside the subwatershed. */
   srcs: number[];
-  /** 40 fincas de ejemplo (semilla fija) — SIMULADAS. */
+  /** 40 example farms (fixed seed) — SIMULATED. */
   farms: { x: number; y: number; dkm: number }[];
   pxPerUnit: number;
 }
@@ -24,11 +24,11 @@ export interface SatTile {
   y: number;
   lx: number;
   ly: number;
-  /** Clase de capacidad de uso (I…VIII, AP). */
+  /** Land use capacity class (I…VIII, AP). */
   cl: string;
   flR: boolean;
   adj: number;
-  /** Patrón ilustrativo (no es un dato medido). */
+  /** Illustrative pattern (not measured data). */
   n: number;
   fl: boolean;
 }
@@ -55,7 +55,7 @@ export function inRing(x: number, y: number, f: number[]): boolean {
   return ins;
 }
 
-/** Clase de uso del suelo sin sufijo de limitaciones ('VIIs13c12' → 'VII'). */
+/** Land use class without the limitation suffix ('VIIs13c12' → 'VII'). */
 export function classOf(cls: string | undefined): string {
   const m = String(cls || '').match(/^(AP|VIII|VII|VI|V|IV|III|II|I)/);
   return m ? m[1] : '';
@@ -70,7 +70,7 @@ export class Geo {
     return this.cache.get(key) as T;
   }
 
-  /** Latitud/longitud → coordenadas locales (polinomio de segundo grado del prototipo). */
+  /** Latitude/longitude → local coordinates (the prototype's second-degree polynomial). */
   llToLocal(lat: number, lon: number): Loc {
     const { bx, by } = this.ds.territory;
     const t = [1, lon, lat, lon * lon, lat * lat, lon * lat];
@@ -81,8 +81,8 @@ export class Geo {
   }
 
   /**
-   * Coordenadas locales → [longitud, latitud], invirtiendo el polinomio con Newton.
-   * Error típico ~50 m (la resolución de la cuadrícula local).
+   * Local coordinates → [longitude, latitude], inverting the polynomial with Newton's method.
+   * Typical error ~50 m (the resolution of the local grid).
    */
   localToLngLat(loc: Loc): [number, number] {
     const { bx, by } = this.ds.territory;
@@ -103,7 +103,7 @@ export class Geo {
     return [lon, lat];
   }
 
-  /** Celda de 3 km más cercana (busca hasta 3 celdas alrededor). */
+  /** Nearest 3 km cell (searches up to 3 cells around). */
   cellAt(loc: Loc): GridCell | null {
     const { grid, step } = this.ds.territory;
     const ix = Math.floor(loc.x / step);
@@ -119,7 +119,7 @@ export class Geo {
     return null;
   }
 
-  /** Orillas (IGN 1:5 000) y verdor (MODIS 1 km) en la celda de 1,5 km. */
+  /** Riverbanks (IGN 1:5 000) and greenness (MODIS 1 km) in the 1.5 km cell. */
   ripAt(x: number, y: number): RipCell | null {
     const ci = Math.floor(x / 30);
     const cj = Math.floor(y / 30);
@@ -147,7 +147,7 @@ export class Geo {
     };
   }
 
-  /** Paths SVG de todas las cuencas del país. */
+  /** SVG paths of every watershed in the country. */
   allPath(): string {
     return this.memo('all', () =>
       this.ds.territory.cuencas.map((c) => c.r.map(ringPath).join('')).join(''),
@@ -164,7 +164,7 @@ export class Geo {
     return cu ? cu.r.map(ringPath).join('') : '';
   }
 
-  /** Geometría de la subcuenca ajustada a un lienzo de 326×230. */
+  /** Subwatershed geometry fitted to a 326×230 canvas. */
   subGeo(id: number): SubGeo {
     return this.memo(`sub${id}`, () => {
       const { subs } = this.ds.territory;
@@ -201,7 +201,7 @@ export class Geo {
         if (fu[0] < x0 || fu[0] > x1 || fu[1] < y0 || fu[1] > y1) return;
         if (inRing(fu[0], fu[1], f)) srcs.push(i);
       });
-      // 40 fincas de ejemplo dentro de la subcuenca (semilla fija) — SIMULADAS.
+      // 40 example farms inside the subwatershed (fixed seed) — SIMULATED.
       let seed = id * 9301 + 49297;
       const rnd = () => {
         seed = (seed * 16807) % 2147483647;
@@ -232,7 +232,7 @@ export class Geo {
     });
   }
 
-  /** Cuadrícula de 9 px dentro de la subcuenca con clase de suelo e inundación. */
+  /** 9 px grid inside the subwatershed with soil class and flooding. */
   satBase(id: number): SatTile[] {
     return this.memo(`sat${id}`, () => {
       const sb = this.ds.territory.subs[id];
@@ -288,7 +288,7 @@ export class Geo {
     return { i: best, km: bd / 10 };
   }
 
-  /** Clasifica cada fuente: naciente, pozo, superficial u otra. */
+  /** Classifies each source: spring, well, surface or other. */
   sourceKinds(): { kinds: SourceKind[]; pctSub: number } {
     return this.memo('kinds', () => {
       const kind = (q: Fuente): SourceKind => {
@@ -304,7 +304,7 @@ export class Geo {
     });
   }
 
-  /** Conexiones y ASADAS por cuenca; reportes de sequía 2014–15 por cuenca. */
+  /** Connections and ASADAS per watershed; 2014–15 drought reports per watershed. */
   cuencaConnections(): {
     byCuenca: Record<number, Record<number, number>>;
     hist: Record<number, number[]>;
@@ -341,13 +341,13 @@ export function getGeo(ds: Dataset): Geo {
   return g;
 }
 
-/** Contexto del lugar seleccionado. */
+/** Context of the selected place. */
 export interface PlaceContext {
   loc: Loc;
   cell: GridCell;
-  /** Cuenca de la celda (la que se muestra). */
+  /** Watershed of the cell (the one shown). */
   cuenca: Cuenca | undefined;
-  /** Índice de la cuenca a la que pertenece la subcuenca elegida. */
+  /** Index of the watershed the chosen subwatershed belongs to. */
   cuIdx: number;
   subId: number;
   sub: Subcuenca;

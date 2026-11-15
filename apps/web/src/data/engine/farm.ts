@@ -17,13 +17,13 @@ export interface FarmProfile {
   who: string;
   tipo: string;
   ha: number;
-  /** Hectáreas para sembrar (cultivo o forraje). */
+  /** Hectares to plant (crop or forage). */
   cult: number;
   animals: number;
-  /** true si son los datos del propio productor (guardados en su dispositivo). */
+  /** true if it is the farmer's own data (stored on their device). */
   own: boolean;
 }
-/** Perfiles de ejemplo (SIMULADOS) del prototipo v10. */
+/** Example profiles (SIMULATED) from the v10 prototype. */
 export const EXAMPLE_FARMS: Record<ExampleFarmKey, FarmProfile> = localizedResource(() => ({
   lechera: {
     key: 'lechera',
@@ -75,7 +75,7 @@ export const FARM_FLOODING: [string, string][] = localizedResource(() => [
   ['aveces', message('m7fd5abe9df95')],
   ['si', message('mef612425c20b')],
 ]);
-/** Datos de la finca del productor; se guardan solo en su dispositivo. */
+/** The farmer's farm data; stored only on their device. */
 export interface MyFarm {
   name: string;
   act: string;
@@ -147,7 +147,7 @@ export function myFarmToForm(f: MyFarm): FarmFormInput {
   };
 }
 const lab = (list: [string, string][], k: string) => list.find((o) => o[0] === k)?.[1] ?? k;
-/** Finca activa: la del productor o uno de los perfiles de ejemplo. */
+/** Active farm: the farmer's or one of the example profiles. */
 export function activeFarm(key: FarmKey, my: MyFarm | null): FarmProfile {
   if (key === 'mia' && my) {
     const water = my.agua ? message('m1dd3302033b8', lab(FARM_WATER, my.agua).toLowerCase()) : '';
@@ -170,7 +170,7 @@ export function activeFarm(key: FarmKey, my: MyFarm | null): FarmProfile {
   }
   return EXAMPLE_FARMS[key === 'mia' ? 'lechera' : key];
 }
-/** ¿La finca se puede encharcar? (mapa CNE/RIESGOS, drenaje del suelo, modo demo o dato del productor). */
+/** Can the farm get waterlogged? (CNE/RIESGOS map, soil drainage, demo mode or the farmer's data). */
 export function siteFloods(
   ctx: PlaceContext,
   demo: DemoScenario | null,
@@ -193,7 +193,7 @@ export interface ConservationAction {
   who: string;
   opp?: boolean;
 }
-/** Catálogo de acciones del dueño que protegen el agua (Ley Forestal, art. 33; PNUD). */
+/** Catalog of owner actions that protect the water (Forestry Law, art. 33; UNDP). */
 export const CONSERVATION_ACTIONS: ConservationAction[] = localizedResource(() => [
   {
     id: 'naciente',
@@ -264,12 +264,12 @@ export const CONSERVATION_ACTIONS: ConservationAction[] = localizedResource(() =
 export type ActionStatus = 'hecho' | 'plan' | '';
 export interface RotationMonth {
   m: string;
-  /** Días de descanso recomendados ese mes. */
+  /** Recommended rest days that month. */
   rest: number;
-  /** Altura de la barra (4–70 px). */
+  /** Bar height (4–70 px). */
   h: number;
   col: string;
-  /** Animales que aguanta el pasto. */
+  /** Animals the pasture can support. */
   cap: number;
 }
 export interface Rotation {
@@ -287,8 +287,8 @@ export interface Rotation {
   animals: number;
 }
 /**
- * Rotación de potreros con humedad del suelo (NASA POWER), verdor (MODIS) y clima
- * esperado (El Niño según NOAA RONI). Estimación orientativa del prototipo v10.
+ * Pasture rotation using soil moisture (NASA POWER), greenness (MODIS) and expected
+ * weather (El Niño per NOAA RONI). Indicative estimate from the v10 prototype.
  */
 export function pastureRotation(
   ds: Dataset,

@@ -9,20 +9,20 @@ export type RiskLevel = 0 | 1 | 2;
 export const RISK_LABEL = localizedResource(
   () => [message('m4c65c6b78b08'), message('m5693d7652b9a'), message('m9102470142ed')] as const,
 );
-/** [nombre, color de la gota, fondo de la etiqueta, texto de la etiqueta]. */
+/** [name, drop color, label background, label text]. */
 export const RISK_STYLE: [string, string, string, string][] = localizedResource(() => [
   [message('m0b6af7d377da'), '#2F7FC1', '#DCEAF5', '#1C4E78'],
   [message('md357175cfe89'), '#E0A030', '#FDF1D6', '#6B4505'],
   [message('m42719229fd62'), '#D9534F', '#F8E1DE', '#8E2A21'],
 ]);
 const FRAG: Record<string, boolean> = { VI: true, VII: true, VIII: true, AP: true };
-const R1 = 10; // 1 km en unidades de 100 m
+const R1 = 10; // 1 km in 100 m units
 const PCOL = ['#CFE6D3', '#F6D98B', '#F2A65A', '#D9534F', '#B3261E', '#8E1A14'];
 const BCOL = ['#E9EEEA', '#2E7A43', '#F2A65A', '#D9534F'];
 export interface NearSource {
   i: number;
   q: Fuente;
-  /** Distancia en km a la ubicación seleccionada. */
+  /** Distance in km to the selected location. */
   d: number;
 }
 export function nearbySources(ds: Dataset, ctx: PlaceContext): NearSource[] {
@@ -33,7 +33,7 @@ export function nearbySources(ds: Dataset, ctx: PlaceContext): NearSource[] {
     })
     .sort((a, b) => a.d - b.d);
 }
-/** Fuente más cercana a la finca, preferiblemente naciente (si está en la subcuenca). */
+/** Source nearest to the farm, preferably a spring (if it is in the subwatershed). */
 export function nearestSource(ds: Dataset, ctx: PlaceContext): NearSource {
   const g = getGeo(ds);
   const { kinds } = g.sourceKinds();
@@ -45,7 +45,7 @@ export function nearestSource(ds: Dataset, ctx: PlaceContext): NearSource {
   return { i: z.i, q: ds.sources.fuentes[z.i], d: z.km };
 }
 export interface WaterJourney {
-  /** % de fuentes subterráneas (naciente o pozo) en la subcuenca. */
+  /** % of groundwater sources (spring or well) in the subwatershed. */
   pct: string;
   pctPais: string;
   nNac: string;
@@ -79,7 +79,7 @@ export function waterJourney(ds: Dataset, ctx: PlaceContext): WaterJourney {
     distKm: nf0.d,
   };
 }
-/** Estado legal / de recarga de la finca respecto de la naciente más cercana. */
+/** Legal / recharge status of the farm relative to the nearest spring. */
 export function legalZone(ds: Dataset, ctx: PlaceContext) {
   const j = waterJourney(ds, ctx);
   if (j.distKm <= 0.1)
@@ -106,7 +106,7 @@ export function legalZone(ds: Dataset, ctx: PlaceContext) {
     bg: '#E3EFF3',
   };
 }
-/** Cuenca completa: conexiones, ASADAS y reportes de sequía 2014–15. */
+/** Whole watershed: connections, ASADAS and 2014–15 drought reports. */
 export function basinInfo(ds: Dataset, ctx: PlaceContext) {
   const g = getGeo(ds);
   const { byCuenca, hist } = g.cuencaConnections();
@@ -142,7 +142,7 @@ export function basinInfo(ds: Dataset, ctx: PlaceContext) {
       : '',
   };
 }
-/** Tarjetas "Tu finca en la cuenca": tierra, inundación y agua de la comunidad. */
+/** "Your farm in the watershed" cards: land, flooding and community water. */
 export function terrainCards(ds: Dataset, ctx: PlaceContext) {
   const LIM: Record<string, string> = {
     e: message('m449476eaf089'),
@@ -206,7 +206,7 @@ export interface SourceInfo {
 export interface MapTile {
   x: number;
   y: number;
-  /** Centro de la celda en coordenadas locales. */
+  /** Cell center in local coordinates. */
   lx: number;
   ly: number;
   col: string;
@@ -222,14 +222,14 @@ export interface RegenerationAction {
 export interface WatershedPlan {
   sources: SourceInfo[];
   nacientes: SourceInfo[];
-  /** Nacientes de riesgo medio o alto. */
+  /** Springs at medium or high risk. */
   nHi: number;
   nNac: number;
   conn: string;
   connRisk: number;
   tilesRestaurar: MapTile[];
   tilesOrillas: MapTile[];
-  /** Halos de 1 km de recarga (capa Fuentes de agua). */
+  /** 1 km recharge halos (Water sources layer). */
   halos: {
     x: number;
     y: number;
@@ -258,8 +258,8 @@ export interface WatershedPlan {
   ndvi: string;
 }
 /**
- * Plan de la subcuenca: riesgo de nacientes, dónde restaurar (NASA MODIS 1 km +
- * IGN 1:5 000 + ladera frágil + cercanía a nacientes), ríos sin bosque y acciones.
+ * Subwatershed plan: spring risk, where to restore (NASA MODIS 1 km +
+ * IGN 1:5 000 + fragile slope + proximity to springs), rivers without forest and actions.
  */
 export function watershedPlan(
   ds: Dataset,
@@ -320,7 +320,7 @@ export function watershedPlan(
     ly: o.t.ly,
     col: o.water || !o.r ? '#CFE3EC' : BCOL[o.r.bank],
   }));
-  // cifras de orillas y restauración
+  // riverbank and restoration figures
   const rSeen: Record<string, number> = {};
   let kmT = 0;
   let kmNo = 0;
@@ -357,7 +357,7 @@ export function watershedPlan(
     down: String(Math.round((100 * downN) / nT)),
     ndvi: ndM === null ? '—' : f2(ndM),
   };
-  // fuentes: riesgo según tierra frágil y restauración urgente a 1 km
+  // sources: risk from fragile land and urgent restoration within 1 km
   const sources: SourceInfo[] = srcI.map((i) => {
     const q = fuentes[i];
     const op = (ops[q[2]] || ['', 0]) as [string, number];
@@ -416,7 +416,7 @@ export function watershedPlan(
   const fragShare = tileP.length ? tileP.filter((o) => FRAG[o.t.cl]).length / tileP.length : 0;
   const floodShare = tileP.length ? tileP.filter((o) => o.t.flR).length / tileP.length : 0;
   const nearFarms = geo.farms.filter((f) => f.dkm < 1).length;
-  // Pronóstico de lluvia nov–abr con El Niño
+  // Nov–Apr rainfall outlook with El Niño
   const climF = rainFactor(ds, reg, 'nino');
   const clR = ds.climate.NASA[reg].clim.rain;
   const forecast = [10, 11, 0, 1, 2, 3].map((m) => ({
@@ -530,7 +530,7 @@ export function watershedPlan(
     ndvi: f2(serie[nF - 1]),
   };
 }
-/** Bloque "Tu zona vista desde arriba" (1,5 km alrededor de la finca). */
+/** "Your area from above" block (1.5 km around the farm). */
 export function zoneFromAbove(ds: Dataset, loc: Loc) {
   const g = getGeo(ds);
   const me = g.ripAt(loc.x, loc.y);

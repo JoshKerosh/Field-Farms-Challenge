@@ -1,8 +1,8 @@
-"""Archivos de ejemplo con el formato final, marcados como simulados (SPA-7).
+"""Example files in the final format, marked as simulated (SPA-7).
 
-Sirven para trabajar sin esperar el conector real de otra persona. Cuando el conector exista,
-escribe en su propia ruta (p. ej. `nasa/imerg/latest.json`) y se deja de leer el ejemplo.
-    python -m field_farms_data.publish.ejemplos [--out <carpeta>]
+They let people work without waiting for someone else's real connector. Once the connector exists,
+it writes to its own path (e.g. `nasa/imerg/latest.json`) and the example is no longer read.
+    python -m field_farms_data.publish.ejemplos [--out <folder>]
 """
 
 import argparse
@@ -12,7 +12,7 @@ from pathlib import Path
 from field_farms_data.publish.archivos import DATA_DIR, escribir_json, meta
 from field_farms_data.transforms.indicadores import indicador
 
-# Cuatro subcuencas reales de la cuenca del río San Carlos (ids de geo/subcuencas/14.geojson).
+# Four real subwatersheds of the San Carlos river watershed (ids from geo/subcuencas/14.geojson).
 SUBCUENCAS = (('14-123', 'Río San Carlos'), ('14-103', 'Río Arenal'),
               ('14-86', 'Río Peñas Blancas'), ('14-130', 'Río Tres Amigos'))
 NOTA = 'SIMULADO: valores inventados con el formato final. No usar como dato real.'

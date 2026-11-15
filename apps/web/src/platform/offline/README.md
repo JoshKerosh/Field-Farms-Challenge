@@ -1,5 +1,5 @@
-# Trabajo sin conexión
+# Offline work
 
-La PWA precarga el código, fuentes y recursos locales de la demo en su build de producción. `ConnectionStatus` informa del estado de la red; `PwaStatus` permite aplicar una actualización disponible.
+The PWA precaches the code, fonts and local demo resources in its production build. `ConnectionStatus` reports the network state; `PwaStatus` lets users apply an available update.
 
-Esta etapa no guarda observaciones ni sincroniza datos. La próxima integración incorporará Dexie/IndexedDB, una outbox con identificadores estables, estados locales y remotos diferenciados, reintentos y una política explícita para conflictos. El service worker no equivale a sincronización de registros.
+This stage does not save observations or sync data. The next integration will add Dexie/IndexedDB, an outbox with stable identifiers, distinct local and remote states, retries and an explicit conflict policy. The service worker is not the same as syncing records.

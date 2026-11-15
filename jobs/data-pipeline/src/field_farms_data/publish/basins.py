@@ -1,7 +1,7 @@
-"""Publica cuencas, subcuencas, ASADAS y fuentes del SAGA como GeoJSON livianos para la web.
+"""Publishes watersheds, subwatersheds, ASADAS and SAGA sources as lightweight GeoJSON for the web.
 
-Ejecutar desde jobs/data-pipeline:
-    python -m field_farms_data.publish.basins --datasets <carpeta PNUD> [--out <carpeta>]
+Run from jobs/data-pipeline:
+    python -m field_farms_data.publish.basins --datasets <PNUD folder> [--out <folder>]
 """
 
 import argparse
@@ -15,7 +15,7 @@ from field_farms_data.providers import pnud
 from field_farms_data.transforms import geo
 
 DEFAULT_OUT = Path(__file__).resolve().parents[5] / 'apps' / 'web' / 'public' / 'data' / 'geo'
-# Tolerancia de simplificación (m). Las subcuencas se usan para cruzarlas con fincas: más detalle.
+# Simplification tolerance (m). Subwatersheds are overlaid with farms, so they keep more detail.
 TOL_CUENCAS = 10
 TOL_SUBCUENCAS = 5
 
@@ -46,13 +46,13 @@ def publish_basins(datasets: Path, out: Path) -> pnud.Layer:
     for record, geom in subcuencas.features:
         geometry = geo.to_web_polygon(geom, TOL_SUBCUENCAS, subcuencas.to_wgs84)
         if geometry:
-            # 0 agrupa islas y franjas costeras que no pertenecen a ninguna de las 34 cuencas.
+            # 0 groups islands and coastal strips that belong to none of the 34 watersheds.
             by_basin.setdefault(locate(geom.representative_point()), []).append({
                 'type': 'Feature', 'geometry': geometry, 'properties': {
                     'nombre': record['N_SUBCUENC'].title(), 'gran_cuenca': record['GRAN_CUENC'].title(),
                     'vertiente': record['VERTIENTE'].title(), 'hectareas': round(record['HECTARES'], 1)}})
-    # El nombre se repite (una subcuenca con varias partes), así que cada parte lleva un id estable
-    # "<cuenca>-<orden>": es la llave que usan los archivos de indicadores por subcuenca.
+    # The name repeats (a subwatershed with several parts), so each part gets a stable id
+    # "<cuenca>-<orden>": it is the key used by the per-subwatershed indicator files.
     for no, items in by_basin.items():
         for i, item in enumerate(items):
             item['properties'] = {'id': f'{no}-{i}', **item['properties']}

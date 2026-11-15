@@ -1,10 +1,10 @@
-"""Capas locales de FFC_datos.zip que aún no estaban en `public/data/`: CNE, SINAC y la grilla de orillas.
+"""Local layers from FFC_datos.zip that were not yet in `public/data/`: CNE, SINAC and the riverbank grid.
 
-Ejecutar desde jobs/data-pipeline, con la carpeta descomprimida del paquete del equipo:
-    python -m field_farms_data.publish.local --ffc <carpeta FFC_datos> [--out <carpeta>]
+Run from jobs/data-pipeline, with the unzipped folder of the team's package:
+    python -m field_farms_data.publish.local --ffc <FFC_datos folder> [--out <folder>]
 
-Las cuencas, subcuencas, fuentes y ASADAS las publica `publish.basins`. FLUC, la sequía 2014–15 y
-la grilla de 3 km siguen empaquetadas en `apps/web/src/data/real/` porque la app ya las usa.
+Watersheds, subwatersheds, sources and ASADAS are published by `publish.basins`. FLUC, the 2014–15
+drought and the 3 km grid are still bundled in `apps/web/src/data/real/` because the app already uses them.
 """
 
 import argparse
@@ -17,11 +17,11 @@ from field_farms_data.publish.archivos import DATA_DIR, actualizar_fuente, escri
 
 SNIT = '04_snit_huetar_norte'
 ORILLAS = '03_v10_orillas_y_verdor/orillas_y_verdor_1.5km.csv'
-# Fechas de los paquetes según LEEME.md.
+# Package dates according to LEEME.md.
 FECHA_SNIT = date(2026, 11, 14)
-FECHA_ORILLAS = date(2026, 10, 31)  # verdor MODIS hasta oct 2026
+FECHA_ORILLAS = date(2026, 10, 31)  # MODIS greenness up to Oct 2026
 ORILLA_CODIGO = {'sin río': 0, 'con bosque': 1, 'a medias': 2, 'sin bosque': 3}
-# Catálogo de servicios OGC del SNIT donde se publicaron las capas de la CNE (descarga del 14 nov 2026).
+# SNIT OGC service catalog where the CNE layers were published (downloaded Nov 14, 2026).
 SNIT_OGC = 'https://www.snitcr.go.cr/ico_servicios_ogc'
 
 
@@ -30,7 +30,7 @@ def leer_geojson(path: Path) -> dict:
 
 
 def con_meta(coleccion: dict, m: dict, propiedades: list[str]) -> dict:
-    """GeoJSON con encabezado `meta` (miembro extra válido en RFC 7946) y solo las propiedades útiles."""
+    """GeoJSON with a `meta` header (a valid extra member in RFC 7946) and only the useful properties."""
     features = [{'type': 'Feature', 'geometry': f['geometry'],
                  'properties': {k: f['properties'][k] for k in propiedades if k in f['properties']}}
                 for f in coleccion['features']]
@@ -82,7 +82,7 @@ def _num(texto: str) -> float | None:
 
 
 def publicar_orillas(ffc: Path, out: Path) -> int:
-    """Grilla de 1,5 km en columnas (un arreglo por campo): la mitad de peso que filas con claves."""
+    """1.5 km grid in columns (one array per field): half the size of rows with keys."""
     columnas: dict[str, list] = {k: [] for k in (
         'celda_3km', 'lat', 'lon', 'verdor', 'orilla', 'verdor_cambio_celda',
         'orilla_bosque_frac_celda', 'orilla_potrero_frac_celda', 'km_rio_celda')}

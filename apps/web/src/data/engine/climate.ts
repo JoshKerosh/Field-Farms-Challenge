@@ -25,7 +25,7 @@ export const REGION_NAMES: Record<RegionCode, string> = localizedResource(() => 
   V: message('mab29bbf1c58f'),
 }));
 const k12 = (v: number) => Array<number>(12).fill(v);
-/** Factor de lluvia mensual por escenario. */
+/** Monthly rainfall factor per scenario. */
 export function rainFactor(ds: Dataset, reg: RegionCode, scen: ClimateScenario): number[] {
   const Y = ds.climate.NASA[reg].yrs;
   if (scen === 'nino')
@@ -37,7 +37,7 @@ export function rainFactor(ds: Dataset, reg: RegionCode, scen: ClimateScenario):
   if (scen in Y) return Y[scen as YearKey].f;
   return k12(1);
 }
-/** Multiplicador de evapotranspiración mensual por escenario. */
+/** Monthly evapotranspiration multiplier per scenario. */
 export function etMultiplier(ds: Dataset, reg: RegionCode, scen: ClimateScenario): number[] {
   const Y = ds.climate.NASA[reg].yrs;
   if (scen === 'nino')
@@ -48,7 +48,7 @@ export function etMultiplier(ds: Dataset, reg: RegionCode, scen: ClimateScenario
   if (scen in Y) return Y[scen as YearKey].e;
   return k12(1);
 }
-/** Meses secos seguidos desde noviembre (lluvia < mitad de la evaporación). */
+/** Consecutive dry months from November (rainfall < half of evaporation). */
 export function dryRun(ds: Dataset, reg: RegionCode, scen: ClimateScenario): number {
   const fz = rainFactor(ds, reg, scen);
   const ez = etMultiplier(ds, reg, scen);
@@ -61,7 +61,7 @@ export function dryRun(ds: Dataset, reg: RegionCode, scen: ClimateScenario): num
   }
   return n;
 }
-/** Largo del verano: normal (dN) y con El Niño o el modo demo (dE). */
+/** Length of the dry season: normal (dN) and with El Niño or demo mode (dE). */
 export function seasonLength(ds: Dataset, reg: RegionCode, demo: DemoScenario | null) {
   return {
     dN: dryRun(ds, reg, 'normal'),
@@ -92,14 +92,14 @@ export interface Signal {
   src: string;
   srcCol: string;
   on: boolean;
-  /** true cuando el dato es de ejemplo (IMERG/SMAP pendientes, modo demo). */
+  /** true when the data is an example (IMERG/SMAP pending, demo mode). */
   simulated: boolean;
 }
 export interface NinoInfo {
   state: string;
-  /** Valor del índice RONI, ej. '+2,0'. */
+  /** RONI index value, e.g. '+2,0'. */
   val: string;
-  /** Posición (2–98 %) en la escala La Niña … Muy fuerte. */
+  /** Position (2–98 %) on the La Niña … Very strong scale. */
   pos: number;
   effect: string;
   season: string;
@@ -113,7 +113,7 @@ export function ndviContext(ds: Dataset, reg: RegionCode) {
 }
 const oniText = (v: number) =>
   `+${v.toFixed(1).replace('.', displayLanguage() === 'en' ? '.' : ',')}`;
-/** Señales de la zona (alertas de clima) con el mismo criterio del prototipo v10. */
+/** Signals for the area (weather alerts) with the same criteria as the v10 prototype. */
 export function climateSignals(ds: Dataset, ctx: PlaceContext, demo: DemoScenario | null) {
   const { reg, canton } = ctx;
   const NZ = ds.climate.NASA[reg].y2026;
@@ -148,7 +148,7 @@ export function climateSignals(ds: Dataset, ctx: PlaceContext, demo: DemoScenari
         : nd.zN >= 1
           ? { s: message('mf9c77adf2c49'), on: false, bg: '#E2F1E5', fg: '#1F5A32' }
           : { s: message('ma7248eeb45eb'), on: false, bg: '#E2F1E5', fg: '#1F5A32' };
-  // Valores de ejemplo hasta conectar IMERG/SMAP (cuenta Earthdata): SIMULADOS.
+  // Example values until IMERG/SMAP are connected (Earthdata account): SIMULATED.
   const MOCK = {
     N: [96, 55, 41, 0.41, 0.33],
     C: [140, 70, 63, 0.46, 0.4],
@@ -414,7 +414,7 @@ export interface PrepItem {
   when: string;
   kind: 'dry' | 'wet';
 }
-/** Acciones "Prepárate" (plan del MAG ante El Niño y buenas prácticas). */
+/** "Prepárate" actions (MAG's El Niño plan and good practices). */
 export function prepare(ds: Dataset, ctx: PlaceContext, demo: DemoScenario | null) {
   const { reg, canton, flood } = ctx;
   const NZ = ds.climate.NASA[reg].y2026;
@@ -476,7 +476,7 @@ const PAL: [number, [number, number, number]][] = [
   [0.8, [46, 122, 67]],
   [0.95, [18, 82, 45]],
 ];
-/** Color de la rampa de verdor (café seco → verde bosque). */
+/** Greenness ramp color (dry brown → forest green). */
 export function ndviColor(v: number): string {
   if (v <= PAL[0][0]) return `rgb(${PAL[0][1].join(',')})`;
   for (let i = 1; i < PAL.length; i++) {
@@ -500,7 +500,7 @@ export interface SatelliteView {
   date: string;
   first: string;
   last: string;
-  /** Verdor del cuadro mostrado. */
+  /** Greenness of the cell shown. */
   v: string;
   verd: {
     k: 'ambos' | 'inund' | 'seca' | 'viene' | 'ok';
@@ -526,12 +526,12 @@ export interface SatelliteView {
     normX: number;
     normY: number;
   };
-  /** Serie de verdor 2026 por imagen (19 imágenes MODIS de 250 m). */
+  /** 2026 greenness series per image (19 MODIS 250 m images). */
   serie: number[];
   floodTiles: number;
   src: string;
 }
-/** Serie de verdor 2026 (limpia nubes) con ajustes del modo demo. */
+/** 2026 greenness series (cloud-cleaned) with demo mode adjustments. */
 export function ndviSeries(ds: Dataset, reg: RegionCode, demo: DemoScenario | null) {
   const MD = ds.climate.MODIS[reg];
   const doys = Object.keys(MD.y26).sort();

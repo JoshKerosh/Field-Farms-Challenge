@@ -357,6 +357,7 @@ export default function BasinExplorer({
           </label>
         ))}
         {pending.length > 0 && <p className="basin-hint">{c.zoomHint(pending.join(', '))}</p>}
+        <p className="basin-hint">{message('aiIconsNote')}</p>
       </fieldset>
       {result && <BasinResults result={result} />}
       <p className="source-note">{c.basinSources}</p>

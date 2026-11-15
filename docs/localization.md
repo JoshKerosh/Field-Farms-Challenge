@@ -1,44 +1,44 @@
-# Idioma y tema
+# Language and theme
 
-Las preferencias están en `ffc.preferences.v1`. La interfaz usa `useI18n()` y
-`usePreferences()`. No se necesita una cuenta ni conexión para cambiarlas.
+Preferences are stored in `ffc.preferences.v1`. The interface uses `useI18n()` and
+`usePreferences()`. No account or connection is needed to change them.
 
-## Nuevas interfaces
+## New interfaces
 
-- Agregar cada texto a `interface-copy.ts` en español e inglés. `checkedCopy` y
-  la prueba de paridad detectan claves faltantes. No concatenar fragmentos para
-  formar frases; añadir funciones tipadas cuando se necesiten parámetros.
-- Obtener textos dentro del componente mediante `useI18n()`, nunca guardar una
-  traducción en una constante de módulo. Usar sus funciones `number` y `date`.
-- Usar los tokens de `tokens.css`. Verificar contraste en ambos temas. No invertir
-  imágenes satelitales ni paletas científicas.
-- Conservar nombres geográficos, instituciones y notas originales del usuario.
-- Mantener instrucciones y límites de los datos; quitar repeticiones y promesas
-  que no estén respaldadas. Cada error debe indicar una acción de recuperación.
+- Add every text to `interface-copy.ts` in Spanish and English. `checkedCopy` and
+  the parity test catch missing keys. Don't concatenate fragments to build
+  sentences; add typed functions when parameters are needed.
+- Get text inside the component through `useI18n()`; never store a translation
+  in a module constant. Use its `number` and `date` functions.
+- Use the tokens in `tokens.css`. Check contrast in both themes. Don't invert
+  satellite imagery or scientific palettes.
+- Keep geographic names, institutions and the user's original notes.
+- Keep instructions and data limits; remove repetition and promises that aren't
+  backed up. Every error must state a recovery action.
 
-## Mensajes de las pantallas y motores
+## Screen and engine messages
 
-`messages-es.json` y `messages-en.json` contienen los textos de las diez secciones,
-mapas, validaciones y mensajes calculados. `message(clave, ...valores)` inserta
-valores sin traducir datos del usuario, nombres geográficos ni identificadores.
-Los marcadores `ZXQ0QXZ`, `ZXQ1QXZ`, etc. deben conservarse exactamente: la prueba
-de catálogos comprueba las claves y la cantidad de argumentos en ambos idiomas.
-Las nuevas claves pueden tener nombres descriptivos; no es necesario generar un hash.
+`messages-es.json` and `messages-en.json` hold the text of the ten sections,
+maps, validations and computed messages. `message(key, ...values)` inserts
+values without translating user data, geographic names or identifiers.
+The `ZXQ0QXZ`, `ZXQ1QXZ`, etc. placeholders must be kept exactly: the catalog
+test checks the keys and the number of arguments in both languages.
+New keys can have descriptive names; there is no need to generate a hash.
 
-Los componentes que usen `message()` o el catálogo compatible `copy` deben llamar
-a `useMessageLanguage()` para reaccionar al cambio. Los cálculos memorizados que
-generen textos deben depender también del idioma. Las tablas de presentación a
-nivel de módulo usan `localizedResource(() => ...)`, que mantiene referencias
-estables dentro de un idioma. Son recursos de lectura; no se deben mutar ni pasar
-directamente a `structuredClone`. Los datos persistidos se mantienen separados.
+Components that use `message()` or the compatible `copy` catalog must call
+`useMessageLanguage()` to react to the change. Memoized calculations that
+produce text must also depend on the language. Module-level presentation
+tables use `localizedResource(() => ...)`, which keeps references stable
+within a language. They are read-only resources; don't mutate them or pass
+them directly to `structuredClone`. Persisted data is kept separate.
 
-`npm run lint` rechaza texto visible nuevo escrito directamente en JSX, excepto
-unidades, símbolos y nombres compartidos por ambos idiomas. Las pruebas de
-catálogos rechazan traducciones o argumentos faltantes.
+`npm run lint` rejects new visible text written directly in JSX, except
+units, symbols and names shared by both languages. The catalog tests reject
+missing translations or arguments.
 
-Mi finca utiliza el mapa real y un formulario único. No ofrece perfiles ficticios
-ni la selección antigua por pasos. Confirmar requiere haber ubicado la finca;
-los datos introducidos se conservan al cambiar el idioma.
+My farm uses the real map and a single form. It does not offer fictional
+profiles or the old step-by-step selection. Confirming requires the farm to be
+located; entered data is kept when the language changes.
 
-Los colores fijos heredados de algunos gráficos siguen necesitando revisión para
-una adaptación integral del modo oscuro. No se declara conformidad WCAG global.
+The fixed colors inherited by some charts still need review for a full dark
+mode adaptation. No overall WCAG conformance is claimed.

@@ -1,33 +1,33 @@
-# Inventario del prototipo v10
+# v10 prototype inventory
 
-Referencia: `references/prototype-v10.html`. SHA-256: `87f1d943348b9e8f9c5874d0efb170551f02e3578e1a6bb1ec21b5ca3ba9b92a`.
+Reference: `references/prototype-v10.html`. SHA-256: `87f1d943348b9e8f9c5874d0efb170551f02e3578e1a6bb1ec21b5ca3ba9b92a`.
 
-| Pantalla original | Dueño y separación                           | Primera entrega                                  |
-| ----------------- | -------------------------------------------- | ------------------------------------------------ |
-| Ubicación         | Fincas y contexto de Cuencas                 | Finca de ejemplo precargada.                     |
-| Cuenca            | Cuencas, Agua, Restauración y Organizaciones | Esquema local y fuentes ficticias.               |
-| Satélite          | Ambiente                                     | Fuentes a integrar.                              |
-| Finca             | Fincas                                       | Ficha de ejemplo, edición pendiente.             |
-| ABC               | Página Guía                                  | Entrada y navegación funcionales.                |
-| Acciones          | Restauración; potreros en Fincas             | Acciones de ejemplo; recomendaciones pendientes. |
-| Registros         | Agua, Restauración, Alertas y Organizaciones | Series y vistas de ejemplo, sin guardado.        |
-| Alertas           | Alertas                                      | Escenario sin avisos reales.                     |
-| Asistente         | Asistente; voz en Platform                   | Preguntas predefinidas y lectura opcional.       |
-| Plan              | Futuro plan de siembra                       | Fuera de esta etapa.                             |
-| Clima             | Ambiente                                     | Agrupado con Satélite, sin datos actuales.       |
-| Vecinos           | Organizaciones y escenarios futuros          | Fuera de esta etapa.                             |
-| Fuentes           | Página de composición                        | Disponible.                                      |
+| Original screen | Owner and split                                  | First delivery                                |
+| --------------- | ------------------------------------------------ | --------------------------------------------- |
+| Location        | Farms and Watersheds context                     | Preloaded example farm.                       |
+| Watershed       | Watersheds, Water, Restoration and Organizations | Local diagram and fictional sources.          |
+| Satellite       | Environment                                      | Sources to integrate.                         |
+| Farm            | Farms                                            | Example profile, editing pending.             |
+| ABC             | Guide page                                       | Working entry point and navigation.           |
+| Actions         | Restoration; pastures in Farms                   | Example actions; recommendations pending.     |
+| Records         | Water, Restoration, Alerts and Organizations     | Example series and views, no saving.          |
+| Alerts          | Alerts                                           | Scenario without real alerts.                 |
+| Assistant       | Assistant; voice in Platform                     | Predefined questions and optional read-aloud. |
+| Plan            | Future planting plan                             | Out of this stage.                            |
+| Weather         | Environment                                      | Grouped with Satellite, no current data.      |
+| Neighbors       | Organizations and future scenarios               | Out of this stage.                            |
+| Sources         | Composition page                                 | Available.                                    |
 
-Beneficios se añade por decisión del equipo: ahorro demostrable y oportunidades de apoyo. La navegación conserva las seis secciones de v10. No se crea una carpeta por rol ni una entidad «registro» que duplique todos los dominios.
+Benefits is added by team decision: demonstrable savings and support opportunities. Navigation keeps the six v10 sections. No folder per role is created, nor a "record" entity that duplicates every domain.
 
-## Hallazgos
+## Findings
 
-- `Component` mezcla datos empaquetados, navegación, cálculos, mapas y presentación.
-- `localStorage` guarda finca, acciones y registros; no demuestra colaboración remota.
-- Compartir con la red y los tableros institucionales tienen elementos simulados. Los enlaces de WhatsApp preparan texto; no son un canal institucional integrado.
-- El asistente elige respuestas por preguntas y palabras clave; no utiliza IA. La voz usa `speechSynthesis`.
-- Hay datos declarados reales, estimaciones, ejemplos y capas ilustrativas. Esta migración no valida sus metodologías.
-- Las puntuaciones de ingresos no son ahorros monetarios comprobados.
-- El enlace a otra página de inglés no está incluido en el HTML exportado. La base mantiene textos centralizados y evita un enlace roto.
+- `Component` mixes bundled data, navigation, calculations, maps and presentation.
+- `localStorage` stores farm, actions and records; it does not demonstrate remote collaboration.
+- Sharing with the network and the institutional dashboards have simulated elements. The WhatsApp links prepare text; they are not an integrated institutional channel.
+- The assistant picks answers by questions and keywords; it does not use AI. The voice uses `speechSynthesis`.
+- There is data declared as real, estimates, examples and illustrative layers. This migration does not validate their methodologies.
+- Income scores are not proven monetary savings.
+- The link to a separate English page is not included in the exported HTML. The base keeps text centralized and avoids a broken link.
 
-El HTML se conserva fuera de los recursos públicos, sin modificar runtime, datos ni licencias. Las funciones completas se incorporarán con contratos, permisos y validación técnica.
+The HTML is kept outside the public resources, without changing its runtime, data or licenses. Full features will be added with contracts, permissions and technical validation.
