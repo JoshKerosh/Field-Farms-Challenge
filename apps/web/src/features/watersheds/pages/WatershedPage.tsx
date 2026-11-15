@@ -17,7 +17,7 @@ const LAYERS: { id: MapLayer; label: string; desc: string }[] = [
 ];
 
 export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository }) {
-  const { ds, ctx, plan, basin, alerts, journey, pickLatLon } = useField();
+  const { ds, ctx, plan, basin, alerts, journey, farmSite } = useField();
   const [layer, setLayer] = useState<MapLayer>('agua');
   const [zoom, setZoom] = useState(1);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
@@ -56,8 +56,8 @@ export function WatershedPage({ explorer }: { explorer: BasinExplorerRepository 
             </p>
           }
         >
-          {/* The chosen point also becomes the app's location, so this page and the others follow it. */}
-          <BasinExplorer repository={explorer} onLocate={(lng, lat) => pickLatLon(lat, lng)} />
+          {/* The farm is chosen in "Mi finca"; here only its basins are shown. */}
+          <BasinExplorer repository={explorer} site={farmSite} />
         </Suspense>
       </section>
 

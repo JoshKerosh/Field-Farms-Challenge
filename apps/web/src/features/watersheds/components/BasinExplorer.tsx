@@ -1,18 +1,13 @@
-import { bbox, circle, point as turfPoint } from '@turf/turf';
+import { bbox, point as turfPoint } from '@turf/turf';
 import type { Feature, FeatureCollection, MultiPolygon, Point, Polygon } from 'geojson';
-import { LocateFixed } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { copy, number } from '../../../i18n';
-import type { ParcelFeature } from '../../../platform/siri/parcel';
+import type { FarmSite } from '../../../app/context/FieldContext';
+import { copy } from '../../../i18n';
 import { geometryContains } from '../../../shared/geo/geometry';
+import { PageLink } from '../../../shared/ui';
 import {
-  STREAMS_RADIUS_M,
-  WATER_RADIUS_M,
   basinShares,
   mostlyInside,
-  nearbyStreams,
-  nearbyWater,
-  searchZone,
   streamLabel,
   subbasinShares,
   toParcel,
@@ -26,38 +21,38 @@ import {
 import type { BasinExplorerRepository, Bounds } from '../data/basin-explorer.repository';
 import BasinMap, { type BasinMapHandle, type MapScene, type MapView } from './BasinMap';
 import { BasinMinimap } from './BasinMinimap';
-import { BasinResults, formatDistance } from './BasinResults';
-import type { ExplorerResult } from './explorer-result';
+import { BasinResults } from './BasinResults';
+import { LegendMark } from './map-icons';
+import type { BasinResult } from './explorer-result';
+import {
+  EMPTY,
+  collection,
+  operatorTooltip,
+  sourceTooltip,
+  streamTooltip,
+  withTooltip,
+} from './map-tooltips';
 
-type Scope = 'near' | 'basins';
 type LayerKey = 'operators' | 'springs' | 'otherSources' | 'streams';
 
-/** Minimum zoom of each layer when showing everything in the farm's basins. */
-const BASINS_MIN_ZOOM: Record<LayerKey, number> = {
+/** Minimum zoom of each layer, so a whole basin does not draw thousands of points at once. */
+const MIN_ZOOM: Record<LayerKey, number> = {
   operators: 9,
   springs: 11,
   otherSources: 11,
   streams: 14,
 };
-const EMPTY: FeatureCollection = { type: 'FeatureCollection', features: [] };
-const collection = (features: Feature[]): FeatureCollection => ({
-  type: 'FeatureCollection',
-  features,
-});
 
+/** Real map of "Mi cuenca": the basins and sub-basins of the farm chosen in "Mi finca". */
 export default function BasinExplorer({
   repository,
-  onLocate,
+  site,
 }: {
   repository: BasinExplorerRepository;
-  /** Called with every chosen point (GPS or tap), e.g. to share it with the rest of the app. */
-  onLocate?: (lng: number, lat: number) => void;
+  site: FarmSite | null;
 }) {
   const c = copy.watershed.explorer;
   const mapRef = useRef<BasinMapHandle>(null);
-  const requestId = useRef(0);
-  const onLocateRef = useRef(onLocate);
-  onLocateRef.current = onLocate;
   const [basins, setBasins] = useState<FeatureCollection<
     Polygon | MultiPolygon,
     BasinProperties
@@ -65,27 +60,26 @@ export default function BasinExplorer({
   const [status, setStatus] = useState<string>(c.loadingBasins);
   const [view, setView] = useState<MapView | null>(null);
   const [basemap, setBasemap] = useState<MapScene['basemap']>('satellite');
-  const [scope, setScope] = useState<Scope>('near');
   const [layers, setLayers] = useState<Record<LayerKey, boolean>>({
     operators: true,
     springs: true,
     otherSources: true,
     streams: true,
   });
-  const [result, setResult] = useState<ExplorerResult | null>(null);
+  const [result, setResult] = useState<BasinResult | null>(null);
   const [selected, setSelected] = useState<number[]>([]);
   const [subbasins, setSubbasins] = useState<FeatureCollection>(EMPTY);
-  const [basinLayers, setBasinLayers] = useState({
-    operators: EMPTY,
-    sources: EMPTY,
-    streams: EMPTY,
-  });
+  const [water, setWater] = useState<{
+    operators: Feature<Point, OperatorProperties>[];
+    sources: Feature<Point, WaterSourceProperties>[];
+  } | null>(null);
+  const [streams, setStreams] = useState<FeatureCollection>(EMPTY);
 
   useEffect(() => {
     repository.listBasins().then(
       (data) => {
         setBasins(data);
-        setStatus(c.ready);
+        setStatus('');
       },
       () => setStatus(c.basinsError),
     );
@@ -105,55 +99,52 @@ export default function BasinExplorer({
     [basinBoxes],
   );
 
-  const locate = useCallback(
-    async (lng: number, lat: number, accuracyM: number | null, fit: boolean) => {
-      if (!basins) return;
-      const id = ++requestId.current;
-      const stale = () => id !== requestId.current;
-      onLocateRef.current?.(lng, lat);
-      const pointBasin =
-        basinBoxes.find(({ feature }) => geometryContains(feature.geometry, lng, lat))?.feature ??
-        null;
-      const base: ExplorerResult = {
-        lng,
-        lat,
-        accuracyM,
-        pointBasin: pointBasin?.properties ?? null,
-        basinShares: [],
-        pointSubbasin: null,
-        subbasinShares: [],
-        parcel: { state: 'loading' },
-        streams: { state: 'idle' },
-        water: { state: 'idle' },
-      };
-      setResult(base);
-      const firstBasins = [pointBasin?.properties.cuenca_no ?? 0];
-      setSelected(firstBasins);
-      setStatus(c.searchingParcel);
+  // The farm's basins: the one under its point plus every basin its parcel touches.
+  useEffect(() => {
+    if (!basins || !site) {
+      setResult(null);
+      setSelected([]);
+      setSubbasins(EMPTY);
+      setWater(null);
+      return;
+    }
+    let cancelled = false;
+    const { lng, lat, parcel } = site;
+    const pointBasin =
+      basinBoxes.find(({ feature }) => geometryContains(feature.geometry, lng, lat))?.feature ??
+      null;
+    const shares = parcel ? basinShares(parcel, overlapping(parcel)) : [];
+    const numbers = [
+      ...new Set([
+        ...(pointBasin ? [pointBasin.properties.cuenca_no] : []),
+        ...shares.map((s) => s.basinNumber),
+      ]),
+    ];
+    const base: BasinResult = {
+      pointBasin: pointBasin?.properties ?? null,
+      basinShares: shares,
+      pointSubbasin: null,
+      subbasinShares: [],
+      water: { state: numbers.length ? 'loading' : 'idle' },
+    };
+    setResult(base);
+    setSelected(numbers);
+    setWater(null);
+    const areas = basins.features.filter((f) => numbers.includes(f.properties.cuenca_no));
+    if (areas.length) mapRef.current?.fitBounds(bbox(collection(areas)) as Bounds, 13);
+    if (!numbers.length) return;
+    setStatus(c.loadingBasinWater);
 
-      let parcelFeature: ParcelFeature | null = null;
-      let parcelError = false;
-      try {
-        parcelFeature = await repository.findParcel(lng, lat);
-      } catch {
-        parcelError = true;
-      }
-      if (stale()) return;
-
-      // A parcel on a divide also selects every basin it touches.
-      const shares = parcelFeature ? basinShares(parcelFeature, overlapping(parcelFeature)) : [];
-      const basinNumbers = [...new Set([...firstBasins, ...shares.map((s) => s.basinNumber)])];
-      setSelected(basinNumbers);
-      const subFiles = await Promise.all(
-        basinNumbers.map((n) => repository.listSubbasins(n).catch(() => EMPTY)),
-      );
-      if (stale()) return;
-      const subFeatures = subFiles.flatMap((f) => f.features) as Feature<
+    const subTask = Promise.all(
+      numbers.map((n) => repository.listSubbasins(n).catch(() => EMPTY)),
+    ).then((files) => {
+      if (cancelled) return;
+      const features = files.flatMap((f) => f.features) as Feature<
         Polygon | MultiPolygon,
         SubbasinProperties
       >[];
-      const pointSub = subFeatures.find((f) => geometryContains(f.geometry, lng, lat)) ?? null;
-      const subShares = parcelFeature ? subbasinShares(parcelFeature, subFeatures) : [];
+      const pointSub = features.find((f) => geometryContains(f.geometry, lng, lat)) ?? null;
+      const subShares = parcel ? subbasinShares(parcel, features) : [];
       const highlighted = (f: Feature<Polygon | MultiPolygon, SubbasinProperties>) =>
         f === pointSub ||
         subShares.some(
@@ -161,181 +152,64 @@ export default function BasinExplorer({
         );
       setSubbasins(
         collection(
-          subFeatures.map((f) => ({
+          features.map((f) => ({
             ...f,
             properties: { ...f.properties, destacada: highlighted(f) },
           })),
         ),
       );
-
-      const withParcel: ExplorerResult = {
-        ...base,
-        basinShares: shares,
-        pointSubbasin: pointSub?.properties ?? null,
-        subbasinShares: subShares,
-        parcel: parcelError
-          ? { state: 'error' }
-          : {
-              state: 'done',
-              value: parcelFeature && { info: toParcel(parcelFeature), feature: parcelFeature },
+      setResult(
+        (current) =>
+          current && {
+            ...current,
+            pointSubbasin: pointSub?.properties ?? null,
+            subbasinShares: subShares,
+          },
+      );
+    });
+    const waterTask = Promise.all([
+      repository.listOperators(),
+      Promise.all(numbers.map((n) => repository.listWaterSources(n))),
+    ]).then(
+      ([operators, files]) => {
+        if (cancelled) return;
+        const inBasins = operators.features.filter((f) => numbers.includes(f.properties.cuenca_no));
+        const sources = files.flatMap((f) => f.features);
+        setWater({ operators: inBasins, sources });
+        setResult(
+          (current) =>
+            current && {
+              ...current,
+              water: {
+                state: 'done',
+                value: {
+                  operators: inBasins.length,
+                  sources: sources.length,
+                  springs: sources.filter((f) => f.properties.tipo === 'naciente').length,
+                },
+              },
             },
-        streams: { state: parcelFeature ? 'loading' : 'idle' },
-        water: { state: parcelFeature ? 'loading' : 'idle' },
-      };
-      setResult(withParcel);
-      if (!parcelFeature) {
-        setStatus('');
-        if (fit) mapRef.current?.fitBounds([lng - 0.02, lat - 0.02, lng + 0.02, lat + 0.02], 14);
-        return;
-      }
-      const parcel = parcelFeature;
-      if (fit) mapRef.current?.fitBounds(bbox(parcel) as Bounds, 17);
-      setStatus(c.searchingWater);
+        );
+      },
+      () => {
+        if (cancelled) return;
+        setResult((current) => current && { ...current, water: { state: 'error' } });
+      },
+    );
+    void Promise.allSettled([subTask, waterTask]).then(() => cancelled || setStatus(''));
+    return () => {
+      cancelled = true;
+    };
+  }, [basins, basinBoxes, overlapping, site, repository, c]);
 
-      const streamsTask = repository
-        .listStreams(bbox(searchZone(parcel, STREAMS_RADIUS_M)) as Bounds)
-        .then((streams) => {
-          const found = nearbyStreams(parcel, streams);
-          return {
-            list: found.map((s) => s.stream),
-            parts: collection(
-              found.flatMap(({ stream, parts }) =>
-                parts.map((part) => ({
-                  ...part,
-                  properties: {
-                    intermitente: stream.intermittent,
-                    cruza: stream.distanceM === 0,
-                    tooltip: streamTooltip(stream.name, stream.kind),
-                  },
-                })),
-              ),
-            ),
-          };
-        });
-      // Sources are published per basin: load those of every basin the search zone reaches.
-      const zone = searchZone(parcel, WATER_RADIUS_M);
-      const zoneBasins = [
-        ...new Set([...basinNumbers, ...overlapping(zone).map((f) => f.properties.cuenca_no)]),
-      ];
-      const waterTask = Promise.all([
-        Promise.all(zoneBasins.map((n) => repository.listWaterSources(n))),
-        repository.listOperators(),
-      ]).then(([files, operators]) =>
-        nearbyWater(
-          parcel,
-          files.flatMap((f) => f.features),
-          operators.features,
-        ),
-      );
-
-      const [streams, water] = await Promise.allSettled([streamsTask, waterTask]);
-      if (stale()) return;
-      setResult({
-        ...withParcel,
-        streams:
-          streams.status === 'fulfilled'
-            ? { state: 'done', value: streams.value }
-            : { state: 'error' },
-        water:
-          water.status === 'fulfilled' ? { state: 'done', value: water.value } : { state: 'error' },
-      });
-      setStatus('');
-      if (fit) {
-        // Frame the parcel with the nearby streams and, when nothing was within the radius,
-        // the nearest water source.
-        const framed: Feature[] = [parcel];
-        if (streams.status === 'fulfilled') framed.push(...streams.value.parts.features);
-        if (
-          water.status === 'fulfilled' &&
-          water.value.nearestOutsideRadius &&
-          water.value.sources[0]
-        ) {
-          framed.push(turfPoint(water.value.sources[0].coordinates));
-        }
-        mapRef.current?.fitBounds(bbox(collection(framed)) as Bounds, 17);
-      }
-    },
-    [basins, basinBoxes, overlapping, repository, c],
-  );
-
-  /**
-   * Asks the device for its position. When `auto` (on page open), a point picked on the map
-   * meanwhile wins, and a refusal stays quiet: the user did not press the button.
-   */
-  const requestPosition = useCallback(
-    (auto: boolean) => {
-      if (!navigator.geolocation) return void (auto || setStatus(c.noGeolocation));
-      const startedAt = requestId.current;
-      if (!auto) setStatus(c.locating);
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          if (auto && requestId.current !== startedAt) return;
-          void locate(pos.coords.longitude, pos.coords.latitude, pos.coords.accuracy, true);
-        },
-        (error) => {
-          if (auto) return;
-          setStatus(error.code === error.PERMISSION_DENIED ? c.permissionDenied : c.locationFailed);
-        },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 },
-      );
-    },
-    [locate, c],
-  );
-  const useMyLocation = () => requestPosition(false);
-
-  // Use the user's location as soon as the basins are ready; tapping the map still picks any point.
-  const autoLocated = useRef(false);
-  useEffect(() => {
-    if (!basins || autoLocated.current) return;
-    autoLocated.current = true;
-    requestPosition(true);
-  }, [basins, requestPosition]);
-
-  // "Everything in the farm's basins": operators and sources of those basins, and streams in view.
+  // Streams come from the IGN by area: only those of the view, once zoomed in enough.
   const zoom = view?.zoom ?? 0;
-  const wants = (key: LayerKey) =>
-    scope === 'basins' && result !== null && layers[key] && zoom >= BASINS_MIN_ZOOM[key];
+  const visible = (key: LayerKey) => selected.length > 0 && layers[key] && zoom >= MIN_ZOOM[key];
+  const wantStreams = visible('streams');
   const selectedKey = selected.join(',');
   const streamsLoaded = useRef<{ bounds: Bounds; key: string; features: StreamFeature[] } | null>(
     null,
   );
-  const wantOperators = wants('operators');
-  const wantSources = wants('springs') || wants('otherSources');
-  const wantStreams = wants('streams');
-  useEffect(() => {
-    if (!wantOperators && !wantSources) return;
-    let cancelled = false;
-    Promise.all([
-      wantOperators ? repository.listOperators() : null,
-      wantSources ? Promise.all(selected.map((n) => repository.listWaterSources(n))) : null,
-    ]).then(
-      ([operators, files]) => {
-        if (cancelled) return;
-        setBasinLayers((current) => ({
-          ...current,
-          operators: operators
-            ? collection(
-                operators.features
-                  .filter((f) => selected.includes(f.properties.cuenca_no))
-                  .map((f) => withTooltip(f, operatorTooltip(f.properties))),
-              )
-            : current.operators,
-          sources: files
-            ? collection(
-                files
-                  .flatMap((f) => f.features)
-                  .map((f) => withTooltip(f, sourceTooltip(f.properties))),
-              )
-            : current.sources,
-        }));
-      },
-      () => undefined,
-    );
-    return () => {
-      cancelled = true;
-    };
-  }, [wantOperators, wantSources, selectedKey, repository]);
-
   useEffect(() => {
     if (!wantStreams || !view || !basins) return;
     const loaded = streamsLoaded.current;
@@ -348,9 +222,8 @@ export default function BasinExplorer({
       loaded.bounds[3] >= n;
     const selectedAreas = basins.features.filter((f) => selected.includes(f.properties.cuenca_no));
     const show = (features: StreamFeature[]) =>
-      setBasinLayers((current) => ({
-        ...current,
-        streams: collection(
+      setStreams(
+        collection(
           features
             .filter((f) => mostlyInside(f, selectedAreas))
             .map((f) => {
@@ -364,7 +237,7 @@ export default function BasinExplorer({
               };
             }),
         ),
-      }));
+      );
     if (inside) {
       if (loaded.key !== selectedKey) {
         loaded.key = selectedKey;
@@ -387,112 +260,64 @@ export default function BasinExplorer({
     return () => controller.abort();
   }, [wantStreams, view, selectedKey, basins, repository]);
 
+  const showOperators = visible('operators');
+  const showSprings = visible('springs');
+  const showOtherSources = visible('otherSources');
   const scene = useMemo<MapScene>(() => {
-    const water = result?.water.state === 'done' ? result.water.value : null;
-    const parcel = result?.parcel.state === 'done' ? result.parcel.value?.feature : null;
-    const near = scope === 'near';
-    const kindVisible = (tipo: string) =>
-      tipo === 'naciente' ? layers.springs : layers.otherSources;
-    const nearSources = water
-      ? water.sources
-          .filter((s) => kindVisible(s.kind))
-          .map((s) =>
-            withTooltip(turfPoint(s.coordinates, { tipo: s.kind }), [
-              s.name,
-              `${c.sourceKind[s.kind]} · ${s.operatorName}`,
-              s.distanceM === 0 ? c.inParcelLong : c.distance(formatDistance(s.distanceM)),
-              sourceDetail(s.altitudeM, s.lastFlow),
-            ]),
-          )
-      : [];
-    const nearOperators = water
-      ? water.operators
-          .filter((o) => o.office)
-          .map((o) =>
-            withTooltip(turfPoint(o.office!.coordinates), [
-              o.name,
-              `${o.office!.kind} · ${c.services(o.office!.services)}`,
-              c.operatorOffice(
-                o.office!.distanceM === 0
-                  ? c.inParcelLong
-                  : c.distance(formatDistance(o.office!.distanceM)),
-              ),
-            ]),
-          )
-      : [];
+    const sources = (water?.sources ?? []).filter((f) =>
+      f.properties.tipo === 'naciente' ? showSprings : showOtherSources,
+    );
     return {
       basemap,
-      selectedBasins: result ? selected : [],
+      // Only the farm's basins; every basin while no farm has been chosen.
+      basinsShown: selected.length ? 'selected' : 'all',
+      selectedBasins: selected,
       subbasins,
-      parcel: parcel ? collection([parcel]) : EMPTY,
-      zone: near && parcel ? collection([searchZone(parcel, WATER_RADIUS_M)]) : EMPTY,
-      streams: !layers.streams
-        ? EMPTY
-        : near
-          ? result?.streams.state === 'done'
-            ? result.streams.value.parts
-            : EMPTY
-          : wants('streams')
-            ? basinLayers.streams
-            : EMPTY,
-      sources: near
-        ? collection(nearSources)
-        : wantSources
-          ? collection(basinLayers.sources.features.filter((f) => kindVisible(f.properties?.tipo)))
+      parcel: site?.parcel ? collection([site.parcel]) : EMPTY,
+      zone: EMPTY,
+      streams: wantStreams ? streams : EMPTY,
+      sources: collection(sources.map((f) => withTooltip(f, sourceTooltip(f.properties)))),
+      operators:
+        showOperators && water
+          ? collection(water.operators.map((f) => withTooltip(f, operatorTooltip(f.properties))))
           : EMPTY,
-      operators: !layers.operators
-        ? EMPTY
-        : near
-          ? collection(nearOperators)
-          : wantOperators
-            ? basinLayers.operators
-            : EMPTY,
-      user: result ? collection([turfPoint([result.lng, result.lat])]) : EMPTY,
-      accuracy: result?.accuracyM
-        ? collection([
-            circle([result.lng, result.lat], result.accuracyM, { units: 'meters', steps: 48 }),
-          ])
-        : EMPTY,
+      user: site && !site.parcel ? collection([turfPoint([site.lng, site.lat])]) : EMPTY,
+      accuracy: EMPTY,
     };
   }, [
-    result,
+    basemap,
     selected,
     subbasins,
-    scope,
-    layers,
-    basemap,
-    basinLayers,
-    wantSources,
-    wantOperators,
-    zoom,
-    c,
+    site,
+    water,
+    streams,
+    wantStreams,
+    showOperators,
+    showSprings,
+    showOtherSources,
   ]);
 
-  const pending =
-    scope === 'basins' && result
-      ? (Object.keys(BASINS_MIN_ZOOM) as LayerKey[])
-          .filter((k) => layers[k] && zoom < BASINS_MIN_ZOOM[k])
-          .map((k) => `${c.layers[k].toLowerCase()} (zoom ${BASINS_MIN_ZOOM[k]})`)
-      : [];
-  const hint =
-    scope === 'basins' && !result
-      ? c.scopeNeedsPoint
-      : pending.length
-        ? c.zoomHint(pending.join(', '))
-        : '';
+  const pending = selected.length
+    ? (Object.keys(MIN_ZOOM) as LayerKey[])
+        .filter((k) => layers[k] && zoom < MIN_ZOOM[k])
+        .map((k) => `${c.layers[k].toLowerCase()} (zoom ${MIN_ZOOM[k]})`)
+    : [];
 
   return (
     <div className="basin-explorer">
+      {site ? (
+        <p className="basin-hint">
+          {site.parcel ? c.basinOfParcel(toParcel(site.parcel).farmNumber) : c.basinOfPoint}
+        </p>
+      ) : (
+        <div className="basin-notice">
+          <p>{c.needsFarm}</p>
+          <PageLink to="/farm" primary>
+            {c.goToFarm}
+          </PageLink>
+        </div>
+      )}
       <div className="basin-toolbar">
-        <button
-          type="button"
-          className="button button-primary"
-          onClick={useMyLocation}
-          disabled={!basins}
-        >
-          <LocateFixed size={20} aria-hidden="true" />
-          {c.locate}
-        </button>
         <div className="filter-group" role="group" aria-label={c.basemap}>
           {(['satellite', 'streets'] as const).map((value) => (
             <button
@@ -507,20 +332,13 @@ export default function BasinExplorer({
           ))}
         </div>
       </div>
-      {!navigator.onLine && <p className="basin-notice">{c.offline}</p>}
       <p className="basin-status" role="status">
         {status}
       </p>
       <div className="basin-map-frame">
         {basins ? (
           <>
-            <BasinMap
-              ref={mapRef}
-              basins={basins}
-              scene={scene}
-              onPick={(lng, lat) => void locate(lng, lat, null, false)}
-              onView={setView}
-            />
+            <BasinMap ref={mapRef} basins={basins} scene={scene} onView={setView} />
             <BasinMinimap
               basins={basins}
               view={view}
@@ -532,18 +350,7 @@ export default function BasinExplorer({
         )}
       </div>
       <fieldset className="basin-options">
-        <legend>{c.scope}</legend>
-        {(['near', 'basins'] as const).map((value) => (
-          <label key={value}>
-            <input
-              type="radio"
-              name="basin-scope"
-              checked={scope === value}
-              onChange={() => setScope(value)}
-            />
-            {value === 'near' ? c.scopeNear : c.scopeBasins}
-          </label>
-        ))}
+        <legend>{c.basinLayers}</legend>
         {(Object.keys(layers) as LayerKey[]).map((key) => (
           <label key={key}>
             <input
@@ -551,48 +358,14 @@ export default function BasinExplorer({
               checked={layers[key]}
               onChange={(event) => setLayers({ ...layers, [key]: event.target.checked })}
             />
-            <span className={`legend-mark legend-${key}`} aria-hidden="true" />
+            <LegendMark layer={key} />
             {c.layers[key]}
           </label>
         ))}
-        {hint && <p className="basin-hint">{hint}</p>}
+        {pending.length > 0 && <p className="basin-hint">{c.zoomHint(pending.join(', '))}</p>}
       </fieldset>
       {result && <BasinResults result={result} />}
-      <p className="source-note">{c.sources}</p>
+      <p className="source-note">{c.basinSources}</p>
     </div>
   );
-}
-
-function withTooltip<G extends Point>(feature: Feature<G>, lines: (string | null)[]): Feature<G> {
-  return {
-    ...feature,
-    properties: { ...feature.properties, tooltip: lines.filter(Boolean).join('\n') },
-  };
-}
-
-function streamTooltip(name: string | null, kind: string): string {
-  return name ? `${name}\n${kind}` : kind;
-}
-
-function sourceTooltip(p: WaterSourceProperties): (string | null)[] {
-  const c = copy.watershed.explorer;
-  return [p.nombre, `${c.sourceKind[p.tipo]} · ${p.operador}`, sourceDetail(p.altitud, p.caudal)];
-}
-
-function operatorTooltip(p: OperatorProperties): (string | null)[] {
-  const c = copy.watershed.explorer;
-  return [
-    p.nombre,
-    `${p.tipo} · ${p.zona}`,
-    `${c.services(p.servicios)} · ${c.operatorTotals(p.fuentes, p.nacientes)}`,
-  ];
-}
-
-function sourceDetail(altitude: number | null, flow: number | null): string | null {
-  const c = copy.watershed.explorer;
-  const parts = [
-    altitude ? c.altitude(number(altitude, 0)) : null,
-    flow != null ? c.lastFlow(number(flow, 2)) : null,
-  ];
-  return parts.filter(Boolean).join(' · ') || null;
 }

@@ -1,5 +1,5 @@
 import { Crosshair, MapPin, RotateCcw, Search, ZoomIn, ZoomOut } from 'lucide-react';
-import { useMemo, useRef, useState, type FormEvent, type MouseEvent } from 'react';
+import { lazy, Suspense, useMemo, useRef, useState, type FormEvent, type MouseEvent } from 'react';
 import {
   EMPTY_FARM_FORM,
   EXAMPLE_FARMS,
@@ -13,6 +13,11 @@ import { getGeo, ringPath } from '../../../data/engine/geo';
 import { norm } from '../../../data/engine/format';
 import { PageHeader, PageLink } from '../../../shared/ui';
 import { myFarmToForm, useField } from '../../../app/context/FieldContext';
+import { copy } from '../../../i18n';
+import type { BasinExplorerRepository } from '../../watersheds';
+
+// MapLibre and Turf load only when this page opens.
+const FarmExplorer = lazy(() => import('../components/FarmExplorer'));
 
 type PickMode = 'mapa' | 'cuenca' | 'lugar';
 
@@ -24,7 +29,7 @@ const QUICK_PLACES: { name: string; lat: number; lon: number }[] = [
   { name: 'Pérez Zeledón', lat: 9.37, lon: -83.7 },
 ];
 
-export function FarmPage() {
+export function FarmPage({ explorer }: { explorer: BasinExplorerRepository }) {
   const {
     ds,
     ctx,
@@ -37,6 +42,8 @@ export function FarmPage() {
     farm,
     saveMyFarm,
     siteFloodsFlag,
+    farmSite,
+    setFarmSite,
   } = useField();
 
   const [mode, setMode] = useState<PickMode>('mapa');
@@ -165,6 +172,21 @@ export function FarmPage() {
             Ver plan de mi cuenca
           </PageLink>
         </div>
+      </section>
+
+      <section className="v10-card" aria-labelledby="farm-explorer-title">
+        <h2 id="farm-explorer-title">{copy.watershed.explorer.farmTitle}</h2>
+        <p className="v10-muted">{copy.watershed.explorer.farmIntro}</p>
+        <Suspense
+          fallback={
+            <p className="map-loading" role="status">
+              {copy.watershed.mapLoading}
+            </p>
+          }
+        >
+          {/* The farm chosen here also becomes the app's location and the basin shown in "Mi cuenca". */}
+          <FarmExplorer repository={explorer} site={farmSite} onSite={setFarmSite} />
+        </Suspense>
       </section>
 
       <section className="v10-card" aria-labelledby="step1-title">

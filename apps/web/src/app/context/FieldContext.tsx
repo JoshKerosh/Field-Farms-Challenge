@@ -42,6 +42,7 @@ import {
 } from '../../data/engine/watershed';
 import { loadDataset } from '../../data/real/load';
 import type { Dataset } from '../../data/real/types';
+import type { ParcelFeature } from '../../platform/siri/parcel';
 
 const LS_KEYS = {
   loc: 'ffc.v10.loc',
@@ -51,12 +52,21 @@ const LS_KEYS = {
   role: 'ffc.v10.role',
   apartos: 'ffc.v10.apartos',
   flucShare: 'ffc.v10.flucShare',
+  farmSite: 'ffc.v10.farmSite',
 } as const;
 
 export interface ChatTurn {
   id: QuestionId;
   question: string;
   answer: string;
+}
+
+/** Point chosen on the real map in "Mi finca" and the SIRI parcel under it, if any. */
+export interface FarmSite {
+  lng: number;
+  lat: number;
+  accuracyM: number | null;
+  parcel: ParcelFeature | null;
 }
 
 interface StoredLocation {
@@ -94,6 +104,9 @@ export interface FieldContextValue {
   setDemo: (d: DemoScenario | null) => void;
   pickLocation: (loc: Loc, opts?: { subId?: number | null; approx?: boolean }) => boolean;
   pickLatLon: (lat: number, lon: number, approx?: boolean) => boolean;
+  farmSite: FarmSite | null;
+  /** Sets the farm chosen on the real map; it also becomes the app's location. */
+  setFarmSite: (site: FarmSite) => void;
   farmKey: FarmKey;
   setFarmKey: (k: FarmKey) => void;
   myFarm: MyFarm | null;
@@ -160,6 +173,9 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
   const [flucShare, setFlucShareState] = useState<boolean>(() =>
     readJson<boolean>(LS_KEYS.flucShare, false),
   );
+  const [farmSite, setFarmSiteState] = useState<FarmSite | null>(() =>
+    readJson<FarmSite | null>(LS_KEYS.farmSite, null),
+  );
   const [demo, setDemo] = useState<DemoScenario | null>(null);
   const [satFrame, setSatFrame] = useState<number | null>(null);
   const [chatTurns, setChatTurns] = useState<ChatTurn[]>([]);
@@ -193,7 +209,7 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     return placeAt(ds, upalaLoc, null);
   }, [ds, storedLoc]);
 
-  const pickLocation = useCallback(
+  const applyLocation = useCallback(
     (loc: Loc, opts?: { subId?: number | null; approx?: boolean }) => {
       if (!ds) return false;
       const nextSubId = opts?.subId === undefined ? null : opts.subId;
@@ -212,6 +228,19 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     [ds],
   );
 
+  // Any other way of choosing a place leaves the farm from the real map behind.
+  const pickLocation = useCallback(
+    (loc: Loc, opts?: { subId?: number | null; approx?: boolean }) => {
+      const ok = applyLocation(loc, opts);
+      if (ok) {
+        setFarmSiteState(null);
+        writeJson(LS_KEYS.farmSite, null);
+      }
+      return ok;
+    },
+    [applyLocation],
+  );
+
   const pickLatLon = useCallback(
     (lat: number, lon: number, approx = false) => {
       if (!ds) return false;
@@ -219,6 +248,15 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
       return pickLocation(loc, { approx });
     },
     [ds, pickLocation],
+  );
+
+  const setFarmSite = useCallback(
+    (site: FarmSite) => {
+      if (ds) applyLocation(getGeo(ds).llToLocal(site.lat, site.lng));
+      setFarmSiteState(site);
+      writeJson(LS_KEYS.farmSite, site);
+    },
+    [ds, applyLocation],
   );
 
   const setFarmKey = useCallback((key: FarmKey) => {
@@ -361,6 +399,8 @@ export function FieldContextProvider({ children }: { children: ReactNode }) {
     setDemo,
     pickLocation,
     pickLatLon,
+    farmSite,
+    setFarmSite,
     farmKey: farmState.key,
     setFarmKey,
     myFarm: farmState.my,

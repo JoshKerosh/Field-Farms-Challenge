@@ -27,8 +27,8 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/guide" replace /> },
       { path: 'guide', element: <GuidePage /> },
-      { path: 'farm', element: <FarmPage /> },
-      // Real layers (PNUD, SAGA, SIRI, IGN) for the basin map, loaded on demand.
+      // Real layers (PNUD, SAGA, SIRI, IGN) for the farm and basin maps, loaded on demand.
+      { path: 'farm', element: <FarmPage explorer={basinExplorer} /> },
       { path: 'watershed', element: <WatershedPage explorer={basinExplorer} /> },
       { path: 'care', element: <RestorationPage /> },
       { path: 'alerts', element: <AlertsPage /> },

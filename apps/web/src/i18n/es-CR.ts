@@ -134,9 +134,24 @@ export const esCR = {
     zoomOut: 'Alejar',
     resetBearing: 'Orientar el mapa al norte',
     explorer: {
-      title: 'Ubicá tu finca en su cuenca',
+      title: 'La cuenca de tu finca',
       intro:
-        'Si das permiso, el mapa usa tu ubicación al abrir. También podés tocar el mapa para elegir otro lugar. Vas a ver la cuenca, la subcuenca, el lindero de la finca según el catastro, los ríos y las fuentes de ASADAS cercanas.',
+        'La cuenca y la subcuenca a las que pertenece la finca que ubicaste en Mi finca, con las ASADAS, las fuentes y los ríos que hay dentro de ellas.',
+      farmTitle: 'Ubicá tu finca en el mapa',
+      farmIntro:
+        'Si das permiso, el mapa usa tu ubicación al abrir. También podés tocar el mapa para elegir otro lugar. Vas a ver el lindero de la finca según el catastro, los ríos y las fuentes de ASADAS cercanas.',
+      needsFarm: 'Todavía no ubicaste tu finca en el mapa.',
+      goToFarm: 'Ubicar mi finca',
+      basinOfParcel: (number: string) => `Cuenca de la finca ${number} (catastro SIRI).`,
+      basinOfPoint: 'Cuenca del punto elegido en Mi finca; ahí no hay finca catastrada.',
+      basinLayers: 'Agua dentro de la cuenca',
+      farmLayers: 'Agua cerca de la finca',
+      basinWater: 'ASADAS y fuentes de la cuenca (SAGA)',
+      loadingBasinWater: 'Cargando las fuentes de la cuenca…',
+      basinWaterSummary: (sources: number, springs: number) =>
+        `${sources.toLocaleString('es-CR')} ${sources === 1 ? 'fuente' : 'fuentes'} (${springs.toLocaleString('es-CR')} ${springs === 1 ? 'naciente' : 'nacientes'})`,
+      basinOperators: (count: number) =>
+        `${count.toLocaleString('es-CR')} ${count === 1 ? 'ASADA u operador' : 'ASADAS y operadores'} con oficina en la cuenca`,
       mapLabel: 'Mapa de cuencas de Costa Rica',
       locate: 'Usar mi ubicación',
       locating: 'Buscando tu ubicación…',
@@ -152,10 +167,6 @@ export const esCR = {
       basemap: 'Fondo del mapa',
       satellite: 'Satélite',
       streets: 'Mapa',
-      scope: 'Mostrar agua en el mapa',
-      scopeNear: 'Solo cerca de la finca',
-      scopeBasins: 'Todo en las cuencas de la finca',
-      scopeNeedsPoint: 'Elegí un punto para ver el agua de las cuencas de esa finca.',
       zoomHint: (items: string) => `Acercate para ver: ${items}.`,
       layers: {
         operators: 'Oficinas de ASADAS',
@@ -219,8 +230,10 @@ export const esCR = {
         superficial: 'toma superficial',
         'sin clasificar': 'fuente sin clasificar',
       },
-      sources:
-        'Cuencas y subcuencas: PNUD (CRTM05), simplificadas a 10 y 5 m. Finca: catastro del SIRI, Registro Nacional. Ríos: IGN 1:25 000, SNIT. ASADAS y fuentes: SAGA del AyA, 11 nov 2026; el tipo de fuente se deduce del nombre y el caudal no indica su unidad.',
+      basinSources:
+        'Cuencas y subcuencas: PNUD (CRTM05), simplificadas a 10 y 5 m. Ríos: IGN 1:25 000, SNIT. ASADAS y fuentes: SAGA del AyA, 11 nov 2026; el tipo de fuente se deduce del nombre y el caudal no indica su unidad.',
+      farmSources:
+        'Finca: catastro del SIRI, Registro Nacional. Ríos: IGN 1:25 000, SNIT. ASADAS y fuentes: SAGA del AyA, 11 nov 2026; el tipo de fuente se deduce del nombre y el caudal no indica su unidad.',
     },
   },
   water: {
