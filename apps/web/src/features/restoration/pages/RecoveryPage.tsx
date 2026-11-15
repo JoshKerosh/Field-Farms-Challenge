@@ -2,12 +2,10 @@ import { useEffect, useState, type FormEvent } from 'react';
 import {
   RECOVERY_NEEDS,
   RECOVERY_UNITS,
-  recoveryExpenses,
   recoveryFarmId,
   recoveryProgress,
   suggestedRecoveryNeeds,
   validRecoveryGoal,
-  opportunityAvailability,
   type RecoveryPlan,
   type RecoveryGoal,
   type RecoveryNeed,
@@ -15,7 +13,6 @@ import {
 } from '@field-farms/domain';
 import { useField, type FarmSite } from '../../../app/context/FieldContext';
 import { FARM_ACTIVITIES, FARM_WATER, type MyFarm } from '../../../data/engine/farm';
-import { opportunities } from '../../../demo/fixtures/opportunities';
 import { PageHeader, PageLink } from '../../../shared/ui';
 import { loadRecoveryPlan } from '../data/recovery-store';
 import { useRecoveryPlan } from '../data/use-recovery-plan';
@@ -26,21 +23,11 @@ import {
 } from '../data/recovery-environment';
 import { useRecoveryCopy, type RecoveryCopy } from '../recovery-copy';
 import './recovery.css';
-const today = () => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-};
 const technicalUrl = 'https://mag.go.cr/wpfd_file/buenas-practicas-en-ganaderia/';
 const number = (n: number) =>
   new Intl.NumberFormat(document.documentElement.lang || 'es', { maximumFractionDigits: 2 }).format(
     n,
   );
-const money = (n: number) =>
-  new Intl.NumberFormat(document.documentElement.lang || 'es', {
-    style: 'currency',
-    currency: 'CRC',
-    maximumFractionDigits: 0,
-  }).format(n);
 export function RecoveryPage() {
   const c = useRecoveryCopy();
   const { farmSite, myFarm } = useField();
@@ -146,6 +133,7 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
           {FARM_ACTIVITIES.find(([key]) => key === (plan?.profile.activity ?? profile.act))?.[1]} ·{' '}
           {FARM_WATER.find(([key]) => key === (plan?.profile.water ?? profile.agua))?.[1]}
         </p>
+        <p>{c.profileHelp}</p>
         <p>{site.parcel ? site.parcel.properties.identifica : c.provisional}</p>
         {environment?.subbasins.length ? (
           <p>{environment.subbasins.map((s) => s.name).join(' · ')}</p>
@@ -238,6 +226,28 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
       <section className="v10-card">
         <h2>{c.environment}</h2>
         <p>{c.measured}</p>
+        <details className="metric-help">
+          <summary>{c.metricHelp}</summary>
+          <dl>
+            <dt>{c.vegetation}</dt>
+            <dd>{c.ndviHelp}</dd>
+            <dt>{c.rain}</dt>
+            <dd>{c.rainHelp}</dd>
+            <dt>{c.coverage}</dt>
+            <dd>{c.coverageHelp}</dd>
+            <dt>{c.change}</dt>
+            <dd>{c.changeHelp}</dd>
+            <dt>{c.surroundings}</dt>
+            <dd>{c.scaleHelp}</dd>
+          </dl>
+          <a
+            href="https://modis.gsfc.nasa.gov/data/dataprod/mod13.php"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {c.methodSource}
+          </a>
+        </details>
         {environment?.basins.length ? (
           <label>
             {c.basin}
@@ -255,8 +265,7 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
         {environment?.history ? (
           <>
             <p>
-              {c.source}: {environment.history.meta.fuente} · {c.observed}:{' '}
-              {environment.history.meta.fecha_dato}
+              {c.source}: {c.vegetationSource} · {c.observed}: {environment.history.meta.fecha_dato}
             </p>
             <History
               rows={environment.history.datos.basins.find((b) => b.id === selected)?.rows ?? []}
@@ -321,35 +330,6 @@ function FarmRecovery({ site, profile }: { site: FarmSite; profile: MyFarm }) {
         {environment?.flood && <p>{c.flood}</p>}
         {environment?.protected && <p>{c.protected}</p>}
         <p>{c.contextNote}</p>
-      </section>
-      <section className="v10-card">
-        <h2>{c.supports}</h2>
-        {plan && (
-          <dl>
-            <dt>{c.spent}</dt>
-            <dd>{money(plan.goals.reduce((s, g) => s + recoveryExpenses(g), 0))}</dd>
-            <dt>{c.totalBudget}</dt>
-            <dd>
-              {plan.goals.some((g) => g.budget !== null)
-                ? money(plan.goals.reduce((s, g) => s + (g.budget ?? 0), 0))
-                : c.noBudget}
-            </dd>
-          </dl>
-        )}
-        <p>{c.supportNote}</p>
-        {opportunities.map((o) => (
-          <details key={o.id}>
-            <summary>{o.title}</summary>
-            <p>{o.description}</p>
-            <p>{o.requirements}</p>
-            <p>
-              {c.review}: {o.reviewedAt}
-            </p>
-            <a href={o.sourceUrl} target="_blank" rel="noreferrer">
-              {opportunityAvailability(o, today()) === 'closed' ? c.closed : c.verify}
-            </a>
-          </details>
-        ))}
       </section>
     </>
   );
@@ -505,6 +485,7 @@ function Goal({
         {c.progress}: {number(recoveryProgress(goal))} %
       </p>
       <progress value={recoveryProgress(goal)} max={100} aria-label={c.progress} />
+      <p>{c.progressHelp}</p>
       <p>{c.maintenance}</p>
       <PageLink to={`/records?section=plan&goal=${encodeURIComponent(goal.id)}`}>
         {c.recordProgress}
@@ -532,8 +513,10 @@ function History({
   rainOnly?: boolean;
 }) {
   if (!rows.length) return <p>{c.insufficient}</p>;
+  const hasRain = rainOnly || rows.some((r) => r.rain !== null);
   return (
     <>
+      <p>{rainOnly ? c.rainHelp : c.ndviHelp}</p>
       <p>
         {rainOnly
           ? `${c.rain}: 0 – ${number(Math.max(1, ...rows.map((r) => r.rain ?? 0)))}`
@@ -562,7 +545,7 @@ function History({
             <tr>
               <th>{c.date}</th>
               {!rainOnly && <th>{c.vegetation}</th>}
-              <th>{c.rain}</th>
+              {hasRain && <th>{c.rain}</th>}
               {!rainOnly && <th>{c.coverage}</th>}
               {!rainOnly && <th>{c.change}</th>}
             </tr>
@@ -572,7 +555,7 @@ function History({
               <tr key={r.month}>
                 <td>{r.month}</td>
                 {!rainOnly && <td>{r.ndvi === null ? '—' : number(r.ndvi)}</td>}
-                <td>{r.rain === null ? '—' : number(r.rain)}</td>
+                {hasRain && <td>{r.rain === null ? '—' : number(r.rain)}</td>}
                 {!rainOnly && <td>{number(r.coverage * 100)} %</td>}
                 {!rainOnly && <td>{r.change === null ? '—' : number(r.change)}</td>}
               </tr>

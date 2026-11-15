@@ -1,5 +1,23 @@
 import { useMessageLanguage } from '../../i18n/messages';
 const es = {
+  metricHelp: 'Cómo leer estos datos',
+  ndviHelp:
+    'Este índice indica el verdor que observa el satélite. Un valor más alto suele indicar vegetación más verde o densa. No es un porcentaje de bosque ni una medida directa de productividad o agua disponible.',
+  rainHelp:
+    'La lluvia se expresa en milímetros: 1 mm equivale a 1 litro de agua por metro cuadrado. La gráfica mensual suma la lluvia de ese mes; una línea sin dato no significa que no llovió.',
+  coverageHelp:
+    'Es la parte de la superficie para la que el satélite obtuvo datos utilizables. Las nubes y otros problemas pueden dejar zonas sin medir. No indica cuánta superficie tiene árboles.',
+  changeHelp:
+    'Compara el índice de vegetación con el mismo mes del año anterior. Por ejemplo, pasar de 0,60 a 0,65 es un cambio de +0,05 puntos del índice, no un 5 % de recuperación. Solo se compara con al menos 80 % de superficie válida común.',
+  scaleHelp:
+    'Se muestran la cuenca seleccionada y los alrededores de la finca en un radio de 5 km. MODIS observa áreas de unos 250 m por lado: un píxel puede cubrir varios terrenos. No es una medición exacta de tu parcela.',
+  progressHelp:
+    'Este porcentaje compara lo que declaraste haber hecho con tu meta. Por ejemplo, 3 puntos revisados de una meta de 5 equivalen al 60 %. No mide por sí solo la recuperación ambiental.',
+  profileHelp:
+    'Estos datos fueron ingresados por ti. Una hectárea equivale a 10 000 metros cuadrados.',
+  methodSource: 'Consultar el producto de vegetación de NASA',
+  vegetationSource: 'NASA MODIS · MOD13Q1',
+
   recordProgress: 'Registrar avance en Registros',
   lastEntry: 'Último avance',
   recordsHelp:
@@ -81,7 +99,7 @@ const es = {
   suggestions: 'Acciones para considerar',
   reason: 'Sugerida por tus prioridades. Confirma en campo qué aplica.',
   general: 'Opción inicial para revisar; todavía no has confirmado esta necesidad.',
-  benefit: 'Beneficio esperado',
+  benefit: 'Para qué sirve',
   technical: 'Referencia técnica · MAG',
   goals: 'Mis metas',
   add: 'Agregar meta',
@@ -163,6 +181,23 @@ const es = {
   remove: 'Eliminar meta vacía',
 };
 const en: typeof es = {
+  metricHelp: 'How to read these observations',
+  ndviHelp:
+    'This index describes the greenness seen by the satellite. A higher value generally means greener or denser vegetation. It is not a forest percentage or a direct measure of productivity or available water.',
+  rainHelp:
+    'Rainfall is expressed in millimetres: 1 mm equals 1 litre of water per square metre. The monthly chart adds up that month’s rainfall; missing observations do not mean no rain.',
+  coverageHelp:
+    'The share of the area with usable satellite observations. Clouds and other issues can leave gaps. This is not the share of land covered by trees.',
+  changeHelp:
+    'Compares the vegetation index with the same month of the previous year. For example, 0.60 to 0.65 is +0.05 index points, not 5% recovery. Comparisons require at least 80% common valid area.',
+  scaleHelp:
+    'Shows the selected watershed and the area within 5 km of the farm. MODIS observes areas about 250 m on each side; one pixel may cover several properties. This is not an exact measurement of your parcel.',
+  progressHelp:
+    'This percentage compares your reported work with your target. For example, inspecting 3 out of 5 points is 60%. This does not itself measure environmental recovery.',
+  profileHelp: 'You entered these details. One hectare equals 10,000 square metres.',
+  methodSource: 'Consult the NASA vegetation product',
+  vegetationSource: 'NASA MODIS · MOD13Q1',
+
   recordProgress: 'Record progress in Records',
   lastEntry: 'Latest entry',
   recordsHelp:
@@ -243,7 +278,7 @@ const en: typeof es = {
   suggestions: 'Actions to consider',
   reason: 'Suggested from your priorities. Confirm suitability in the field.',
   general: 'An initial option to review; you have not confirmed this need yet.',
-  benefit: 'Expected benefit',
+  benefit: 'What this helps with',
   technical: 'Technical reference · MAG',
   goals: 'My goals',
   add: 'Add goal',
