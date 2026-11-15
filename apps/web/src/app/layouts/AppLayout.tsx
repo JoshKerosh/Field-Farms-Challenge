@@ -166,9 +166,7 @@ export function AppLayout() {
               {c.loading}
             </p>
           ) : (!myFarm || !farmSite) &&
-            ['/watershed', '/alerts', '/environment', '/benefits', '/assistant'].includes(
-              pathname,
-            ) ? (
+            ['/watershed', '/alerts', '/benefits', '/assistant'].includes(pathname) ? (
             <div className="v10-stack">
               <PageHeader
                 title={

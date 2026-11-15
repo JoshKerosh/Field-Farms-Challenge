@@ -56,6 +56,7 @@ Los módulos están en `apps/web/src/features`. Registros integra mediciones de 
 ## Qué incluye
 
 - Seis secciones principales y accesos a beneficios, ambiente, asistente y fuentes.
+- Clima y satélite recupera el visor MODIS regional con Play y añade imágenes NASA GIBS por tema, elevación por colores y relieve 3D, finca y cuencas delimitadas. POWER y NOAA aportan indicadores regionales con sus fechas; ver [datos de clima y satélite](docs/weather-and-satellite.md).
 - Finca, fuentes, relaciones y observaciones ficticias claramente identificadas.
 - Mi cuenca con datos reales: ubicar un punto (GPS o tocando el mapa) muestra la cuenca y subcuenca, el lindero de la finca según el catastro del SIRI, los ríos del IGN y las fuentes y ASADAS del SAGA cercanas, con un resumen textual equivalente y minimapa. Ver [cuencas reales](docs/architecture.md#mi-cuenca-con-capas-reales).
 - Gráficos acompañados de tablas.

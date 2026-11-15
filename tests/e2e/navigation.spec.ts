@@ -1,6 +1,31 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 test.setTimeout(60000);
+
+async function registerTestFarm(page: Page) {
+  await page.addInitScript(() => {
+    localStorage.setItem(
+      'ffc.v10.farm',
+      JSON.stringify({
+        version: 2,
+        key: 'mia',
+        my: {
+          name: 'Finca de pruebas del equipo',
+          act: 'carne',
+          agua: 'pozo',
+          ha: 24,
+          cult: 6,
+          animals: 15,
+          ench: 'no',
+        },
+      }),
+    );
+    localStorage.setItem(
+      'ffc.v10.farmSite',
+      JSON.stringify({ lat: 10.8, lng: -85.08, accuracyM: 15, parcel: null }),
+    );
+  });
+}
 
 test('recorre las seis secciones principales con datos reales y foco accesible', async ({
   page,
@@ -37,6 +62,7 @@ test('integra los registros de caudal, cambia roles y carga ejemplos de 5 meses'
 });
 
 test('muestra avance en finca y catálogo de beneficios con vigencia y fuente', async ({ page }) => {
+  await registerTestFarm(page);
   await page.goto('/benefits', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { name: /Empieza a documentar acciones/ })).toBeVisible();
   const ganbos = page
@@ -58,6 +84,7 @@ test('muestra avance en finca y catálogo de beneficios con vigencia y fuente', 
 test('el asistente responde preguntas rápidas usando el contexto real de la finca', async ({
   page,
 }) => {
+  await registerTestFarm(page);
   await page.goto('/assistant', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { name: 'Asistente del agua' })).toBeVisible();
   await page.getByRole('button', { name: '¿De dónde viene mi agua?' }).click();
@@ -119,15 +146,10 @@ test('mantiene semántica y contraste WCAG 2.2 AA en todas las vistas', async ({
   }
 });
 
-test('abre satélite y fuentes y simula eventos extremos', async ({ page }) => {
+test('abre clima y satélite y pide ubicar la finca antes de mostrar datos', async ({ page }) => {
   await page.goto('/environment', { waitUntil: 'domcontentloaded' });
-  await expect(
-    page.getByRole('heading', { name: 'Satélite y clima en tu subcuenca' }),
-  ).toBeVisible();
-  await page.getByRole('button', { name: 'Sequía extrema' }).click();
-  await expect(page.locator('.demo-label')).toContainText('Simulación: Sequía extrema');
-  await page.getByRole('button', { name: 'Salir de la simulación' }).click();
-  await expect(page.locator('.demo-label')).toContainText('Fuentes de datos');
+  await expect(page.getByRole('heading', { name: 'Clima y satélite', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Primero ubica tu finca' })).toBeVisible();
 
   await page.getByRole('link', { name: 'Fuentes de los datos' }).first().click();
   await expect(page.getByRole('heading', { name: 'Fuentes de los datos' })).toBeVisible();
@@ -137,6 +159,7 @@ test('consulta la base descargada sin conexión y recarga una ruta interna', asy
   page,
   context,
 }) => {
+  await registerTestFarm(page);
   await page.goto('/guide', { waitUntil: 'domcontentloaded' });
   await page.evaluate(async () => {
     await navigator.serviceWorker.ready;

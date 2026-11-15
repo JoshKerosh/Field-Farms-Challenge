@@ -28,9 +28,10 @@ export type ArchivoConocido = keyof typeof ARCHIVOS;
 
 const cache = new Map<string, Promise<unknown>>();
 
-async function getJson<T>(path: string): Promise<T> {
+async function getJson<T>(path: string, refresh = false): Promise<T> {
+  if (refresh) cache.delete(path);
   if (!cache.has(path)) {
-    const promise = fetch(`${DATA}/${path}`).then(async (response) => {
+    const promise = fetch(`${DATA}/${path}`, { cache: 'no-cache' }).then(async (response) => {
       if (!response.ok) throw new Error(`${path}: ${response.status}`);
       return (await response.json()) as T;
     });
@@ -42,16 +43,19 @@ async function getJson<T>(path: string): Promise<T> {
 }
 
 /** Descarga y valida un archivo de indicadores. Un archivo mal formado falla con sus errores. */
-export async function cargarIndicadores(archivo: ArchivoConocido): Promise<ArchivoIndicadores> {
+export async function cargarIndicadores(
+  archivo: ArchivoConocido,
+  refresh = false,
+): Promise<ArchivoIndicadores> {
   const path = ARCHIVOS[archivo];
-  const json = await getJson<unknown>(path);
+  const json = await getJson<unknown>(path, refresh);
   const errores = validarArchivoIndicadores(json);
   if (errores.length) throw new Error(`${path}: ${errores.slice(0, 3).join('; ')}`);
   return json as ArchivoIndicadores;
 }
 
-export const cargarFuentes = (): Promise<CatalogoFuentes> =>
-  getJson<CatalogoFuentes>('fuentes.json');
+export const cargarFuentes = (refresh = false): Promise<CatalogoFuentes> =>
+  getJson<CatalogoFuentes>('fuentes.json', refresh);
 
 export async function fuente(id: string): Promise<Fuente | undefined> {
   return (await cargarFuentes()).fuentes.find((f) => f.id === id);
