@@ -1,0 +1,682 @@
+{
+  "schemaVersion": "alert-source-v1",
+  "kind": "power",
+  "dataMode": "real",
+  "inputFingerprint": "67da7dfc8b7df6f467fcbb84f568e65afd93dbbafa50b9e921be4cca0f2985b7",
+  "sample": {
+    "source": "NASA POWER",
+    "origin": "provider-data",
+    "observedStart": "2026-10-15",
+    "observedEnd": "2026-11-13",
+    "timeStandard": "UTC",
+    "lagDays": 2,
+    "precipitation30d": {
+      "value": 404.38,
+      "unit": "mm",
+      "method": "sum of 30 complete daily PRECTOTCORR values"
+    },
+    "rootZoneWetness30d": {
+      "value": 0.848,
+      "unit": "1",
+      "method": "mean of 30 daily GWETROOT values",
+      "limitation": "Relative wetness, not volumetric SMAP moisture"
+    },
+    "daily": [
+      {
+        "date": "2026-10-15",
+        "precipitationMm": 7.22,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-10-16",
+        "precipitationMm": 8.43,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-10-17",
+        "precipitationMm": 22.11,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-10-18",
+        "precipitationMm": 108.35,
+        "rootZoneWetness": 0.87
+      },
+      {
+        "date": "2026-10-19",
+        "precipitationMm": 12.09,
+        "rootZoneWetness": 0.86
+      },
+      {
+        "date": "2026-10-20",
+        "precipitationMm": 76.64,
+        "rootZoneWetness": 0.89
+      },
+      {
+        "date": "2026-10-21",
+        "precipitationMm": 8.16,
+        "rootZoneWetness": 0.89
+      },
+      {
+        "date": "2026-10-22",
+        "precipitationMm": 3.38,
+        "rootZoneWetness": 0.88
+      },
+      {
+        "date": "2026-10-23",
+        "precipitationMm": 2.03,
+        "rootZoneWetness": 0.87
+      },
+      {
+        "date": "2026-10-24",
+        "precipitationMm": 3.3,
+        "rootZoneWetness": 0.87
+      },
+      {
+        "date": "2026-10-25",
+        "precipitationMm": 0.6,
+        "rootZoneWetness": 0.86
+      },
+      {
+        "date": "2026-10-26",
+        "precipitationMm": 0.39,
+        "rootZoneWetness": 0.85
+      },
+      {
+        "date": "2026-10-27",
+        "precipitationMm": 0.44,
+        "rootZoneWetness": 0.84
+      },
+      {
+        "date": "2026-10-28",
+        "precipitationMm": 0.18,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-10-29",
+        "precipitationMm": 0.36,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-10-30",
+        "precipitationMm": 2.83,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-10-31",
+        "precipitationMm": 3.45,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-11-01",
+        "precipitationMm": 4.54,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-11-02",
+        "precipitationMm": 11.76,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-11-03",
+        "precipitationMm": 19.82,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-11-04",
+        "precipitationMm": 33.41,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-11-05",
+        "precipitationMm": 27.28,
+        "rootZoneWetness": 0.87
+      },
+      {
+        "date": "2026-11-06",
+        "precipitationMm": 10.47,
+        "rootZoneWetness": 0.86
+      },
+      {
+        "date": "2026-11-07",
+        "precipitationMm": 5.59,
+        "rootZoneWetness": 0.86
+      },
+      {
+        "date": "2026-11-08",
+        "precipitationMm": 11.27,
+        "rootZoneWetness": 0.86
+      },
+      {
+        "date": "2026-11-09",
+        "precipitationMm": 7.25,
+        "rootZoneWetness": 0.86
+      },
+      {
+        "date": "2026-11-10",
+        "precipitationMm": 4.67,
+        "rootZoneWetness": 0.85
+      },
+      {
+        "date": "2026-11-11",
+        "precipitationMm": 4.09,
+        "rootZoneWetness": 0.85
+      },
+      {
+        "date": "2026-11-12",
+        "precipitationMm": 2.11,
+        "rootZoneWetness": 0.85
+      },
+      {
+        "date": "2026-11-13",
+        "precipitationMm": 2.16,
+        "rootZoneWetness": 0.84
+      }
+    ],
+    "parameterMetadata": {
+      "PRECTOTCORR": {
+        "units": "mm/day",
+        "longname": "Precipitation Corrected"
+      },
+      "GWETROOT": {
+        "units": "1",
+        "longname": "Root Zone Soil Wetness"
+      }
+    },
+    "precipitationAnomaly30d": {
+      "value": 126.1789124156588,
+      "unit": "%",
+      "status": "available",
+      "method": "power-point-30d-calendar-reference-1991-2020-v1",
+      "referenceYears": [
+        1991,
+        2020
+      ],
+      "referenceMeanMm": 178.78766666666667,
+      "referenceWindowCount": 30,
+      "description": "Mean of 30 complete 30-day windows ending on the same month/day in 1991–2020. Derived POWER point reference, not an official IMN station normal."
+    },
+    "riskEvaluation": "not-performed; no approved thresholds",
+    "freshness": "not-classified; lagDays is reported without inventing an expiry rule",
+    "dailyHistory": [
+      {
+        "date": "2026-08-16",
+        "precipitationMm": 21.31,
+        "rootZoneWetness": 0.57
+      },
+      {
+        "date": "2026-08-17",
+        "precipitationMm": 33.91,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-08-18",
+        "precipitationMm": 7.94,
+        "rootZoneWetness": 0.63
+      },
+      {
+        "date": "2026-08-19",
+        "precipitationMm": 0.14,
+        "rootZoneWetness": 0.62
+      },
+      {
+        "date": "2026-08-20",
+        "precipitationMm": 1.75,
+        "rootZoneWetness": 0.61
+      },
+      {
+        "date": "2026-08-21",
+        "precipitationMm": 4.68,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-08-22",
+        "precipitationMm": 0.11,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-08-23",
+        "precipitationMm": 10.11,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-08-24",
+        "precipitationMm": 0.01,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-08-25",
+        "precipitationMm": 3.14,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-08-26",
+        "precipitationMm": 1.16,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-08-27",
+        "precipitationMm": 2.23,
+        "rootZoneWetness": 0.58
+      },
+      {
+        "date": "2026-08-28",
+        "precipitationMm": 13.75,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-08-29",
+        "precipitationMm": 5.12,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-08-30",
+        "precipitationMm": 8.12,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-08-31",
+        "precipitationMm": 5.06,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-09-01",
+        "precipitationMm": 5.44,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-09-02",
+        "precipitationMm": 8.81,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-09-03",
+        "precipitationMm": 5.83,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-09-04",
+        "precipitationMm": 4.56,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-09-05",
+        "precipitationMm": 1.8,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-09-06",
+        "precipitationMm": 7.27,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-09-07",
+        "precipitationMm": 0.09,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-09-08",
+        "precipitationMm": 0.02,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-09-09",
+        "precipitationMm": 8.79,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-09-10",
+        "precipitationMm": 6.15,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-09-11",
+        "precipitationMm": 0.89,
+        "rootZoneWetness": 0.6
+      },
+      {
+        "date": "2026-09-12",
+        "precipitationMm": 2.09,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-09-13",
+        "precipitationMm": 4.18,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-09-14",
+        "precipitationMm": 0.29,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-09-15",
+        "precipitationMm": 4.5,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-09-16",
+        "precipitationMm": 0.42,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-09-17",
+        "precipitationMm": 0.0,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-09-18",
+        "precipitationMm": 26.13,
+        "rootZoneWetness": 0.59
+      },
+      {
+        "date": "2026-09-19",
+        "precipitationMm": 61.22,
+        "rootZoneWetness": 0.66
+      },
+      {
+        "date": "2026-09-20",
+        "precipitationMm": 46.13,
+        "rootZoneWetness": 0.72
+      },
+      {
+        "date": "2026-09-21",
+        "precipitationMm": 0.24,
+        "rootZoneWetness": 0.73
+      },
+      {
+        "date": "2026-09-22",
+        "precipitationMm": 5.07,
+        "rootZoneWetness": 0.71
+      },
+      {
+        "date": "2026-09-23",
+        "precipitationMm": 2.63,
+        "rootZoneWetness": 0.7
+      },
+      {
+        "date": "2026-09-24",
+        "precipitationMm": 6.96,
+        "rootZoneWetness": 0.69
+      },
+      {
+        "date": "2026-09-25",
+        "precipitationMm": 3.47,
+        "rootZoneWetness": 0.69
+      },
+      {
+        "date": "2026-09-26",
+        "precipitationMm": 14.14,
+        "rootZoneWetness": 0.7
+      },
+      {
+        "date": "2026-09-27",
+        "precipitationMm": 23.87,
+        "rootZoneWetness": 0.72
+      },
+      {
+        "date": "2026-09-28",
+        "precipitationMm": 2.17,
+        "rootZoneWetness": 0.73
+      },
+      {
+        "date": "2026-09-29",
+        "precipitationMm": 24.5,
+        "rootZoneWetness": 0.73
+      },
+      {
+        "date": "2026-09-30",
+        "precipitationMm": 10.32,
+        "rootZoneWetness": 0.74
+      },
+      {
+        "date": "2026-10-01",
+        "precipitationMm": 2.4,
+        "rootZoneWetness": 0.74
+      },
+      {
+        "date": "2026-10-02",
+        "precipitationMm": 17.31,
+        "rootZoneWetness": 0.81
+      },
+      {
+        "date": "2026-10-03",
+        "precipitationMm": 75.98,
+        "rootZoneWetness": 0.85
+      },
+      {
+        "date": "2026-10-04",
+        "precipitationMm": 17.37,
+        "rootZoneWetness": 0.87
+      },
+      {
+        "date": "2026-10-05",
+        "precipitationMm": 8.32,
+        "rootZoneWetness": 0.85
+      },
+      {
+        "date": "2026-10-06",
+        "precipitationMm": 4.51,
+        "rootZoneWetness": 0.84
+      },
+      {
+        "date": "2026-10-07",
+        "precipitationMm": 6.84,
+        "rootZoneWetness": 0.84
+      },
+      {
+        "date": "2026-10-08",
+        "precipitationMm": 4.42,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-10-09",
+        "precipitationMm": 4.48,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-10-10",
+        "precipitationMm": 8.57,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-10-11",
+        "precipitationMm": 6.19,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-10-12",
+        "precipitationMm": 4.13,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-10-13",
+        "precipitationMm": 4.91,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-10-14",
+        "precipitationMm": 6.3,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-10-15",
+        "precipitationMm": 7.22,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-10-16",
+        "precipitationMm": 8.43,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-10-17",
+        "precipitationMm": 22.11,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-10-18",
+        "precipitationMm": 108.35,
+        "rootZoneWetness": 0.87
+      },
+      {
+        "date": "2026-10-19",
+        "precipitationMm": 12.09,
+        "rootZoneWetness": 0.86
+      },
+      {
+        "date": "2026-10-20",
+        "precipitationMm": 76.64,
+        "rootZoneWetness": 0.89
+      },
+      {
+        "date": "2026-10-21",
+        "precipitationMm": 8.16,
+        "rootZoneWetness": 0.89
+      },
+      {
+        "date": "2026-10-22",
+        "precipitationMm": 3.38,
+        "rootZoneWetness": 0.88
+      },
+      {
+        "date": "2026-10-23",
+        "precipitationMm": 2.03,
+        "rootZoneWetness": 0.87
+      },
+      {
+        "date": "2026-10-24",
+        "precipitationMm": 3.3,
+        "rootZoneWetness": 0.87
+      },
+      {
+        "date": "2026-10-25",
+        "precipitationMm": 0.6,
+        "rootZoneWetness": 0.86
+      },
+      {
+        "date": "2026-10-26",
+        "precipitationMm": 0.39,
+        "rootZoneWetness": 0.85
+      },
+      {
+        "date": "2026-10-27",
+        "precipitationMm": 0.44,
+        "rootZoneWetness": 0.84
+      },
+      {
+        "date": "2026-10-28",
+        "precipitationMm": 0.18,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-10-29",
+        "precipitationMm": 0.36,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-10-30",
+        "precipitationMm": 2.83,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-10-31",
+        "precipitationMm": 3.45,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-11-01",
+        "precipitationMm": 4.54,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-11-02",
+        "precipitationMm": 11.76,
+        "rootZoneWetness": 0.82
+      },
+      {
+        "date": "2026-11-03",
+        "precipitationMm": 19.82,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-11-04",
+        "precipitationMm": 33.41,
+        "rootZoneWetness": 0.83
+      },
+      {
+        "date": "2026-11-05",
+        "precipitationMm": 27.28,
+        "rootZoneWetness": 0.87
+      },
+      {
+        "date": "2026-11-06",
+        "precipitationMm": 10.47,
+        "rootZoneWetness": 0.86
+      },
+      {
+        "date": "2026-11-07",
+        "precipitationMm": 5.59,
+        "rootZoneWetness": 0.86
+      },
+      {
+        "date": "2026-11-08",
+        "precipitationMm": 11.27,
+        "rootZoneWetness": 0.86
+      },
+      {
+        "date": "2026-11-09",
+        "precipitationMm": 7.25,
+        "rootZoneWetness": 0.86
+      },
+      {
+        "date": "2026-11-10",
+        "precipitationMm": 4.67,
+        "rootZoneWetness": 0.85
+      },
+      {
+        "date": "2026-11-11",
+        "precipitationMm": 4.09,
+        "rootZoneWetness": 0.85
+      },
+      {
+        "date": "2026-11-12",
+        "precipitationMm": 2.11,
+        "rootZoneWetness": 0.85
+      },
+      {
+        "date": "2026-11-13",
+        "precipitationMm": 2.16,
+        "rootZoneWetness": 0.84
+      }
+    ],
+    "location": {
+      "longitude": -85.08,
+      "latitude": 10.8,
+      "subbasin": {
+        "properties": {
+          "nombre": "Rio Zapote",
+          "gran_cuenca": "Cuencas Lago De Nicaragua",
+          "vertiente": "Atlantica",
+          "hectareas": 53411.0
+        },
+        "file": "apps/web/public/data/geo/subcuencas/17.geojson",
+        "featureIndex": 21,
+        "layerSha256": "8c6c2266eb97d6275875b32aea6aa2318d7e9178488085dbbebdb50fed73b9b6"
+      },
+      "spatialMethod": "point-in-polygon on versioned WGS84 layer",
+      "limitation": "Point sample inside a subbasin, NOT an area-weighted subbasin mean. File/index is a local reference, not a shared stable indicator ID."
+    },
+    "evidence": {
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR%2CGWETROOT&community=AG&longitude=-85.08&latitude=10.8&start=20260718&end=20261114&format=JSON&time-standard=UTC",
+      "resolvedUrl": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR%2CGWETROOT&community=AG&longitude=-85.08&latitude=10.8&start=20260718&end=20261114&format=JSON&time-standard=UTC",
+      "sha256": "344f3cc40fccc482e2203412d2159205f9dd253da1541da1320233ea80c561df"
+    },
+    "baselineEvidence": {
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR&community=AG&longitude=-85.08&latitude=10.8&start=19900101&end=20201231&format=JSON&time-standard=UTC",
+      "resolvedUrl": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR&community=AG&longitude=-85.08&latitude=10.8&start=19900101&end=20201231&format=JSON&time-standard=UTC",
+      "sha256": "e8cb5e5ce69fefba3c047b700b2fb8f37b8ef4f476fe7553dabd3344b6e74ae3"
+    },
+    "retrievedAt": "2026-11-15T08:38:57.697665+00:00"
+  }
+}

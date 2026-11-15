@@ -2,6 +2,10 @@
 
 Proyecto Python independiente de los workspaces de npm.
 
+Los [conectores POWER, RONI y cruces CNE](CLIMATE.md) ya publican JSON que consume
+Alertas, sin Earthdata. Incluyen referencia histórica explícita para anomalías,
+validación, fechas separadas de descarga/observación y conservación ante fallos.
+
 ## Comprobar fuentes de alertas
 
 La [comprobación de fuentes](SOURCE_CHECK.md) descarga muestras pequeñas de POWER

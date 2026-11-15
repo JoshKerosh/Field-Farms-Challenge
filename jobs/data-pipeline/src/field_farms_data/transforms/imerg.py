@@ -22,7 +22,8 @@ def load_subbasins(directory):
     seen = set()
     for path in sorted(Path(directory).glob('*.geojson')):
         payload = json.loads(path.read_text(encoding='utf-8'))
-        for feature in payload['features']:
+        layer_digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        for feature_index, feature in enumerate(payload['features']):
             geom = shape(feature['geometry'])
             if geom.geom_type not in ('Polygon', 'MultiPolygon') or not geom.is_valid or geom.is_empty:
                 raise ValueError('Invalid subbasin geometry; repair explicitly before IMERG aggregation')
@@ -33,7 +34,9 @@ def load_subbasins(directory):
             seen.add(digest)
             basins.append({'id': f'imerg-{digest[:20]}', 'geometry': geom,
                            'geometrySha256': digest, 'name': properties['nombre'],
-                           'basinFile': path.name, 'vertiente': properties.get('vertiente')})
+                           'basinFile': path.name, 'featureIndex': feature_index,
+                           'layerSha256': layer_digest, 'bounds': list(geom.bounds),
+                           'vertiente': properties.get('vertiente')})
     if not basins:
         raise ValueError('No subbasins found')
     return basins

@@ -1,7 +1,9 @@
 import { messageLanguage as displayLanguage } from '../../i18n/messages';
 import { message } from '../../i18n/messages';
 import {
-  pendingRiskAssessment,
+  evaluateEnvironmentalRisk,
+  evidenceWithFreshness,
+  REQUIRED_RISK_EVIDENCE,
   validObservationDate,
   type AlertEvidence,
   type EnvironmentalRisk,
@@ -11,6 +13,11 @@ import { demoAlertEvidence, demoAlertSeverities } from '../../demo/fixtures/envi
 import type { Dataset } from '../real/types';
 import type { DemoScenario } from './climate';
 import { getGeo, type PlaceContext } from './geo';
+import {
+  emptyAlertSources,
+  evidenceForLocation,
+  type AlertSources,
+} from '../../features/alerts/data/alert-sources';
 export interface DroughtHistoryItem {
   title: string;
   detail: string;
@@ -43,6 +50,8 @@ export interface AlertCard {
   recs: string[];
   src: string;
   defaultOpen: boolean;
+  ruleReferences: string[];
+  ruleConditions: string[];
 }
 export interface AlertsSummary {
   face: string;
@@ -51,6 +60,7 @@ export interface AlertsSummary {
   top: AlertCard;
   evaluatedAt: string;
   history: DroughtHistorySummary;
+  sourceWarnings: string[];
 }
 /** Conexiones de la cuenca completa y reportes reales de sequía 2014–2015 (HIST). */
 export function droughtHistory(ds: Dataset, ctx: PlaceContext): DroughtHistorySummary {
@@ -88,12 +98,6 @@ export function droughtHistory(ds: Dataset, ctx: PlaceContext): DroughtHistorySu
       : '',
   };
 }
-const REQUIRED: Record<EnvironmentalRisk, string[]> = {
-  sequia: ['roni', 'drainage', 'rain30anomaly', 'soilMoisture'],
-  inundacion: ['rain1d', 'rain7d', 'floodZone', 'drainage'],
-  saturacion: ['soilMoisture'],
-  deslizamiento: ['slope', 'soil', 'rain7d', 'soilMoisture', 'landslideZone'],
-};
 
 const EVIDENCE_LABELS = {
   roni: 'alerts.evidence.roni',
@@ -189,8 +193,15 @@ export function environmentalAlerts(
   ctx: PlaceContext,
   demo: DemoScenario | null,
   evaluatedAt = new Date().toISOString(),
+  sources: AlertSources = emptyAlertSources(),
 ): AlertsSummary {
-  const inputs = demo ? demoAlertEvidence(demo) : availableEvidence(ds, ctx);
+  const [longitude, latitude] = getGeo(ds).localToLngLat(ctx.loc);
+  const inputs = demo
+    ? demoAlertEvidence(demo)
+    : {
+        ...availableEvidence(ds, ctx),
+        ...evidenceForLocation(sources, longitude, latitude),
+      };
   const demoLevels = demo ? demoAlertSeverities(demo) : null;
   const definitions = [
     { id: 'sequia', icon: '☀️', title: message('mca9d461485f3'), recs: [message('m5182d0419fdf')] },
@@ -228,8 +239,13 @@ export function environmentalAlerts(
     indeterminate: ['#EEF1EE', '#55665B'],
   };
   const raw = definitions.map((definition): AlertCard => {
-    const evidence = REQUIRED[definition.id].map((id) => inputs[id]);
-    const pending = pendingRiskAssessment(evidence, evaluatedAt);
+    const policy = demo ? undefined : sources.policies[definition.id];
+    const evidence = evidenceWithFreshness(
+      REQUIRED_RISK_EVIDENCE[definition.id].map((id) => inputs[id]),
+      policy,
+      evaluatedAt,
+    );
+    const pending = evaluateEnvironmentalRisk(definition.id, evidence, evaluatedAt, policy);
     const severity = demoLevels?.[definition.id] ?? pending.severity;
     const [bg, fg] = colors[severity];
     const blockers = demo
@@ -248,7 +264,30 @@ export function environmentalAlerts(
       bg,
       fg,
       defaultOpen: false,
-      why: demo ? message(`alerts.demoWhy.${definition.id}`) : message('alerts.pendingWhy'),
+      ruleReferences: pending.policy?.references ?? [],
+      ruleConditions:
+        policy && pending.policy
+          ? policy.bands
+              .filter((band) => pending.matchedBandIds.includes(band.id))
+              .flatMap((band) =>
+                band.all.map(
+                  (condition) =>
+                    `${evidenceLabel(condition.indicator)} ${
+                      { gte: '≥', lte: '≤', gt: '>', lt: '<', eq: '=' }[condition.operator]
+                    } ${evidenceValue({ ...inputs[condition.indicator], value: condition.value })}`,
+                ),
+              )
+          : [],
+      why: demo
+        ? message(`alerts.demoWhy.${definition.id}`)
+        : pending.severity === 'indeterminate'
+          ? message('alerts.pendingWhy')
+          : message(
+              'alerts.ruleWhy',
+              pending.policy?.version,
+              pending.matchedEvidenceIds.map(evidenceLabel).join(', ') ||
+                message('alerts.noThresholdMatched'),
+            ),
       src: [
         ...new Set(
           evidence.map(
@@ -262,11 +301,18 @@ export function environmentalAlerts(
   raw.sort((a, b) => b.level - a.level);
   const list = raw.map((card, index) => ({ ...card, defaultOpen: index === 0 || card.level >= 3 }));
   return {
-    face: message(demo ? 'alerts.demoNotice' : 'alerts.realNotice'),
+    face: message(
+      demo
+        ? 'alerts.demoNotice'
+        : raw.some((c) => c.severity !== 'indeterminate')
+          ? 'alerts.liveNotice'
+          : 'alerts.realNotice',
+    ),
     caribe: ctx.caribe,
     list,
     top: list[0],
     evaluatedAt,
     history: droughtHistory(ds, ctx),
+    sourceWarnings: demo ? [] : sources.warnings.map((warning) => message(warning)),
   };
 }

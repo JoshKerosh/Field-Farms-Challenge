@@ -14,6 +14,7 @@ export interface AlertEvidence {
   provenance: Provenance | null;
   observedStart: string | null;
   observedEnd: string | null;
+  productId?: string;
 }
 
 export type AlertBlocker =
@@ -43,6 +44,7 @@ export function pendingRiskAssessment(
       item.value === '' ||
       (typeof item.value === 'number' && !Number.isFinite(item.value)) ||
       !item.provenance?.source.trim() ||
+      !validObservationDate(item.provenance?.asOf ?? null) ||
       !validObservationDate(item.observedStart) ||
       !validObservationDate(item.observedEnd) ||
       item.observedStart > item.observedEnd ||

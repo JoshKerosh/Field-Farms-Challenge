@@ -58,3 +58,42 @@ test('supports the same simulation and provenance in English', async ({ page }) 
   await expect(flood).toContainText('Observation period');
   await expect(page.locator('[data-alert-type="saturacion"]')).toContainText('Excess soil water');
 });
+
+test.describe('real published sources', () => {
+  test.use({ serviceWorkers: 'block' });
+
+  test('shows actual POWER and RONI dates while unapproved risk stays indeterminate', async ({
+    page,
+  }) => {
+    await page.goto('/alerts');
+    const drought = page.locator('[data-alert-type="sequia"]');
+    const anomaly = drought.getByRole('row', { name: /Anomalía de lluvia de 30 días/ });
+    await expect(anomaly).toContainText('1991–2020');
+    await expect(anomaly).toContainText('13 nov 2026');
+    await expect(anomaly).toContainText('Disponible');
+    await expect(drought.getByRole('row', { name: /Índice RONI/ })).toContainText(
+      'NOAA CPC · RONI ERSSTv6',
+    );
+    await expect(
+      page.locator('[data-alert-type]').filter({ hasText: 'Indeterminada' }),
+    ).toHaveCount(4);
+    await page.getByRole('button', { name: 'Simular sequía', exact: true }).click();
+    await expect(drought).toContainText('Field Farms Challenge · demo');
+    await expect(drought).not.toContainText('NASA POWER (10.8');
+  });
+
+  test('retains cached observation dates after a refresh fails', async ({ page }) => {
+    await page.goto('/alerts');
+    const drought = page.locator('[data-alert-type="sequia"]');
+    await expect(drought.getByRole('row', { name: /Índice RONI/ })).toContainText(
+      'NOAA CPC · RONI ERSSTv6',
+    );
+    await page.route('**/data/nasa/roni/latest.json', (route) => route.abort());
+    await page.reload();
+    await expect(
+      page.getByRole('region', { name: 'Estado de actualización de las fuentes' }),
+    ).toContainText('copia local');
+    await expect(drought.getByRole('row', { name: /Índice RONI/ })).toContainText('31 oct 2026');
+    await expect(drought).toContainText('Indeterminada');
+  });
+});

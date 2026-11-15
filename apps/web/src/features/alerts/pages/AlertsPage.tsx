@@ -6,6 +6,7 @@ import { date } from '../../../i18n';
 import { message, messageLanguage, useMessageLanguage } from '../../../i18n/messages';
 import { PageHeader, PageLink } from '../../../shared/ui';
 import './alerts.css';
+import { AlertObservations } from '../components/AlertObservations';
 export function AlertsPage() {
   useMessageLanguage();
   const { ctx, alerts, demo, setDemo } = useField();
@@ -26,6 +27,14 @@ export function AlertsPage() {
           {alerts.face}
         </h2>
       </section>
+
+      {alerts.sourceWarnings.length > 0 && (
+        <section className="v10-card" aria-label={message('alerts.sourceUpdates')}>
+          {alerts.sourceWarnings.map((warning) => (
+            <p key={warning}>{warning}</p>
+          ))}
+        </section>
+      )}
 
       <section className="v10-card" aria-labelledby="alert-scenarios-title">
         <h2 id="alert-scenarios-title">{message('alerts.scenarios')}</h2>
@@ -66,6 +75,8 @@ export function AlertsPage() {
         <PageLink to="/environment">{message('ma2c2049557a1')}</PageLink>
       </section>
 
+      <AlertObservations />
+
       <section className="v10-stack" aria-label={message('md9cd6157e5f4')}>
         {alerts.list.map((a) => (
           <details key={a.id} className="v10-card" open={a.defaultOpen} data-alert-type={a.id}>
@@ -96,6 +107,27 @@ export function AlertsPage() {
                     <li key={blocker}>{blocker}</li>
                   ))}
                 </ul>
+              )}
+              {a.ruleConditions.length > 0 && (
+                <ul>
+                  {a.ruleConditions.map((condition) => (
+                    <li key={condition}>{condition}</li>
+                  ))}
+                </ul>
+              )}
+              {a.ruleReferences.length > 0 && (
+                <div>
+                  <strong>{message('alerts.methodSources')}</strong>
+                  <ul>
+                    {a.ruleReferences.map((url) => (
+                      <li key={url}>
+                        <a href={url} target="_blank" rel="noreferrer">
+                          {url}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
               <p className="v10-small alert-table-hint">{message('alerts.scrollHint')}</p>
               <div

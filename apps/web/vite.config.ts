@@ -56,6 +56,17 @@ export default defineConfig({
         // Basin layers are not precached (several MB); the ones already opened stay available offline.
         runtimeCaching: [
           {
+            urlPattern: ({ url }) =>
+              url.pathname.startsWith('/data/nasa/') || url.pathname.startsWith('/data/alerts/'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'alert-indicators-v1',
+              networkTimeoutSeconds: 5,
+              cacheableResponse: { statuses: [200] },
+              expiration: { maxEntries: 30 },
+            },
+          },
+          {
             urlPattern: ({ url }) => url.pathname.startsWith('/data/geo/'),
             handler: 'StaleWhileRevalidate',
             options: { cacheName: 'geo-data', expiration: { maxEntries: 80 } },
